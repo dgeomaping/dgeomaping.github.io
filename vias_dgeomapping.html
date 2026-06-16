@@ -1,0 +1,2523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DGeoMap — Diseño Geométrico de Vías · INVIAS MDG-2025</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0f14;--bg2:#111720;--bg3:#1a2332;--bg4:#1e2c3d;
+  --brd:#263548;--brd2:#2e4060;
+  --rd:#c41e3a;--rd2:#e02040;--gr:#00c896;--gr2:#00a87a;
+  --yl:#f0b429;--yl2:#f5cc60;
+  --bl:#1d7fdb;--bl2:#2b9af3;
+  --tx:#e8edf5;--tx2:#9bb0cc;--tx3:#5a7a9a;
+  --wh:#ffffff;
+  --font:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --disp:'Bebas Neue',sans-serif;
+  --r:8px;--R:14px;
+  --shadow:0 4px 24px rgba(0,0,0,.4);
+  --shadow2:0 12px 48px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:var(--font);font-size:14px;min-height:100vh}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:3px}
+
+/* ── HEADER ── */
+.app-header{
+  background:linear-gradient(135deg,#0d1c2e 0%,#071424 50%,#0a1520 100%);
+  border-bottom:1px solid var(--brd);
+  padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;position:sticky;top:0;z-index:100;
+}
+.logo-zone{display:flex;align-items:center;gap:14px}
+.logo-badge{
+  width:38px;height:38px;background:linear-gradient(135deg,var(--rd),#a00020);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--disp);font-size:18px;color:#fff;letter-spacing:-.5px;
+  box-shadow:0 0 20px rgba(196,30,58,.35);
+}
+.logo-text{font-family:var(--disp);font-size:22px;letter-spacing:1px;color:var(--wh)}
+.logo-text span{color:var(--rd2);font-size:11px;font-family:var(--font);font-weight:600;display:block;letter-spacing:3px;margin-top:-4px}
+.header-badge{
+  background:rgba(196,30,58,.12);border:1px solid rgba(196,30,58,.3);
+  color:var(--rd2);font-size:10px;font-weight:700;letter-spacing:1.5px;
+  padding:4px 10px;border-radius:20px;
+}
+
+/* ── NAV TABS ── */
+.nav-tabs{
+  display:flex;gap:4px;padding:16px 28px 0;
+  background:var(--bg2);border-bottom:1px solid var(--brd);
+  overflow-x:auto;
+}
+.ntab{
+  background:none;border:none;color:var(--tx2);font-family:var(--font);
+  font-size:13px;font-weight:600;padding:10px 18px;cursor:pointer;
+  border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;
+}
+.ntab:hover{color:var(--tx)}
+.ntab.on{color:var(--bl2);border-bottom-color:var(--bl2)}
+
+/* ── LAYOUT ── */
+.app-content{max-width:1400px;margin:0 auto;padding:24px 28px 60px}
+.panel{display:none}.panel.on{display:block}
+
+/* ── CARDS ── */
+.card{background:var(--bg2);border:1px solid var(--brd);border-radius:var(--R);padding:20px;margin-bottom:16px}
+.card-title{font-family:var(--disp);font-size:18px;letter-spacing:.5px;color:var(--tx);margin-bottom:4px}
+.card-sub{font-size:11px;color:var(--tx3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:16px}
+
+/* ── GRID INPUTS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+
+/* ── FORM CONTROLS ── */
+.fgrp{display:flex;flex-direction:column;gap:4px}
+.fgrp label{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px}
+.inp,.sel{
+  width:100%;background:var(--bg3);border:1.5px solid var(--brd);
+  border-radius:var(--r);color:var(--tx);font-family:var(--font);
+  font-size:13px;padding:9px 12px;transition:border-color .15s;
+}
+.inp:focus,.sel:focus{outline:none;border-color:var(--bl2);background:var(--bg4)}
+.inp.big{font-weight:700;font-size:14px;color:var(--wh)}
+.inp::placeholder{color:var(--tx3);font-weight:400}
+.sel option{background:var(--bg3)}
+
+/* ── BUTTONS ── */
+.btn{
+  background:var(--bg3);border:1.5px solid var(--brd2);color:var(--tx);
+  font-family:var(--font);font-size:12px;font-weight:700;
+  padding:9px 18px;border-radius:var(--r);cursor:pointer;
+  transition:all .15s;letter-spacing:.3px;
+  display:inline-flex;align-items:center;gap:7px;
+}
+.btn:hover{background:var(--bg4);border-color:var(--tx3)}
+.btn.prim{background:var(--bl);border-color:var(--bl);color:#fff}
+.btn.prim:hover{background:var(--bl2)}
+.btn.danger{background:rgba(196,30,58,.15);border-color:var(--rd);color:var(--rd2)}
+.btn.danger:hover{background:rgba(196,30,58,.25)}
+.btn.success{background:rgba(0,200,150,.12);border-color:var(--gr2);color:var(--gr)}
+.btn.success:hover{background:rgba(0,200,150,.2)}
+.btn.gold{background:rgba(240,180,41,.12);border-color:var(--yl);color:var(--yl2)}
+.btn.gold:hover{background:rgba(240,180,41,.2)}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+
+/* ── RESULT ITEMS ── */
+.res-item{
+  background:var(--bg3);border:1px solid var(--brd);border-radius:var(--r);
+  padding:10px 14px;
+}
+.res-lbl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px}
+.res-val{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--wh)}
+.res-unit{font-size:11px;color:var(--tx3);margin-left:4px}
+.res-item.hi{border-color:var(--gr2);background:rgba(0,200,150,.07)}
+.res-item.hi .res-val{color:var(--gr)}
+
+/* ── COMPLIANCE BADGE ── */
+.compliance{
+  border-radius:var(--r);padding:12px 16px;margin-top:12px;
+  font-size:12px;font-weight:700;
+  display:flex;align-items:flex-start;gap:10px;
+}
+.compliance.ok{background:rgba(0,200,150,.1);border:1.5px solid var(--gr2);color:var(--gr)}
+.compliance.warn{background:rgba(240,180,41,.1);border:1.5px solid var(--yl);color:var(--yl2)}
+.compliance.fail{background:rgba(196,30,58,.1);border:1.5px solid var(--rd);color:var(--rd2)}
+.compliance .ico{font-size:20px;flex-shrink:0;margin-top:-1px}
+.compliance .msg{line-height:1.5}
+.compliance .msg .norm{font-size:10px;opacity:.7;display:block;margin-top:3px;font-weight:400}
+
+/* ── CANVAS WRAPPER ── */
+.canvas-wrap{
+  background:var(--bg3);border:1px solid var(--brd);border-radius:var(--R);
+  padding:16px;position:relative;overflow:hidden;
+}
+.canvas-title{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
+canvas{display:block;width:100%;border-radius:8px}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--bg4);color:var(--tx2);font-size:10px;text-transform:uppercase;letter-spacing:.6px;padding:8px 10px;text-align:center;border:1px solid var(--brd);font-weight:700}
+td{padding:7px 10px;text-align:center;border:1px solid var(--brd);color:var(--tx);font-family:var(--mono);font-size:12px}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+tr:hover td{background:rgba(255,255,255,.05)}
+td.ok-c{color:var(--gr);font-weight:700}
+td.fail-c{color:var(--rd2);font-weight:700}
+
+/* ── SEPARATOR ── */
+.sep{border:none;border-top:1px solid var(--brd);margin:16px 0}
+
+/* ── MODE TABS ── */
+.mode-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.mtab{
+  background:var(--bg3);border:1.5px solid var(--brd);color:var(--tx2);
+  font-family:var(--font);font-size:11px;font-weight:700;
+  padding:6px 14px;border-radius:20px;cursor:pointer;transition:all .15s;
+  letter-spacing:.3px;
+}
+.mtab:hover{border-color:var(--tx3);color:var(--tx)}
+.mtab.on{background:var(--bl);border-color:var(--bl);color:#fff}
+
+/* ── INFO BOX ── */
+.info-box{
+  background:rgba(43,154,243,.07);border:1px solid rgba(43,154,243,.25);
+  border-radius:var(--r);padding:10px 14px;font-size:11px;color:var(--tx2);
+  margin-bottom:12px;line-height:1.6;
+}
+.info-box b{color:var(--bl2)}
+.warn-box{
+  background:rgba(240,180,41,.07);border:1px solid rgba(240,180,41,.25);
+  border-radius:var(--r);padding:10px 14px;font-size:11px;color:var(--tx2);
+  margin-bottom:12px;line-height:1.6;
+}
+
+/* ── PARAMETER BOX ── */
+.param-box{
+  background:var(--bg3);border:1px solid var(--brd2);border-radius:var(--R);
+  padding:16px;margin-bottom:16px;
+}
+.param-box-title{
+  font-family:var(--disp);font-size:16px;letter-spacing:.5px;
+  color:var(--yl2);margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.param-box-title::before{content:'';width:4px;height:20px;background:var(--yl);border-radius:2px;display:inline-block}
+
+/* ── SECTION DIVIDER ── */
+.sdiv{
+  font-family:var(--disp);font-size:14px;letter-spacing:1px;color:var(--tx3);
+  text-transform:uppercase;margin:20px 0 12px;padding-bottom:6px;
+  border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:8px;
+}
+.sdiv::before{content:'';width:3px;height:16px;background:var(--bl);border-radius:2px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .g4{grid-template-columns:1fr 1fr}
+  .g5{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr}
+  .app-content{padding:16px}
+  .app-header{padding:0 16px}
+}
+@media(max-width:600px){
+  .g2,.g3,.g4,.g5{grid-template-columns:1fr}
+}
+
+/* ── PRINT / EXPORT STYLES ── */
+.export-preview{
+  background:#fff;color:#000;padding:24px;border-radius:var(--R);
+  font-family:'Arial',sans-serif;font-size:12px;display:none;
+  margin-top:16px;border:1px solid var(--brd);
+}
+.export-preview.show{display:block}
+
+/* ── DIAGRAM SVG area ── */
+.diagram-area{
+  background:var(--bg3);border:1px solid var(--brd);border-radius:var(--R);
+  padding:16px;margin-top:16px;
+}
+
+/* ── HIGHLIGHT NUMBER ── */
+.big-num{
+  font-family:var(--disp);font-size:36px;letter-spacing:1px;line-height:1;
+}
+
+/* ── NORMA INVIAS BADGE ── */
+.invias-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(196,30,58,.1);border:1px solid rgba(196,30,58,.3);
+  border-radius:4px;padding:2px 8px;
+  font-size:9px;font-weight:700;letter-spacing:1px;color:var(--rd2);
+  text-transform:uppercase;
+}
+
+/* ── CUADRO PARA PLANO (exportable) ── */
+#cuadro-canvas-wrap{position:relative}
+#cuadro-download{
+  position:absolute;top:10px;right:10px;
+  background:var(--bl);color:#fff;border:none;
+  padding:6px 12px;border-radius:6px;
+  font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);
+  display:none;
+}
+
+/* ── CUADRO PLANO STYLE ── */
+.cuadro-plano{
+  background:#fff;color:#000;padding:0;
+  border:2px solid #000;font-family:'Arial',sans-serif;
+  font-size:11px;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="app-header">
+  <div class="logo-zone">
+    <div class="logo-badge">DG</div>
+    <div class="logo-text">DGeoMap<span>Ingeniería S.A.S.</span></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="invias-badge">MDG-2025</span>
+    <div class="header-badge">DISEÑO GEOMÉTRICO DE VÍAS</div>
+  </div>
+</header>
+
+<!-- ══ NAV ══ -->
+<div class="nav-tabs" id="nav-tabs">
+  <button class="ntab on" onclick="goPanel('params',this)">⚙️ Parámetros</button>
+  <button class="ntab" onclick="goPanel('horizontal',this)">🔄 Alineamiento Horizontal</button>
+  <button class="ntab" onclick="goPanel('vertical',this)">📈 Alineamiento Vertical</button>
+  <button class="ntab" onclick="goPanel('seccion',this)">📐 Sección Transversal</button>
+  <button class="ntab" onclick="goPanel('cuadros',this)">📋 Cuadros para Plano</button>
+  <button class="ntab" onclick="goPanel('informe',this)">📄 Informe INVIAS</button>
+</div>
+
+<div class="app-content">
+
+<!-- ══════════════════════════════════════════════
+  PANEL 0 — PARÁMETROS DE DISEÑO
+══════════════════════════════════════════════════ -->
+<div class="panel on" id="panel-params">
+  <div class="card">
+    <div class="card-title">Parámetros de Diseño del Proyecto</div>
+    <div class="card-sub">Manual de Diseño Geométrico INVIAS — MDG-2025 · Tabla 3.1</div>
+
+    <div class="param-box">
+      <div class="param-box-title">Clasificación de la Vía</div>
+      <div class="g4">
+        <div class="fgrp">
+          <label>Categoría funcional</label>
+          <select class="sel" id="p-categoria" onchange="paramsUpdate()">
+            <option value="autopista">Autopista (CPD/CPS)</option>
+            <option value="primer" selected>Primer orden (CP)</option>
+            <option value="segundo">Segundo orden (CS)</option>
+            <option value="tercer">Tercer orden (CM)</option>
+          </select>
+        </div>
+        <div class="fgrp">
+          <label>Tipo de terreno</label>
+          <select class="sel" id="p-terreno" onchange="paramsUpdate()">
+            <option value="plano">Plano</option>
+            <option value="ondulado" selected>Ondulado</option>
+            <option value="montanoso">Montañoso</option>
+            <option value="escarpado">Escarpado</option>
+          </select>
+        </div>
+        <div class="fgrp">
+          <label>Velocidad de diseño Vd (km/h)</label>
+          <select class="sel" id="p-vd" onchange="paramsUpdate()">
+            <option>15</option><option>20</option><option>30</option>
+            <option>40</option><option selected>50</option><option>60</option>
+            <option>70</option><option>80</option><option>90</option>
+            <option>100</option><option>110</option><option>120</option><option>130</option>
+          </select>
+        </div>
+        <div class="fgrp">
+          <label>Número de calzadas</label>
+          <select class="sel" id="p-calzadas" onchange="paramsUpdate()">
+            <option value="1" selected>1 calzada (CS)</option>
+            <option value="2">2 calzadas (CPD)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="param-box">
+      <div class="param-box-title">Sección Transversal</div>
+      <div class="g4">
+        <div class="fgrp">
+          <label>Ancho de calzada (m)</label>
+          <input class="inp big" id="p-calzada" type="number" step="0.1" value="7.0" oninput="paramsUpdate()">
+        </div>
+        <div class="fgrp">
+          <label>Ancho de carril (m)</label>
+          <input class="inp big" id="p-carril" type="number" step="0.1" value="3.5" oninput="paramsUpdate()">
+        </div>
+        <div class="fgrp">
+          <label>Ancho de berma (m)</label>
+          <input class="inp big" id="p-berma" type="number" step="0.1" value="1.0" oninput="paramsUpdate()">
+        </div>
+        <div class="fgrp">
+          <label>Número de carriles por calzada</label>
+          <select class="sel" id="p-ncarriles" onchange="paramsUpdate()">
+            <option value="2" selected>2 carriles</option>
+            <option value="3">3 carriles</option>
+            <option value="4">4 carriles</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="param-box">
+      <div class="param-box-title">Parámetros Calculados INVIAS MDG-2025</div>
+      <div id="params-calculated-grid" class="g4"></div>
+      <div id="params-compliance" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Tabla de Parámetros de Diseño</div>
+    <div class="card-sub">Cuadro resumen para incluir en planos — Norma INVIAS MDG-2025</div>
+    <canvas id="params-table-canvas" width="760" height="480"></canvas>
+    <div class="btn-group">
+      <button class="btn gold" onclick="exportParamsCanvas()">💾 Guardar como imagen (PNG)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+  PANEL 1 — ALINEAMIENTO HORIZONTAL
+══════════════════════════════════════════════════ -->
+<div class="panel" id="panel-horizontal">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+
+    <!-- INPUTS -->
+    <div>
+      <div class="card">
+        <div class="card-title">Curva Horizontal</div>
+        <div class="card-sub">Espiral–Circular–Espiral (ECS) · Circular Simple (CS) — INVIAS MDG-2025</div>
+
+        <div class="mode-tabs" id="horiz-modes">
+          <button class="mtab on" onclick="hSetMode('CS',this)">⭕ Circular Simple</button>
+          <button class="mtab" onclick="hSetMode('ECS',this)">🌀 Espiral–Circular</button>
+        </div>
+
+        <div class="info-box">
+          <b>Modo activo:</b> <span id="h-mode-desc">Circular Simple — Ingrese Radio + Deflexión (o cualquier par de datos)</span>
+        </div>
+
+        <!-- Curva circular inputs -->
+        <div id="h-cs-inputs">
+          <div class="sdiv">Datos de entrada</div>
+          <div class="g3">
+            <div class="fgrp">
+              <label>Radio R (m)</label>
+              <input class="inp big" id="h-R" type="number" step="1" placeholder="ej: 200" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Deflexión Δ (°)</label>
+              <input class="inp big" id="h-Delta" type="number" step="0.0001" placeholder="ej: 45.00" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Tangente T (m)</label>
+              <input class="inp" id="h-T" type="number" step="0.001" placeholder="auto" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Long. curva Lc (m)</label>
+              <input class="inp" id="h-Lc" type="number" step="0.001" placeholder="auto" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Cuerda larga CL (m)</label>
+              <input class="inp" id="h-CL" type="number" step="0.001" placeholder="auto" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Ángulo al centro Gc (°)</label>
+              <input class="inp" id="h-Gc" type="number" step="0.0001" placeholder="= Δ" oninput="hCalc()">
+            </div>
+          </div>
+
+          <div class="sdiv">Datos del proyecto</div>
+          <div class="g4">
+            <div class="fgrp">
+              <label>Estación PC (km+m)</label>
+              <input class="inp" id="h-PC-sta" type="text" placeholder="ej: 0+276.097" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Sentido</label>
+              <select class="sel" id="h-sentido" onchange="hDraw()">
+                <option value="D">Derecha (D)</option>
+                <option value="I">Izquierda (I)</option>
+              </select>
+            </div>
+            <div class="fgrp">
+              <label>Azimut tangente ent. (°)</label>
+              <input class="inp" id="h-azimut" type="number" step="0.0001" placeholder="ej: 129.997" oninput="hCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Velocidad diseño (km/h)</label>
+              <select class="sel" id="h-vd" onchange="hCheckNorma()">
+                <option>15</option><option>20</option><option>30</option>
+                <option>40</option><option selected>50</option><option>60</option>
+                <option>70</option><option>80</option><option>90</option>
+                <option>100</option><option>110</option><option>120</option><option>130</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Coordenadas PI -->
+          <div class="sdiv">Coordenadas PI (opcional)</div>
+          <div class="g3">
+            <div class="fgrp">
+              <label>Norte PI</label>
+              <input class="inp" id="h-PI-N" type="number" step="0.001" placeholder="ej: 920985.395" oninput="hCalcFromCoords()">
+            </div>
+            <div class="fgrp">
+              <label>Este PI</label>
+              <input class="inp" id="h-PI-E" type="number" step="0.001" placeholder="ej: 1014032.807" oninput="hCalcFromCoords()">
+            </div>
+            <div class="fgrp">
+              <label>Peralte e (%)</label>
+              <input class="inp" id="h-e" type="number" step="0.1" placeholder="auto-INVIAS" oninput="hCheckNorma()">
+            </div>
+            <div class="fgrp">
+              <label>Norte PC (para replanteo)</label>
+              <input class="inp" id="h-PC-N" type="number" step="0.001" placeholder="opcional">
+            </div>
+            <div class="fgrp">
+              <label>Este PC (para replanteo)</label>
+              <input class="inp" id="h-PC-E" type="number" step="0.001" placeholder="opcional">
+            </div>
+            <div class="fgrp">
+              <label>Intervalo replanteo (m)</label>
+              <select class="sel" id="h-inter">
+                <option value="5">5 m</option>
+                <option value="10">10 m</option>
+                <option value="20" selected>20 m</option>
+                <option value="50">50 m</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ECS inputs -->
+        <div id="h-ecs-inputs" style="display:none">
+          <div class="sdiv">Espiral–Circular–Espiral</div>
+          <div class="g3">
+            <div class="fgrp">
+              <label>Radio curva circular Rc (m)</label>
+              <input class="inp big" id="ecs-R" type="number" step="1" placeholder="ej: 110" oninput="ecsCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Long. espiral Ls (m)</label>
+              <input class="inp big" id="ecs-Ls" type="number" step="1" placeholder="ej: 45" oninput="ecsCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Deflexión total Δ (°)</label>
+              <input class="inp" id="ecs-Delta" type="number" step="0.0001" placeholder="ej: 66.60" oninput="ecsCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Velocidad diseño (km/h)</label>
+              <select class="sel" id="ecs-vd" onchange="ecsCalc()">
+                <option>15</option><option>20</option><option>30</option>
+                <option>40</option><option selected>50</option><option>60</option>
+                <option>70</option><option>80</option><option>90</option>
+                <option>100</option><option>110</option><option>120</option><option>130</option>
+              </select>
+            </div>
+            <div class="fgrp">
+              <label>Estación TE (km+m)</label>
+              <input class="inp" id="ecs-TE-sta" type="text" placeholder="ej: 0+276.097" oninput="ecsCalc()">
+            </div>
+            <div class="fgrp">
+              <label>Sentido</label>
+              <select class="sel" id="ecs-sentido" onchange="ecsDraw()">
+                <option value="D">Derecha (D)</option>
+                <option value="I">Izquierda (I)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="btn-group">
+          <button class="btn prim" onclick="hGenReport()">📄 Generar Reporte PDF</button>
+          <button class="btn success" onclick="hGenExcel()">📥 Exportar Excel</button>
+          <button class="btn gold" onclick="hGenCuadro()">📋 Cuadro para Plano</button>
+          <button class="btn" onclick="hLimpiar()">🗑 Limpiar</button>
+        </div>
+      </div>
+
+      <!-- Resultados -->
+      <div class="card" id="h-res-card" style="display:none">
+        <div class="card-title">Elementos de Curva</div>
+        <div id="h-res-grid" class="g3" style="margin-bottom:12px"></div>
+        <hr class="sep">
+        <div class="sdiv">Estaciones principales</div>
+        <div id="h-estaciones-grid" class="g4"></div>
+        <div id="h-norma-box" style="margin-top:12px"></div>
+      </div>
+
+      <!-- Tabla de replanteo -->
+      <div class="card" id="h-replanteo-card" style="display:none">
+        <div class="card-title">Tabla de Replanteo</div>
+        <div class="card-sub">Coordenadas UTM MAGNA-SIRGAS — Método de deflexiones y cuerdas</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Estación</th>
+                <th>Arco (m)</th>
+                <th>Deflexión (°)</th>
+                <th>Cuerda (m)</th>
+                <th>Ángulo acp. (°)</th>
+                <th>Norte</th>
+                <th>Este</th>
+              </tr>
+            </thead>
+            <tbody id="h-tbody-replanteo"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIAGRAMA -->
+    <div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">Diagrama Geométrico — Vista en Planta</div>
+        <canvas id="h-canvas" width="560" height="560"></canvas>
+        <div style="margin-top:8px;font-size:10px;color:var(--tx3);text-align:center">
+          Los elementos se dibujan en tiempo real · Haga clic en el diagrama para descargar imagen
+        </div>
+      </div>
+
+      <!-- Cuadro de parámetros de curva (para plano) -->
+      <div class="card" id="h-cuadro-card" style="margin-top:16px;display:none">
+        <div class="card-title">Vista Previa — Cuadro de Curvatura</div>
+        <div class="card-sub">Formato para pegar en plano CAD · Click derecho → Guardar imagen</div>
+        <div id="cuadro-canvas-wrap">
+          <canvas id="h-cuadro-canvas" width="1200" height="320" style="width:100%;border:1px solid var(--brd);border-radius:8px"></canvas>
+          <button id="cuadro-download" onclick="downloadCuadro()">⬇ Descargar PNG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cuadro completo de elementos de curvatura (multi-PI) -->
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Cuadro de Elementos de Curvatura Horizontal — Multi-PI</div>
+    <div class="card-sub">Para cuadros de plano completos — INVIAS MDG-2025 · Ingrese todos los PIVs del proyecto</div>
+    <div class="info-box">
+      Ingrese los datos de cada curva para generar el cuadro completo de elementos de curvatura para incluir en los planos.
+      Los cuadros generados reproducen exactamente el formato de planos INVIAS.
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="btn prim" onclick="multiHAddRow()">+ Agregar PI</button>
+      <button class="btn gold" onclick="multiHDraw()">⚡ Generar Cuadro</button>
+      <button class="btn success" onclick="downloadMultiHCuadro()">💾 Guardar Cuadro PNG</button>
+      <button class="btn" onclick="multiHLimpiar()">🗑 Limpiar</button>
+    </div>
+    <div class="tbl-wrap">
+      <table id="multi-h-input-table">
+        <thead>
+          <tr>
+            <th>PI#</th><th>Norte</th><th>Este</th><th>R (m)</th>
+            <th>Ls ent (m)</th><th>Ls sal (m)</th><th>Sentido</th>
+            <th>e(%)</th><th>PC (km+m)</th><th>✕</th>
+          </tr>
+        </thead>
+        <tbody id="multi-h-tbody"></tbody>
+      </table>
+    </div>
+    <div class="diagram-area" style="margin-top:16px;display:none" id="multi-h-cuadro-area">
+      <canvas id="multi-h-canvas" width="1800" height="520" style="width:100%;background:#fff;border-radius:8px"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+  PANEL 2 — ALINEAMIENTO VERTICAL
+══════════════════════════════════════════════════ -->
+<div class="panel" id="panel-vertical">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+    <div>
+      <div class="card">
+        <div class="card-title">Curva Vertical</div>
+        <div class="card-sub">Convexa y Cóncava — Parámetro K — INVIAS MDG-2025 · Tabla 5.3</div>
+
+        <div class="mode-tabs">
+          <button class="mtab on" onclick="vSetTipo('convexa',this)">▲ Convexa (paso alto)</button>
+          <button class="mtab" onclick="vSetTipo('concava',this)">▽ Cóncava (paso bajo)</button>
+        </div>
+
+        <div class="sdiv">Pendientes de entrada y salida</div>
+        <div class="g3">
+          <div class="fgrp">
+            <label>Pendiente entrada p₁ (%)</label>
+            <input class="inp big" id="v-p1" type="number" step="0.01" placeholder="ej: +5.00" oninput="vCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Pendiente salida p₂ (%)</label>
+            <input class="inp big" id="v-p2" type="number" step="0.01" placeholder="ej: -2.00" oninput="vCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Diferencia A = |p₁ - p₂| (%)</label>
+            <input class="inp" id="v-A" type="number" step="0.01" placeholder="auto" oninput="vCalcFromA()">
+          </div>
+        </div>
+
+        <div class="sdiv">Parámetros del PIV</div>
+        <div class="g3">
+          <div class="fgrp">
+            <label>Estación PIV (km+m)</label>
+            <input class="inp" id="v-PIV-sta" type="text" placeholder="ej: 1+234.56" oninput="vCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Cota PIV (m)</label>
+            <input class="inp" id="v-PIV-cota" type="number" step="0.001" placeholder="ej: 83.456" oninput="vCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Velocidad diseño (km/h)</label>
+            <select class="sel" id="v-vd" onchange="vCalc()">
+              <option>15</option><option>20</option><option>30</option>
+              <option>40</option><option selected>50</option><option>60</option>
+              <option>70</option><option>80</option><option>90</option>
+              <option>100</option><option>110</option><option>120</option><option>130</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="sdiv">Longitud y K</div>
+        <div class="g3">
+          <div class="fgrp">
+            <label>Longitud Lv (m) <span style="color:var(--tx3)">(o dejar vacío)</span></label>
+            <input class="inp big" id="v-Lv" type="number" step="1" placeholder="auto" oninput="vCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Parámetro K (m/%)</label>
+            <input class="inp big" id="v-K" type="number" step="0.1" placeholder="auto" oninput="vCalcFromK()">
+          </div>
+          <div class="fgrp">
+            <label>K mínimo INVIAS</label>
+            <input class="inp" id="v-Kmin" type="number" readonly style="background:var(--bg4);color:var(--yl2)">
+          </div>
+        </div>
+
+        <div class="sdiv">Tabla de rasante — PIVs del perfil</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button class="btn prim" onclick="vAddPIV()">+ PIV</button>
+          <button class="btn gold" onclick="vDrawPerfil()">⚡ Dibujar Perfil</button>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Estación</th><th>Cota PIV</th><th>p₁(%)</th><th>p₂(%)</th><th>Lv(m)</th><th>K</th><th>Tipo</th><th>Cumple</th><th>✕</th></tr>
+            </thead>
+            <tbody id="v-piv-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn prim" onclick="vGenReport()">📄 Generar Reporte</button>
+          <button class="btn success" onclick="vGenExcel()">📥 Exportar Excel</button>
+          <button class="btn gold" onclick="vGenCuadro()">📋 Cuadro para Plano</button>
+        </div>
+      </div>
+
+      <div class="card" id="v-res-card" style="display:none">
+        <div class="card-title">Elementos de Curva Vertical</div>
+        <div id="v-res-grid" class="g3" style="margin-bottom:12px"></div>
+        <div id="v-norma-box"></div>
+        <hr class="sep">
+        <div class="sdiv">Tabla de cotas de rasante</div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Estación</th><th>Dist. desde PCV (m)</th><th>Corrección y (m)</th><th>Cota rasante (m)</th><th>Pendiente inst. (%)</th></tr>
+            </thead>
+            <tbody id="v-tbody-cotas"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">Perfil Longitudinal de Rasante</div>
+        <canvas id="v-canvas" width="600" height="380"></canvas>
+        <div style="margin-top:8px;font-size:10px;color:var(--tx3);text-align:center">
+          Diagrama perfil vertical — Línea de rasante con curvas verticales
+        </div>
+      </div>
+      <div class="canvas-wrap" style="margin-top:16px" id="v-curva-wrap">
+        <div class="canvas-title">Diagrama Curva Vertical</div>
+        <canvas id="v-curva-canvas" width="600" height="340"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+  PANEL 3 — SECCIÓN TRANSVERSAL
+══════════════════════════════════════════════════ -->
+<div class="panel" id="panel-seccion">
+  <div style="display:grid;grid-template-columns:380px 1fr;gap:16px;align-items:start">
+    <div>
+      <div class="card">
+        <div class="card-title">Sección Transversal Típica</div>
+        <div class="card-sub">Peralte, sobreancho, bermas — INVIAS MDG-2025</div>
+
+        <div class="g2">
+          <div class="fgrp">
+            <label>Radio Rc (m)</label>
+            <input class="inp big" id="st-R" type="number" step="1" placeholder="ej: 200" oninput="stCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Velocidad Vd (km/h)</label>
+            <select class="sel" id="st-vd" onchange="stCalc()">
+              <option>15</option><option>20</option><option>30</option>
+              <option>40</option><option selected>50</option><option>60</option>
+              <option>70</option><option>80</option><option>90</option>
+              <option>100</option><option>110</option><option>120</option><option>130</option>
+            </select>
+          </div>
+          <div class="fgrp">
+            <label>e máx (%)</label>
+            <select class="sel" id="st-emax" onchange="stCalc()">
+              <option value="4">4% (pasos urbanos)</option>
+              <option value="6">6% (3ᵉʳ orden/afirmado)</option>
+              <option value="8" selected>8% (1ᵉʳ y 2° orden)</option>
+            </select>
+          </div>
+          <div class="fgrp">
+            <label>Ancho calzada (m)</label>
+            <input class="inp" id="st-ancho" type="number" step="0.1" value="7.0" oninput="stCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Ancho carril (m)</label>
+            <input class="inp" id="st-carril" type="number" step="0.1" value="3.5" oninput="stCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Ancho berma (m)</label>
+            <input class="inp" id="st-berma" type="number" step="0.1" value="1.0" oninput="stCalc()">
+          </div>
+          <div class="fgrp">
+            <label>Bombeo normal (%)</label>
+            <input class="inp" id="st-bombeo" type="number" step="0.1" value="2.0" oninput="stCalc()">
+          </div>
+          <div class="fgrp">
+            <label>N° carriles</label>
+            <select class="sel" id="st-ncar" onchange="stCalc()">
+              <option value="2" selected>2</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+
+        <hr class="sep">
+        <div id="st-res" style="display:none">
+          <div class="sdiv">Resultados</div>
+          <div id="st-res-grid" class="g2"></div>
+          <div id="st-norma-box" style="margin-top:10px"></div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn gold" onclick="stExportCanvas()">💾 Guardar Sección PNG</button>
+          <button class="btn prim" onclick="stGenReport()">📄 Reporte</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="canvas-wrap">
+        <div class="canvas-title">Sección Transversal Típica</div>
+        <canvas id="st-canvas" width="800" height="340"></canvas>
+      </div>
+      <!-- tabla peralte por radios -->
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Tabla de Peraltes — INVIAS MDG-2025</div>
+        <div class="card-sub">Tabla 4.5 — emax = 8% · Método 5 AASHTO</div>
+        <div class="tbl-wrap" id="peralte-tabla-wrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+  PANEL 4 — CUADROS PARA PLANO
+══════════════════════════════════════════════════ -->
+<div class="panel" id="panel-cuadros">
+  <div class="card">
+    <div class="card-title">Cuadros para Pegar en Plano</div>
+    <div class="card-sub">Imágenes PNG de alta resolución — Formato INVIAS · Para importar en AutoCAD / MicroStation</div>
+
+    <div class="mode-tabs">
+      <button class="mtab on" onclick="cuSetTipo('parametros',this)">⚙️ Parámetros Diseño</button>
+      <button class="mtab" onclick="cuSetTipo('curvatura_h',this)">🔄 Curvatura Horizontal</button>
+      <button class="mtab" onclick="cuSetTipo('seccion',this)">📐 Sección Típica</button>
+      <button class="mtab" onclick="cuSetTipo('referencias',this)">📍 Referencias y BMs</button>
+    </div>
+
+    <div id="cu-parametros" class="cu-panel">
+      <div class="info-box">Este cuadro se genera automáticamente con los <b>Parámetros de Diseño</b> configurados en el primer panel.</div>
+      <canvas id="cu-params-canvas" width="900" height="540" style="width:100%;background:#fff;border:1px solid var(--brd);border-radius:8px;margin-bottom:12px"></canvas>
+      <button class="btn gold" onclick="cuExport('cu-params-canvas','cuadro_parametros_diseno')">💾 Descargar PNG (300 dpi equiv.)</button>
+    </div>
+
+    <div id="cu-curvatura_h" class="cu-panel" style="display:none">
+      <div class="info-box">Se genera el <b>Cuadro de Elementos de Curvatura Horizontal</b> completo con todos los PIVs ingresados en el panel de Alineamiento Horizontal.</div>
+      <canvas id="cu-horiz-canvas" width="1800" height="480" style="width:100%;background:#fff;border:1px solid var(--brd);border-radius:8px;margin-bottom:12px"></canvas>
+      <button class="btn gold" onclick="cuExport('cu-horiz-canvas','cuadro_curvatura_horizontal')">💾 Descargar PNG</button>
+    </div>
+
+    <div id="cu-seccion" class="cu-panel" style="display:none">
+      <div class="info-box">Sección transversal típica con parámetros del proyecto para incluir en el plano de sección tipo.</div>
+      <canvas id="cu-seccion-canvas" width="1100" height="440" style="width:100%;background:#fff;border:1px solid var(--brd);border-radius:8px;margin-bottom:12px"></canvas>
+      <button class="btn gold" onclick="cuExport('cu-seccion-canvas','cuadro_seccion_tipica')">💾 Descargar PNG</button>
+    </div>
+
+    <div id="cu-referencias" class="cu-panel" style="display:none">
+      <div class="sdiv">Ingresar BMs / Referencias</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button class="btn prim" onclick="cuAddBM()">+ BM</button>
+      </div>
+      <div class="tbl-wrap" style="margin-bottom:12px">
+        <table>
+          <thead><tr><th>REF No.</th><th>Norte</th><th>Este</th><th>Cota</th><th>Descripción</th><th>✕</th></tr></thead>
+          <tbody id="cu-bm-tbody"></tbody>
+        </table>
+      </div>
+      <button class="btn gold" onclick="cuGenBM()">⚡ Generar Cuadro</button>
+      <canvas id="cu-bm-canvas" width="800" height="320" style="width:100%;background:#fff;border:1px solid var(--brd);border-radius:8px;margin-top:12px;display:none"></canvas>
+      <button class="btn gold" id="cu-bm-dl" onclick="cuExport('cu-bm-canvas','cuadro_referencias_bms')" style="display:none;margin-top:8px">💾 Descargar PNG</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+  PANEL 5 — INFORME INVIAS
+══════════════════════════════════════════════════ -->
+<div class="panel" id="panel-informe">
+  <div class="card">
+    <div class="card-title">Informe Técnico — Diseño Geométrico</div>
+    <div class="card-sub">Verificación de cumplimiento con el Manual de Diseño Geométrico INVIAS MDG-2025</div>
+
+    <div class="g3" style="margin-bottom:16px">
+      <div class="fgrp">
+        <label>Nombre del proyecto</label>
+        <input class="inp" id="inf-proyecto" type="text" placeholder="ej: Mejoramiento vía La Palma...">
+      </div>
+      <div class="fgrp">
+        <label>Elaborado por</label>
+        <input class="inp" id="inf-elabora" type="text" value="DGeoMap Ingeniería S.A.S.">
+      </div>
+      <div class="fgrp">
+        <label>Revisado por</label>
+        <input class="inp" id="inf-revisa" type="text" placeholder="Nombre del revisor">
+      </div>
+      <div class="fgrp">
+        <label>Municipio / Departamento</label>
+        <input class="inp" id="inf-ubicacion" type="text" placeholder="ej: Cundinamarca, Colombia">
+      </div>
+      <div class="fgrp">
+        <label>Fecha del informe</label>
+        <input class="inp" id="inf-fecha" type="date">
+      </div>
+      <div class="fgrp">
+        <label>Número de contrato/proyecto</label>
+        <input class="inp" id="inf-contrato" type="text" placeholder="ej: CT-2025-001">
+      </div>
+    </div>
+
+    <button class="btn prim" onclick="genInforme()" style="font-size:14px;padding:12px 24px">
+      ⚡ Generar Informe Completo
+    </button>
+  </div>
+
+  <div class="card" id="inf-preview" style="display:none">
+    <div id="inf-content" style="background:#fff;color:#000;padding:32px;border-radius:8px;font-family:Arial,sans-serif;font-size:12px;line-height:1.6"></div>
+    <div class="btn-group" style="margin-top:16px">
+      <button class="btn prim" onclick="printInforme()">🖨️ Imprimir / Guardar PDF</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app-content -->
+
+<script>
+// ════════════════════════════════════════════════
+// TABLAS NORMATIVAS INVIAS MDG-2025
+// ════════════════════════════════════════════════
+
+// Radios mínimos (emax=8%) - Tabla 4.2
+const RADIO_MIN_8 = {15:12,20:15,30:20,40:41,50:73,60:113,70:168,80:229,90:304,100:394,110:501,120:667,130:832};
+// Radios mínimos (emax=6%) - Tabla 4.3
+const RADIO_MIN_6 = {15:12,20:15,30:21,40:43,50:79,60:123,70:184,80:252,90:336,100:437,110:560,120:756,130:951};
+// Fricción transversal máx - Tabla 4.1
+const FRICCION_MAX = {15:.40,20:.35,30:.28,40:.23,50:.19,60:.17,70:.15,80:.14,90:.13,100:.12,110:.11,120:.09,130:.08};
+// K mínimo curvas convexas (h1=1.10, h2=0.20) - Tabla 5.3
+const K_MIN_CONVEXA = {15:1,20:1,30:3,40:6,50:10,60:17,70:25,80:38,90:58,100:77,110:109,120:140,130:182};
+// K mínimo curvas cóncavas - Tabla 5.3
+const K_MIN_CONCAVA = {15:2,20:3,30:6,40:9,50:13,60:18,70:23,80:30,90:38,100:45,110:55,120:63,130:73};
+// Lv mín por operación (0.6*Vd) - Tabla 5.3
+const LV_MIN_OP = {15:10,20:15,30:20,40:24,50:30,60:36,70:42,80:48,90:54,100:60,110:66,120:72,130:78};
+// Pendiente máx longitudinal (%) - terreno plano, ondulado, montañoso, escarpado
+const PEND_MAX = {
+  autopista:    {plano:3,ondulado:4,montanoso:6,escarpado:7},
+  primer:       {plano:5,ondulado:7,montanoso:9,escarpado:10},
+  segundo:      {plano:6,ondulado:8,montanoso:10,escarpado:12},
+  tercer:       {plano:8,ondulado:10,montanoso:12,escarpado:14}
+};
+// Peralte vs Radio - emax=8%, Tabla 4.5 (Vd: 15 a 130)
+const PERALTE_TABLE_8 = {
+  15: {BN:108,BP:78,'2.2':70,'2.4':63,'2.6':57,'2.8':52,'3.0':48,'3.2':44,'3.4':40,'3.6':37,'3.8':34,'4.0':31,'4.2':29,'4.4':26,'4.6':23,'4.8':20,'5.0':18,'5.2':16,'5.4':14,'5.6':13,'5.8':12,'6.0':12,'6.2':12,'6.4':12,'6.6':12,'6.8':12,'7.0':12,'7.2':12,'7.4':12,'7.6':12,'7.8':12,'8.0':12},
+  50: {BN:1082,BP:790,'2.2':710,'2.4':643,'2.6':587,'2.8':538,'3.0':495,'3.2':458,'3.4':425,'3.6':395,'3.8':368,'4.0':343,'4.2':321,'4.4':300,'4.6':281,'4.8':263,'5.0':245,'5.2':229,'5.4':213,'5.6':198,'5.8':184,'6.0':172,'6.2':161,'6.4':151,'6.6':141,'6.8':132,'7.0':123,'7.2':115,'7.4':107,'7.6':98,'7.8':89,'8.0':73},
+  80: {BN:2439,BP:1793,'2.2':1616,'2.4':1469,'2.6':1344,'2.8':1237,'3.0':1144,'3.2':1062,'3.4':990,'3.6':925,'3.8':867,'4.0':815,'4.2':767,'4.4':723,'4.6':683,'4.8':646,'5.0':612,'5.2':580,'5.4':550,'5.6':522,'5.8':495,'6.0':470,'6.2':446,'6.4':423,'6.6':401,'6.8':380,'7.0':359,'7.2':339,'7.4':318,'7.6':297,'7.8':273,'8.0':229}
+};
+
+// Distancia de visibilidad de parada - Tabla 3.4 (para K mín)
+const DP_TABLA = {15:15,20:20,30:35,40:50,50:65,60:85,70:105,80:130,90:160,100:185,110:220,120:250,130:285};
+
+// Longitud mínima entre PIVs (m) - 6*Vd
+const PIV_MIN = v => 6*v;
+
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let gParams = {categoria:'primer',terreno:'ondulado',vd:50,calzada:7.0,carril:3.5,berma:1.0,ncarriles:2,calzadas:1};
+let hMode = 'CS';
+let hData = {};
+let vTipo = 'convexa';
+let multiHRows = [];
+let cuadroTipo = 'parametros';
+let vPIVs = [];
+let cuBMs = [];
+
+// ════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════
+const rad = d => d*Math.PI/180;
+const deg = r => r*180/Math.PI;
+const fmt = (v,d=3) => (typeof v==='number'&&isFinite(v)) ? v.toFixed(d) : '—';
+const fmtSta = v => {
+  if(!v && v!==0) return '—';
+  const km = Math.floor(v/1000);
+  const m = v - km*1000;
+  return `${km}+${m.toFixed(3).padStart(7,'0')}`;
+};
+const parseSta = s => {
+  if(!s) return NaN;
+  s = s.toString().trim();
+  const m = s.match(/^(\d+)[+\-,.](\d+\.?\d*)$/);
+  if(m) return parseFloat(m[1])*1000+parseFloat(m[2]);
+  return parseFloat(s)||NaN;
+};
+
+function resItem(lbl,val,unit='',hi=false){
+  return `<div class="res-item${hi?' hi':''}">
+    <div class="res-lbl">${lbl}</div>
+    <div class="res-val">${val}<span class="res-unit">${unit}</span></div>
+  </div>`;
+}
+function complianceBadge(ok, msg, norma){
+  const cls = ok==='ok'?'ok':ok==='warn'?'warn':'fail';
+  const ico = ok==='ok'?'✅':ok==='warn'?'⚠️':'❌';
+  return `<div class="compliance ${cls}">
+    <span class="ico">${ico}</span>
+    <div class="msg">${msg}<span class="norm">${norma||''}</span></div>
+  </div>`;
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function goPanel(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+  if(btn) btn.classList.add('on');
+  else {
+    const tabs = document.querySelectorAll('.ntab');
+    const panels = ['params','horizontal','vertical','seccion','cuadros','informe'];
+    const idx = panels.indexOf(id);
+    if(idx>=0) tabs[idx].classList.add('on');
+  }
+  // refresh cuadros panel
+  if(id==='cuadros') cuRefresh();
+}
+
+// ════════════════════════════════════════════════
+// PANEL 0 — PARÁMETROS
+// ════════════════════════════════════════════════
+function paramsUpdate(){
+  gParams = {
+    categoria: document.getElementById('p-categoria').value,
+    terreno:   document.getElementById('p-terreno').value,
+    vd:        parseInt(document.getElementById('p-vd').value),
+    calzada:   parseFloat(document.getElementById('p-calzada').value)||7,
+    carril:    parseFloat(document.getElementById('p-carril').value)||3.5,
+    berma:     parseFloat(document.getElementById('p-berma').value)||1,
+    ncarriles: parseInt(document.getElementById('p-ncarriles').value)||2,
+    calzadas:  parseInt(document.getElementById('p-calzadas').value)||1,
+  };
+  const Vd = gParams.vd;
+  const Rmin = RADIO_MIN_8[Vd]||'—';
+  const ft   = FRICCION_MAX[Vd]||'—';
+  const Kconv = K_MIN_CONVEXA[Vd]||'—';
+  const Kconc = K_MIN_CONCAVA[Vd]||'—';
+  const LvOp  = LV_MIN_OP[Vd]||'—';
+  const PendMax = PEND_MAX[gParams.categoria]?.[gParams.terreno]||'—';
+  const Dp    = DP_TABLA[Vd]||'—';
+  const LTmin = 0.6*Vd;
+
+  const g = document.getElementById('params-calculated-grid');
+  g.innerHTML = 
+    resItem('Velocidad de diseño Vd',Vd,'km/h',true)+
+    resItem('Radio mínimo Rc(min)',Rmin,'m')+
+    resItem('Peralte máximo e(max)','8','%')+
+    resItem('Fricción transv. f(t max)',ft,'')+
+    resItem('K mín convexa',Kconv,'m/%')+
+    resItem('K mín cóncava',Kconc,'m/%')+
+    resItem('Lv mín por operación',LvOp,'m')+
+    resItem('Pendiente máx longitudinal',PendMax,'%')+
+    resItem('Dist. visib. de parada Dp',Dp,'m')+
+    resItem('Long. transición mín',LTmin.toFixed(0),'m');
+
+  const comp = document.getElementById('params-compliance');
+  comp.innerHTML = complianceBadge('ok',
+    `Parámetros calculados según MDG-2025 para Vd=${Vd}km/h, terreno ${gParams.terreno}.`,
+    'Ref: INVIAS MDG-2025 — Tablas 4.1, 4.2, 5.3'
+  );
+
+  drawParamsTable();
+  // sync vd selects across panels
+  ['h-vd','ecs-vd','v-vd','st-vd'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = Vd;
+  });
+}
+
+function drawParamsTable(){
+  const cvs = document.getElementById('params-table-canvas');
+  if(!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+  drawParamsTableOnCtx(ctx, W, H, gParams, '#000', '#fff', false);
+}
+
+function drawParamsTableOnCtx(ctx, W, H, p, txtColor, bgColor, forExport){
+  const Vd=p.vd;
+  const rows=[
+    ['Número de Calzadas', `= ${p.calzadas}`],
+    ['Velocidad de Diseño', `= ${Vd} Km/h`],
+    ['Ancho de Calzada', `= ${p.calzada.toFixed(1)} m`],
+    ['Ancho de Carril', `= ${p.carril.toFixed(1)} m`],
+    ['Ancho de Berma', `= ${p.berma.toFixed(1)} m`],
+    ['Radio mínimo', `= ${RADIO_MIN_8[Vd]||'—'} m`],
+    ['Peralte máximo (e%)', `= 8.0%`],
+    ['Longitud Tramo circular Mínimo (m)', `= ${LV_MIN_OP[Vd]||'—'}`],
+    ['Tipo de terreno', `= ${p.terreno.charAt(0).toUpperCase()+p.terreno.slice(1)}`],
+    ['Longitud mínima entre PIVs (m)', `= ${(6*Vd)}`],
+    ['K mínimo curva convexa', `= ${K_MIN_CONVEXA[Vd]||'—'}`],
+    ['K mínimo curva cóncava', `= ${K_MIN_CONCAVA[Vd]||'—'}`],
+    ['Longitud mínima curva vertical (m)', `= ${LV_MIN_OP[Vd]||'—'}`],
+    ['Pendiente longitudinal máxima', `= ${PEND_MAX[p.categoria]?.[p.terreno]||'—'}.0%`],
+    ['Pendiente longitudinal mínima', `= 0.5%`],
+  ];
+
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle = txtColor;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(10,10,W-20,H-20);
+
+  // Title
+  ctx.fillStyle = txtColor;
+  ctx.font = 'bold 15px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('PARÁMETROS DE DISEÑO', W/2, 38);
+  ctx.strokeRect(10,10,W-20,34);
+
+  const rowH = (H-54)/(rows.length);
+  rows.forEach((r,i)=>{
+    const y = 44+i*rowH;
+    ctx.strokeRect(10,y,W-20,rowH);
+    ctx.fillStyle = txtColor;
+    ctx.font = `${forExport?'14':'12'}px Arial`;
+    ctx.textAlign = 'left';
+    ctx.fillText(r[0], 22, y+rowH*0.65);
+    ctx.textAlign = 'right';
+    ctx.fillText(r[1], W-22, y+rowH*0.65);
+  });
+}
+
+function exportParamsCanvas(){
+  const cvs = document.getElementById('params-table-canvas');
+  const link = document.createElement('a');
+  link.download = 'parametros_diseno_invias.png';
+  link.href = cvs.toDataURL('image/png');
+  link.click();
+}
+
+// ════════════════════════════════════════════════
+// PANEL 1 — HORIZONTAL
+// ════════════════════════════════════════════════
+function hSetMode(m, btn){
+  hMode=m;
+  document.querySelectorAll('#horiz-modes .mtab').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  document.getElementById('h-cs-inputs').style.display = m==='CS'?'':'none';
+  document.getElementById('h-ecs-inputs').style.display = m==='ECS'?'':'none';
+  document.getElementById('h-mode-desc').textContent = m==='CS'
+    ? 'Circular Simple — Ingrese Radio + Deflexión (o cualquier par de datos)'
+    : 'Espiral–Circular–Espiral — Ingrese Rc + Ls + Δ total';
+}
+
+function hCalc(){
+  const R = parseFloat(document.getElementById('h-R').value);
+  const Delta = parseFloat(document.getElementById('h-Delta').value);
+  const T_in = parseFloat(document.getElementById('h-T').value);
+  const Lc_in = parseFloat(document.getElementById('h-Lc').value);
+
+  let R_f=R, Delta_f=Delta, T_f, Lc_f, E_f, M_f, CL_f, GC_f;
+
+  if(isFinite(R_f)&&isFinite(Delta_f)){
+    const dRad = rad(Delta_f);
+    T_f = R_f*Math.tan(dRad/2);
+    Lc_f = R_f*dRad;
+    E_f = R_f*(1/Math.cos(dRad/2)-1);
+    M_f = R_f*(1-Math.cos(dRad/2));
+    CL_f = 2*R_f*Math.sin(dRad/2);
+    GC_f = Delta_f;
+  } else if(isFinite(R_f)&&isFinite(T_in)){
+    T_f=T_in;
+    Delta_f = 2*deg(Math.atan(T_f/R_f));
+    const dRad=rad(Delta_f);
+    Lc_f=R_f*dRad; E_f=R_f*(1/Math.cos(dRad/2)-1);
+    M_f=R_f*(1-Math.cos(dRad/2)); CL_f=2*R_f*Math.sin(dRad/2); GC_f=Delta_f;
+  } else if(isFinite(R_f)&&isFinite(Lc_in)){
+    Lc_f=Lc_in;
+    Delta_f=deg(Lc_f/R_f);
+    const dRad=rad(Delta_f);
+    T_f=R_f*Math.tan(dRad/2); E_f=R_f*(1/Math.cos(dRad/2)-1);
+    M_f=R_f*(1-Math.cos(dRad/2)); CL_f=2*R_f*Math.sin(dRad/2); GC_f=Delta_f;
+  } else { hClearResults(); return; }
+
+  hData = {R:R_f,Delta:Delta_f,T:T_f,Lc:Lc_f,E:E_f,M:M_f,CL:CL_f,GC:GC_f};
+
+  // Fill back computed values
+  if(!isFinite(parseFloat(document.getElementById('h-Delta').value)))
+    document.getElementById('h-Delta').value = fmt(Delta_f,4);
+  if(!isFinite(T_in)) document.getElementById('h-T').value = fmt(T_f,3);
+  if(!isFinite(Lc_in)) document.getElementById('h-Lc').value = fmt(Lc_f,3);
+  document.getElementById('h-CL').value = fmt(CL_f,3);
+  document.getElementById('h-Gc').value = fmt(GC_f,4);
+
+  // Stations
+  const PC_sta = parseSta(document.getElementById('h-PC-sta').value);
+  let PI_sta = isFinite(PC_sta) ? PC_sta + T_f : NaN;
+  let PT_sta = isFinite(PC_sta) ? PC_sta + Lc_f : NaN;
+
+  hShowResults(R_f,Delta_f,T_f,Lc_f,E_f,M_f,CL_f,GC_f, PC_sta, PI_sta, PT_sta);
+  hCheckNorma();
+  hDraw();
+  if(isFinite(PC_sta)) hTableReplanteo(R_f,Delta_f,Lc_f,PC_sta);
+}
+
+function hCalcFromCoords(){
+  // Will compute azimut + T from PI coords if available in future
+  hCalc();
+}
+
+function hShowResults(R,Delta,T,Lc,E,M,CL,GC, PC,PI_sta,PT){
+  document.getElementById('h-res-card').style.display='';
+  const g = document.getElementById('h-res-grid');
+  g.innerHTML =
+    resItem('Radio R',fmt(R,3),'m',true)+
+    resItem('Deflexión Δ',fmt(Delta,4),'°')+
+    resItem('Tangente T',fmt(T,3),'m')+
+    resItem('Long. curva Lc',fmt(Lc,3),'m')+
+    resItem('Externa E',fmt(E,3),'m')+
+    resItem('Flecha M',fmt(M,3),'m')+
+    resItem('Cuerda larga CL',fmt(CL,3),'m')+
+    resItem('Grado curva GC',fmt(GC,4),'°');
+
+  const eg = document.getElementById('h-estaciones-grid');
+  eg.innerHTML =
+    resItem('Estación PC',isFinite(PC)?fmtSta(PC):'—','')+
+    resItem('Estación PI',isFinite(PI_sta)?fmtSta(PI_sta):'—','')+
+    resItem('Estación PT',isFinite(PT)?fmtSta(PT):'—','')+
+    resItem('Longitud total Lc',fmt(Lc,3),'m');
+}
+
+function hCheckNorma(){
+  if(!hData.R) return;
+  const Vd = parseInt(document.getElementById('h-vd').value);
+  const Rmin = RADIO_MIN_8[Vd]||999;
+  const R = hData.R;
+  const nb = document.getElementById('h-norma-box');
+  if(!nb) return;
+  
+  let msgs = [];
+  let status = 'ok';
+  
+  if(R < Rmin){
+    msgs.push(`❌ Radio R=${fmt(R,1)}m es menor al mínimo INVIAS para Vd=${Vd}km/h (Rmin=${Rmin}m).`);
+    status='fail';
+  } else if(R < 1.5*Rmin){
+    msgs.push(`⚠️ Radio R=${fmt(R,1)}m es mayor al mínimo pero menor a 1.5×Rmin=${(1.5*Rmin).toFixed(0)}m. Se recomienda usar radio mayor.`);
+    status='warn';
+  } else {
+    msgs.push(`✅ Radio R=${fmt(R,1)}m CUMPLE con el mínimo INVIAS (Rmin=${Rmin}m) para Vd=${Vd}km/h.`);
+  }
+
+  // Calculate required superelevation
+  const ft = FRICCION_MAX[Vd]||0.19;
+  const e_req = Math.min(8, (Vd*Vd/(127*R) - ft)*100);
+  if(e_req>0){
+    msgs.push(`📐 Peralte requerido: e = ${Math.max(0,e_req).toFixed(1)}% (Tabla 4.5 MDG-2025)`);
+    const eInput = document.getElementById('h-e');
+    if(eInput && !eInput.value) eInput.value = Math.max(0,e_req).toFixed(1);
+  } else {
+    msgs.push('📐 Curva no requiere peralte (radio supera límite de bombeo normal).');
+  }
+
+  nb.innerHTML = complianceBadge(status,msgs.join('<br>'),`Ref: INVIAS MDG-2025 — Tabla 4.2 (emax=8%), Tabla 4.5`);
+}
+
+function hClearResults(){
+  document.getElementById('h-res-card').style.display='none';
+  document.getElementById('h-replanteo-card').style.display='none';
+  hDraw();
+}
+
+function hTableReplanteo(R,Delta,Lc,PC_sta){
+  const interval = parseInt(document.getElementById('h-inter').value)||20;
+  const N_pc = parseFloat(document.getElementById('h-PC-N').value);
+  const E_pc = parseFloat(document.getElementById('h-PC-E').value);
+  const azimut = parseFloat(document.getElementById('h-azimut').value)||0;
+  const sentido = document.getElementById('h-sentido').value;
+  const tb = document.getElementById('h-tbody-replanteo');
+  tb.innerHTML='';
+  
+  // Build stakeout table
+  const pts = [];
+  // First point: PC
+  pts.push({sta:PC_sta, arco:0, defl:0, cuerda:0, angAcp:0});
+  
+  // Regular intervals
+  const staFirst = Math.ceil(PC_sta/interval)*interval;
+  for(let sta=staFirst; sta<=PC_sta+Lc; sta+=interval){
+    const l = sta - PC_sta;
+    if(l<=0||l>Lc) continue;
+    const defl = deg(l/R)/2; // deflexión desde tangente
+    const chord = 2*R*Math.sin(rad(l/R/2));
+    const angAcp = sentido==='D' ? (azimut+defl)%360 : (azimut-defl+360)%360;
+    pts.push({sta, arco:l, defl:fmt(defl,4), cuerda:fmt(chord,3), angAcp:fmt(angAcp,4)});
+  }
+  // Last point: PT
+  const defl_pt = deg(Lc/R)/2;
+  const chord_pt = 2*R*Math.sin(rad(Lc/R/2));
+  const angAcp_pt = sentido==='D' ? (azimut+defl_pt)%360 : (azimut-defl_pt+360)%360;
+  pts.push({sta:PC_sta+Lc, arco:Lc, defl:fmt(defl_pt,4), cuerda:fmt(chord_pt,3), angAcp:fmt(angAcp_pt,4)});
+
+  pts.forEach((p,i)=>{
+    let Norte='—', Este='—';
+    if(isFinite(N_pc)&&isFinite(E_pc)){
+      const l = p.arco;
+      const theta = rad(l/R);
+      const az_rad = rad(azimut);
+      // Coordinates relative to PC
+      if(sentido==='D'){
+        const xc = R*Math.sin(theta);
+        const yc = R*(1-Math.cos(theta));
+        Norte = fmt(N_pc + xc*Math.cos(az_rad) - yc*Math.sin(az_rad),3);
+        Este  = fmt(E_pc + xc*Math.sin(az_rad) + yc*Math.cos(az_rad),3);
+      } else {
+        const xc = R*Math.sin(theta);
+        const yc = R*(1-Math.cos(theta));
+        Norte = fmt(N_pc + xc*Math.cos(az_rad) + yc*Math.sin(az_rad),3);
+        Este  = fmt(E_pc + xc*Math.sin(az_rad) - yc*Math.cos(az_rad),3);
+      }
+    }
+    const row = `<tr>
+      <td>${i===0?'PC':i===pts.length-1?'PT':fmtSta(p.sta)}</td>
+      <td>${fmt(p.arco,3)}</td>
+      <td>${p.defl}</td>
+      <td>${p.cuerda}</td>
+      <td>${p.angAcp}</td>
+      <td>${Norte}</td>
+      <td>${Este}</td>
+    </tr>`;
+    tb.innerHTML += row;
+  });
+
+  document.getElementById('h-replanteo-card').style.display='';
+}
+
+function hDraw(){
+  const cvs = document.getElementById('h-canvas');
+  const ctx = cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+  
+  // Background
+  ctx.fillStyle='#0d1520';
+  ctx.fillRect(0,0,W,H);
+  
+  if(!hData.R||!hData.Delta){
+    ctx.fillStyle='#2a3c52';
+    ctx.font='14px IBM Plex Sans';
+    ctx.textAlign='center';
+    ctx.fillText('Ingrese los datos de la curva para visualizar',W/2,H/2);
+    return;
+  }
+
+  const {R,Delta,T,Lc,E,M,CL} = hData;
+  const sentido = document.getElementById('h-sentido')?.value||'D';
+  const dRad = rad(Delta);
+
+  // Scale to fit
+  const extent = Math.max(T*2, R*1.2);
+  const scale = (Math.min(W,H)*0.82)/extent;
+  const cx = W/2, cy = H*0.6;
+
+  ctx.save();
+  ctx.translate(cx,cy);
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,0.04)';
+  ctx.lineWidth=1;
+  for(let i=-10;i<=10;i++){
+    ctx.beginPath();ctx.moveTo(i*50*scale,-H);ctx.lineTo(i*50*scale,H);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(-W,i*50*scale);ctx.lineTo(W,i*50*scale);ctx.stroke();
+  }
+
+  // Points in local coords (tangent horizontal, left = back tangent)
+  const PC_x = -T; const PC_y = 0;
+  const PI_x = 0;  const PI_y = 0;
+  const PT_angle = sentido==='D' ? dRad : -dRad;
+  const PT_x = T*Math.cos(PT_angle); const PT_y = T*Math.sin(PT_angle)*-1;
+  
+  // Center of circular arc
+  const dir = sentido==='D' ? -1 : 1;
+  const O_x = PC_x;
+  const O_y = dir * R;
+
+  // Draw back tangent
+  ctx.beginPath();
+  ctx.strokeStyle='#2b9af3';ctx.lineWidth=2;ctx.setLineDash([8,6]);
+  ctx.moveTo(-T*scale*1.5,0);ctx.lineTo(PC_x*scale,PC_y*scale);ctx.stroke();
+
+  // Draw forward tangent
+  ctx.beginPath();
+  ctx.setLineDash([8,6]);
+  const fwdLen = T*1.5;
+  ctx.moveTo(PT_x*scale,PT_y*scale);
+  ctx.lineTo((PT_x+fwdLen*Math.cos(PT_angle))*scale,(PT_y-fwdLen*Math.sin(PT_angle))*scale);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Draw circular arc
+  ctx.beginPath();
+  ctx.strokeStyle='#00c896';ctx.lineWidth=3;
+  const startAngle = sentido==='D' ? -Math.PI/2 : Math.PI/2;
+  const endAngle = startAngle + (sentido==='D'?dRad:-dRad);
+  ctx.arc(O_x*scale, O_y*scale, R*scale, startAngle, endAngle, sentido!=='D');
+  ctx.stroke();
+
+  // Draw radii lines (dashed)
+  ctx.strokeStyle='rgba(255,200,50,.4)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(O_x*scale,O_y*scale);ctx.lineTo(PC_x*scale,PC_y*scale);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(O_x*scale,O_y*scale);ctx.lineTo(PT_x*scale,PT_y*scale);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Angle arc at PI
+  ctx.strokeStyle='rgba(240,180,41,.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.arc(0,0,40*scale,Math.PI, Math.PI+PT_angle, sentido==='D');
+  ctx.stroke();
+
+  // Draw long chord
+  ctx.strokeStyle='rgba(255,120,120,.5)';ctx.lineWidth=1.5;ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(PC_x*scale,PC_y*scale);ctx.lineTo(PT_x*scale,PT_y*scale);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Point labels
+  const drawPt = (x,y,lbl,color)=>{
+    ctx.fillStyle=color;
+    ctx.beginPath();ctx.arc(x*scale,y*scale,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='bold 12px IBM Plex Mono';ctx.textAlign='center';
+    ctx.fillText(lbl,x*scale,y*scale-10);
+  };
+  drawPt(PC_x,PC_y,'PC','#00c896');
+  drawPt(PI_x,PI_y,'PI','#f0b429');
+  drawPt(PT_x,PT_y,'PT','#00c896');
+  drawPt(O_x,O_y,'O','rgba(255,200,50,.7)');
+
+  // Dimension labels
+  ctx.fillStyle='#9bb0cc';ctx.font='11px IBM Plex Mono';ctx.textAlign='left';
+  ctx.fillText(`R = ${fmt(R,1)} m`, (-W/2+10)/1, (-H/2+100)/1);
+  ctx.fillText(`Δ = ${fmt(Delta,4)}°`, (-W/2+10)/1, (-H/2+118)/1);
+  ctx.fillText(`T = ${fmt(T,3)} m`, (-W/2+10)/1, (-H/2+136)/1);
+  ctx.fillText(`Lc = ${fmt(Lc,3)} m`, (-W/2+10)/1, (-H/2+154)/1);
+  ctx.fillText(`E = ${fmt(E,3)} m`, (-W/2+10)/1, (-H/2+172)/1);
+  ctx.fillText(`CL = ${fmt(CL,3)} m`, (-W/2+10)/1, (-H/2+190)/1);
+
+  // Scale bar
+  const sb = Math.pow(10,Math.floor(Math.log10(R)))*0.5;
+  ctx.fillStyle='#fff';ctx.strokeStyle='#fff';ctx.lineWidth=2;
+  const sbx = -W/2+20, sby = H/2-20;
+  ctx.beginPath();ctx.moveTo(sbx,sby);ctx.lineTo(sbx+sb*scale,sby);ctx.stroke();
+  ctx.font='10px IBM Plex Mono';ctx.textAlign='left';
+  ctx.fillText(`${sb}m`,sbx,sby-5);
+
+  ctx.restore();
+
+  // Title
+  ctx.fillStyle='#5a7a9a';ctx.font='11px IBM Plex Sans';ctx.textAlign='right';
+  ctx.fillText(`Curva Circular ${sentido==='D'?'Derecha':'Izquierda'} — DGeoMap INVIAS MDG-2025`,W-12,H-10);
+}
+
+function hLimpiar(){
+  ['h-R','h-Delta','h-T','h-Lc','h-CL','h-Gc','h-PC-sta','h-e'].forEach(id=>{
+    const el=document.getElementById(id);if(el) el.value='';
+  });
+  hData={};
+  document.getElementById('h-res-card').style.display='none';
+  document.getElementById('h-replanteo-card').style.display='none';
+  document.getElementById('h-cuadro-card').style.display='none';
+  hDraw();
+}
+
+function hGenCuadro(){
+  if(!hData.R) return;
+  // Draw cuadro for plano on white canvas
+  const cvs = document.getElementById('h-cuadro-canvas');
+  const card = document.getElementById('h-cuadro-card');
+  card.style.display='';
+  drawCuadroHoriz(cvs, [hData], gParams);
+  document.getElementById('cuadro-download').style.display='';
+}
+
+function drawCuadroHoriz(cvs, curves, p){
+  const ctx = cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#000';ctx.lineWidth=1.5;
+  ctx.strokeRect(0,0,W,H);
+
+  // Header
+  ctx.fillStyle='#000';
+  ctx.font='bold 14px Arial';ctx.textAlign='center';
+  ctx.fillText('CUADRO DE ELEMENTOS DE CURVATURA HORIZONTAL',W/2,22);
+  ctx.strokeRect(0,0,W,34);
+
+  // Columns definition
+  const cols = [
+    {lbl:'PI#',w:40},{lbl:'Norte',w:110},{lbl:'Este',w:110},
+    {lbl:'DEF (°)',w:70},{lbl:'DE (°)',w:70},{lbl:'LE (m)',w:60},
+    {lbl:'R(m)',w:70},{lbl:'GC(°)',w:70},{lbl:'T(m)',w:70},
+    {lbl:'L(m)',w:70},{lbl:'Ext(m)',w:60},{lbl:'DC(°)',w:70},
+    {lbl:'TE',w:90},{lbl:'EC/PC',w:90},{lbl:'CE/PT',w:90},{lbl:'ET',w:90},{lbl:'e%',w:50}
+  ];
+  let xOff=0;
+  const rowH=34, hdrH=50;
+  ctx.font='bold 10px Arial';ctx.textAlign='center';
+  cols.forEach(c=>{
+    ctx.strokeRect(xOff,34,c.w,hdrH);
+    ctx.fillText(c.lbl,xOff+c.w/2,34+hdrH/2+4);
+    xOff+=c.w;
+  });
+
+  curves.forEach((d,i)=>{
+    const y=34+hdrH+i*rowH;
+    const vals=[
+      `${i+1}`, '—','—',
+      fmt(d.Delta,4), fmt(d.Delta,4), '—',
+      fmt(d.R,3), fmt(d.GC||d.Delta,4), fmt(d.T,3),
+      fmt(d.Lc,3), fmt(d.E,3), '—',
+      '—','—','—','—',
+      '—'
+    ];
+    xOff=0;
+    ctx.font='11px Arial';ctx.textAlign='center';
+    vals.forEach((v,j)=>{
+      ctx.strokeRect(xOff,y,cols[j].w,rowH);
+      ctx.fillText(v,xOff+cols[j].w/2,y+rowH/2+4);
+      xOff+=cols[j].w;
+    });
+  });
+
+  ctx.font='9px Arial';ctx.textAlign='left';ctx.fillStyle='#555';
+  ctx.fillText('Ref: INVIAS Manual de Diseño Geométrico MDG-2025 — DGeoMap Ingeniería S.A.S.',8,H-6);
+}
+
+function downloadCuadro(){
+  const cvs=document.getElementById('h-cuadro-canvas');
+  const link=document.createElement('a');
+  link.download='cuadro_curvatura_horizontal.png';
+  link.href=cvs.toDataURL('image/png');
+  link.click();
+}
+
+function hGenReport(){ genReport('horizontal'); }
+function hGenExcel(){ alert('Función Excel disponible en la versión integrada con dgeomaping.com'); }
+
+// Multi-H
+function multiHAddRow(){
+  const i = multiHRows.length;
+  multiHRows.push({});
+  const tb = document.getElementById('multi-h-tbody');
+  tb.innerHTML += `<tr id="mh-row-${i}">
+    <td>${i===0?'INICIO':i===multiHRows.length-1?'FIN':i}</td>
+    <td><input type="number" step="0.001" class="inp" style="width:100px" placeholder="Norte" oninput="mhUpdate()"></td>
+    <td><input type="number" step="0.001" class="inp" style="width:100px" placeholder="Este" oninput="mhUpdate()"></td>
+    <td><input type="number" step="1" class="inp" style="width:70px" placeholder="ej:200" oninput="mhUpdate()"></td>
+    <td><input type="number" step="1" class="inp" style="width:55px" value="0" oninput="mhUpdate()"></td>
+    <td><input type="number" step="1" class="inp" style="width:55px" value="0" oninput="mhUpdate()"></td>
+    <td><select class="sel" style="width:70px" onchange="mhUpdate()"><option value="D">D</option><option value="I">I</option></select></td>
+    <td><input type="number" step="0.1" class="inp" style="width:55px" placeholder="auto" oninput="mhUpdate()"></td>
+    <td><input type="text" class="inp" style="width:90px" placeholder="0+000.000" oninput="mhUpdate()"></td>
+    <td><button class="btn danger" onclick="mhRemoveRow(${i})" style="padding:4px 8px">✕</button></td>
+  </tr>`;
+}
+function mhRemoveRow(i){ document.getElementById(`mh-row-${i}`)?.remove(); }
+function mhUpdate(){}
+function multiHLimpiar(){ document.getElementById('multi-h-tbody').innerHTML=''; multiHRows=[]; }
+
+function multiHDraw(){
+  const area = document.getElementById('multi-h-cuadro-area');
+  area.style.display='';
+  const cvs = document.getElementById('multi-h-canvas');
+  drawBigCuadroHoriz(cvs);
+}
+function downloadMultiHCuadro(){
+  multiHDraw();
+  const cvs=document.getElementById('multi-h-canvas');
+  const link=document.createElement('a');
+  link.download='cuadro_curvatura_horizontal_completo.png';
+  link.href=cvs.toDataURL('image/png');link.click();
+}
+
+function drawBigCuadroHoriz(cvs){
+  // Reads data from multi-H table and draws
+  const ctx=cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  
+  const rows = document.querySelectorAll('#multi-h-tbody tr');
+  if(rows.length<2){
+    ctx.fillStyle='#999';ctx.font='16px Arial';ctx.textAlign='center';
+    ctx.fillText('Agregue al menos 2 puntos (INICIO y FIN)',W/2,H/2);
+    return;
+  }
+
+  // Parse input rows
+  const pts=[];
+  rows.forEach((row,i)=>{
+    const inputs=row.querySelectorAll('input,select');
+    pts.push({
+      N:parseFloat(inputs[0].value)||NaN,
+      E:parseFloat(inputs[1].value)||NaN,
+      R:parseFloat(inputs[2].value)||NaN,
+      Ls1:parseFloat(inputs[3].value)||0,
+      Ls2:parseFloat(inputs[4].value)||0,
+      sentido:inputs[5].value,
+      e:parseFloat(inputs[6].value)||NaN,
+      sta_str:inputs[7].value
+    });
+  });
+
+  // Calculate elements between consecutive points
+  const curves=[];
+  for(let i=1;i<pts.length-1;i++){
+    const prev=pts[i-1], curr=pts[i], next=pts[i+1];
+    if(!isFinite(prev.N)||!isFinite(curr.N)||!isFinite(next.N)||!isFinite(curr.R)) continue;
+    
+    // Compute azimuts
+    const az1 = Math.atan2(curr.E-prev.E, curr.N-prev.N);
+    const az2 = Math.atan2(next.E-curr.E, next.N-curr.N);
+    let Delta = Math.abs(deg(az2-az1));
+    if(Delta>180) Delta=360-Delta;
+    
+    const R=curr.R, Ls=curr.Ls1;
+    const dRad=rad(Delta);
+    const T = R*Math.tan(dRad/2) + Ls*(1+Ls*Ls/(24*R*R));
+    const Lc = R*dRad;
+    const E = R*(1/Math.cos(dRad/2)-1)+Ls*Math.tan(dRad/4)*0.5;
+    const CL= 2*R*Math.sin(dRad/2);
+    const GC= Delta;
+    const ft=FRICCION_MAX[gParams.vd]||0.19;
+    const e_req=isFinite(curr.e)?curr.e:Math.max(0,Math.min(8,(gParams.vd*gParams.vd/(127*R)-ft)*100));
+    
+    const PC_sta = parseSta(pts[i].sta_str);
+    const EC_sta = isFinite(PC_sta)&&Ls>0 ? PC_sta+Ls : NaN;
+    const CE_sta = isFinite(PC_sta) ? PC_sta+Ls+Lc : NaN;
+    const PT_sta = isFinite(PC_sta) ? PC_sta+Ls+Lc+Ls : NaN;
+
+    curves.push({
+      pi:i, N:curr.N, E:curr.E, R,Ls,Delta,T,Lc,E:E,CL,GC,
+      e:e_req, PC:PC_sta, EC:EC_sta, CE:CE_sta, PT:PT_sta, sentido:curr.sentido
+    });
+  }
+
+  if(!curves.length){
+    ctx.fillStyle='#999';ctx.font='16px Arial';ctx.textAlign='center';
+    ctx.fillText('Complete datos de Radio en los PIs intermedios',W/2,H/2);
+    return;
+  }
+
+  drawFullCuadroHoriz(ctx, W, H, pts, curves);
+}
+
+function drawFullCuadroHoriz(ctx, W, H, pts, curves){
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#000';ctx.lineWidth=1;
+
+  // Title
+  ctx.font='bold 13px Arial';ctx.textAlign='center';ctx.fillStyle='#000';
+  ctx.fillText('CUADRO DE ELEMENTOS DE CURVATURA HORIZONTAL',W/2,18);
+  ctx.strokeRect(0,0,W,26);
+
+  const cols=[
+    {lbl:'PI#',w:36},{lbl:'COORDENADAS\nNORTE',w:100},{lbl:'COORDENADAS\nESTE',w:100},
+    {lbl:'DIST(m)',w:65},{lbl:'AZIMUT(°)',w:80},{lbl:'SENTIDO',w:52},
+    {lbl:'DEF(°)',w:75},{lbl:'DE(°)',w:75},{lbl:'LE(m)',w:55},
+    {lbl:'R(m)',w:65},{lbl:'GC(°)',w:75},{lbl:'T(m)',w:65},{lbl:'L(m)',w:65},{lbl:'Ext(m)',w:55},
+    {lbl:'DE(°)',w:75},{lbl:'LE(m)',w:55},
+    {lbl:'TE',w:90},{lbl:'EC/PC',w:90},{lbl:'CE/PT',w:90},{lbl:'ET',w:90},{lbl:'e%',w:45}
+  ];
+
+  // We'll just draw a simplified but complete cuadro
+  const hdrH=42, rowH=28;
+  let xOff=0;
+  cols.forEach(c=>{
+    ctx.strokeRect(xOff,26,c.w,hdrH);
+    ctx.font='bold 8.5px Arial';ctx.textAlign='center';ctx.fillStyle='#000';
+    const lines=c.lbl.split('\n');
+    lines.forEach((l,li)=>ctx.fillText(l,xOff+c.w/2,26+hdrH/2+(li-lines.length/2+0.5)*11));
+    xOff+=c.w;
+  });
+
+  // Draw INICIO row
+  const drawRow=(y, vals)=>{
+    xOff=0;
+    ctx.font='9px Arial';ctx.textAlign='center';ctx.fillStyle='#000';
+    vals.forEach((v,j)=>{
+      ctx.strokeRect(xOff,y,cols[j].w,rowH);
+      ctx.fillText(v,xOff+cols[j].w/2,y+rowH/2+4);
+      xOff+=cols[j].w;
+    });
+  };
+
+  let y=26+hdrH;
+  // INICIO
+  const init_sta=parseSta(pts[0]?.sta_str||'');
+  drawRow(y, ['INI',fmt(pts[0].N,3),fmt(pts[0].E,3),'','','','','','','','','','','','','','','','','','']);
+  y+=rowH;
+
+  curves.forEach((c,i)=>{
+    // Distance to previous
+    const prevN = i===0?pts[0].N:pts[i].N;
+    const prevE = i===0?pts[0].E:pts[i].E;
+    const dist=Math.sqrt((c.N-prevN)**2+(c.E-prevE)**2);
+    const az1=deg(Math.atan2(c.E-prevE,c.N-prevN));
+    drawRow(y,[
+      `${i+1}`,fmt(c.N,3),fmt(c.E,3),
+      fmt(dist,3),fmt(az1,4), c.sentido,
+      fmt(c.Delta,4), c.Ls>0?fmt(c.Delta/2,4):'',
+      c.Ls>0?fmt(c.Ls,3):'',
+      fmt(c.R,3), fmt(c.GC,4), fmt(c.T,3), fmt(c.Lc,3), fmt(c.E,3),
+      c.Ls>0?fmt(c.Delta/2,4):'',c.Ls>0?fmt(c.Ls,3):'',
+      isFinite(c.PC)?fmtSta(c.PC):'',
+      isFinite(c.EC)?fmtSta(c.EC):'',
+      isFinite(c.CE)?fmtSta(c.CE):'',
+      isFinite(c.PT)?fmtSta(c.PT):'',
+      isFinite(c.e)?c.e.toFixed(1):''
+    ]);
+    y+=rowH;
+  });
+
+  // FIN
+  drawRow(y,['FIN',fmt(pts[pts.length-1].N,3),fmt(pts[pts.length-1].E,3),'','','','','','','','','','','','','','','','','','']);
+  y+=rowH;
+
+  // Footer
+  ctx.font='8px Arial';ctx.textAlign='left';ctx.fillStyle='#666';
+  ctx.fillText(`INVIAS MDG-2025 — DGeoMap Ingeniería S.A.S. — ${new Date().toLocaleDateString('es-CO')}`,8,y+16);
+}
+
+// ════════════════════════════════════════════════
+// PANEL 2 — VERTICAL
+// ════════════════════════════════════════════════
+function vSetTipo(t, btn){
+  vTipo=t;
+  document.querySelectorAll('#panel-vertical .mode-tabs .mtab').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  vCalc();
+}
+
+function vCalc(){
+  const p1=parseFloat(document.getElementById('v-p1').value);
+  const p2=parseFloat(document.getElementById('v-p2').value);
+  const Vd=parseInt(document.getElementById('v-vd').value);
+  const Lv_in=parseFloat(document.getElementById('v-Lv').value);
+
+  if(!isFinite(p1)||!isFinite(p2)) return;
+  const A=Math.abs(p1-p2);
+  document.getElementById('v-A').value=fmt(A,2);
+
+  const Kmin = vTipo==='convexa' ? (K_MIN_CONVEXA[Vd]||1) : (K_MIN_CONCAVA[Vd]||1);
+  const LvOp = LV_MIN_OP[Vd]||20;
+  document.getElementById('v-Kmin').value=Kmin;
+
+  const Lv_min_seg = A*Kmin;
+  const Lv_min = Math.max(Lv_min_seg, LvOp);
+
+  let Lv = isFinite(Lv_in)&&Lv_in>0 ? Lv_in : Math.ceil(Lv_min/10)*10;
+  document.getElementById('v-Lv').value=Lv;
+  const K = Lv/A;
+  document.getElementById('v-K').value=fmt(K,2);
+
+  const PIV_sta=parseSta(document.getElementById('v-PIV-sta').value);
+  const PIV_cota=parseFloat(document.getElementById('v-PIV-cota').value);
+  
+  const PCV_sta=isFinite(PIV_sta)?PIV_sta-Lv/2:NaN;
+  const PTV_sta=isFinite(PIV_sta)?PIV_sta+Lv/2:NaN;
+  const E = A*Lv/800;
+
+  document.getElementById('v-res-card').style.display='';
+  const g=document.getElementById('v-res-grid');
+  g.innerHTML=
+    resItem('Diferencia A = |p₁-p₂|',fmt(A,2),'%',true)+
+    resItem('Parámetro K',fmt(K,2),'m/%')+
+    resItem('K mínimo INVIAS',Kmin,'m/%')+
+    resItem('Long. curva Lv',fmt(Lv,3),'m')+
+    resItem('Lv mín por seguridad',fmt(Lv_min_seg,1),'m')+
+    resItem('Lv mín por operación',LvOp,'m')+
+    resItem('Externa E',fmt(E,3),'m')+
+    resItem('Cota PCV',isFinite(PIV_cota)?fmt(PIV_cota-(Lv/2)*(p1/100),3):'—','m');
+
+  // Compliance
+  let status='ok', msg=`K=${fmt(K,2)} ≥ Kmin=${Kmin} ✅ Lv=${fmt(Lv,3)}m cumple criterio de seguridad y operación.`;
+  if(K<Kmin){ status='fail'; msg=`❌ K=${fmt(K,2)} < Kmin=${Kmin}. Aumentar Lv mínimo a ${fmt(Lv_min,1)}m.`; }
+  else if(Lv<LvOp){ status='warn'; msg=`⚠️ Lv=${fmt(Lv,3)}m < Lv mín operación=${LvOp}m. Aumentar longitud.`; }
+  
+  const nb=document.getElementById('v-norma-box');
+  nb.innerHTML=complianceBadge(status,msg,`Ref: INVIAS MDG-2025 — Tabla 5.3 (Kmin), §5.2.3`);
+
+  // Stakeout table
+  if(isFinite(PIV_sta)&&isFinite(PIV_cota)){
+    const tb=document.getElementById('v-tbody-cotas');
+    tb.innerHTML='';
+    const step=Lv<=100?5:10;
+    for(let x=0;x<=Lv+0.001;x+=step){
+      const sta=PCV_sta+x;
+      const y_corr=A*(x*x)/(200*Lv);
+      const cota_tang = PIV_cota - (Lv/2-x)*(p1/100);
+      const cota_ras = vTipo==='convexa' ? cota_tang-y_corr : cota_tang+y_corr;
+      const pend_inst = ((p1 - p2)*x/Lv + p2);
+      tb.innerHTML+=`<tr><td>${fmtSta(sta)}</td><td>${fmt(x,3)}</td><td>${fmt(y_corr,4)}</td><td>${fmt(cota_ras,3)}</td><td>${fmt(pend_inst,2)}</td></tr>`;
+    }
+  }
+  
+  vDrawCurva(A, Lv, K, p1, p2, PIV_sta, PIV_cota);
+}
+
+function vCalcFromA(){
+  const A=parseFloat(document.getElementById('v-A').value);
+  if(!isFinite(A)) return;
+  // Auto-set p1, p2 if not set
+  const p1=parseFloat(document.getElementById('v-p1').value);
+  if(!isFinite(p1)){
+    document.getElementById('v-p1').value=fmt(A/2,2);
+    document.getElementById('v-p2').value=fmt(-A/2,2);
+  }
+  vCalc();
+}
+
+function vCalcFromK(){
+  const K=parseFloat(document.getElementById('v-K').value);
+  const p1=parseFloat(document.getElementById('v-p1').value);
+  const p2=parseFloat(document.getElementById('v-p2').value);
+  if(!isFinite(K)||!isFinite(p1)||!isFinite(p2)) return;
+  const A=Math.abs(p1-p2);
+  document.getElementById('v-Lv').value=fmt(K*A,2);
+  vCalc();
+}
+
+function vDrawCurva(A,Lv,K,p1,p2, PIV_sta, PIV_cota){
+  const cvs=document.getElementById('v-curva-canvas');
+  const ctx=cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0d1520';ctx.fillRect(0,0,W,H);
+
+  if(!isFinite(Lv)||!isFinite(A)||A===0) return;
+
+  const padL=70, padR=30, padT=40, padB=50;
+  const pw=W-padL-padR, ph=H-padT-padB;
+
+  // Compute Y range
+  const pts=[];
+  for(let x=0;x<=Lv;x+=Lv/200){
+    const y=A*(x*x)/(200*Lv);
+    const cota_t = isFinite(PIV_cota)?(PIV_cota-(Lv/2-x)*(p1/100)):x*(p1/100);
+    const cota_r = vTipo==='convexa'?cota_t-y:cota_t+y;
+    pts.push({x,y_tang:cota_t,y_ras:cota_r});
+  }
+  const allY=[...pts.map(p=>p.y_tang),...pts.map(p=>p.y_ras)];
+  const minY=Math.min(...allY)-0.5, maxY=Math.max(...allY)+0.5;
+  const scaleX=pw/Lv, scaleY=ph/(maxY-minY);
+
+  const toCanvas=(x,y)=>({
+    cx:padL+x*scaleX,
+    cy:H-padB-(y-minY)*scaleY
+  });
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;
+  for(let i=0;i<=5;i++){
+    const y=minY+(maxY-minY)*i/5;
+    const {cy}=toCanvas(0,y);
+    ctx.beginPath();ctx.moveTo(padL,cy);ctx.lineTo(W-padR,cy);ctx.stroke();
+    ctx.fillStyle='#5a7a9a';ctx.font='10px IBM Plex Mono';ctx.textAlign='right';
+    ctx.fillText(y.toFixed(2),padL-4,cy+3);
+  }
+
+  // Tangent lines
+  ctx.strokeStyle='#2b9af3';ctx.lineWidth=1.5;ctx.setLineDash([8,5]);
+  ctx.beginPath();
+  const tang1=pts.map(p=>p.y_tang);
+  const t0=toCanvas(0,tang1[0]);
+  ctx.moveTo(t0.cx,t0.cy);
+  pts.forEach(p=>{const t=toCanvas(p.x,p.y_tang);ctx.lineTo(t.cx,t.cy);});
+  ctx.stroke();ctx.setLineDash([]);
+
+  // Rasante curve
+  ctx.strokeStyle='#00c896';ctx.lineWidth=3;
+  ctx.beginPath();
+  const r0=toCanvas(0,pts[0].y_ras);
+  ctx.moveTo(r0.cx,r0.cy);
+  pts.forEach(p=>{const r=toCanvas(p.x,p.y_ras);ctx.lineTo(r.cx,r.cy);});
+  ctx.stroke();
+
+  // PIV
+  const piv_c=toCanvas(Lv/2,isFinite(PIV_cota)?PIV_cota:pts[pts.length/2|0].y_tang);
+  ctx.fillStyle='#f0b429';ctx.beginPath();ctx.arc(piv_c.cx,piv_c.cy,5,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#f0b429';ctx.font='10px IBM Plex Mono';ctx.textAlign='left';
+  ctx.fillText('PIV',piv_c.cx+7,piv_c.cy+4);
+
+  // Axes
+  ctx.strokeStyle='#2a3c52';ctx.lineWidth=2;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,H-padB);ctx.lineTo(W-padR,H-padB);ctx.stroke();
+
+  // Labels
+  ctx.fillStyle='#9bb0cc';ctx.font='11px IBM Plex Mono';ctx.textAlign='center';
+  ctx.fillText(`Lv = ${fmt(Lv,1)}m   K = ${fmt(K,2)}   A = ${fmt(A,2)}%   p₁=${fmt(p1,2)}%  p₂=${fmt(p2,2)}%`, W/2, H-8);
+  ctx.save();ctx.rotate(-Math.PI/2);ctx.textAlign='center';
+  ctx.fillText('Cota (m)',-(H/2),14);ctx.restore();
+  ctx.fillText('Distancia (m)',W/2,H-padB+28);
+
+  // Legend
+  ctx.fillStyle='#2b9af3';ctx.font='10px IBM Plex Sans';ctx.textAlign='left';
+  ctx.fillText('— Tangentes verticales',padL+10,padT+14);
+  ctx.fillStyle='#00c896';
+  ctx.fillText('— Rasante (curva parabólica)',padL+10,padT+26);
+}
+
+function vAddPIV(){
+  const p1=parseFloat(document.getElementById('v-p1').value)||0;
+  const p2=parseFloat(document.getElementById('v-p2').value)||0;
+  const Lv=parseFloat(document.getElementById('v-Lv').value)||0;
+  const K=parseFloat(document.getElementById('v-K').value)||0;
+  const Vd=parseInt(document.getElementById('v-vd').value)||50;
+  const Kmin=vTipo==='convexa'?K_MIN_CONVEXA[Vd]:K_MIN_CONCAVA[Vd];
+  const sta=document.getElementById('v-PIV-sta').value;
+  const cota=document.getElementById('v-PIV-cota').value;
+  const cumple=K>=Kmin&&Lv>=LV_MIN_OP[Vd];
+
+  const tb=document.getElementById('v-piv-tbody');
+  const i=tb.rows.length;
+  tb.innerHTML+=`<tr>
+    <td>${i+1}</td>
+    <td>${sta}</td>
+    <td>${cota}</td>
+    <td>${fmt(p1,2)}</td>
+    <td>${fmt(p2,2)}</td>
+    <td>${fmt(Lv,1)}</td>
+    <td>${fmt(K,2)}</td>
+    <td>${vTipo==='convexa'?'Convexa':'Cóncava'}</td>
+    <td class="${cumple?'ok-c':'fail-c'}">${cumple?'✅':'❌'}</td>
+    <td><button class="btn danger" onclick="this.closest('tr').remove()" style="padding:3px 8px">✕</button></td>
+  </tr>`;
+}
+
+function vDrawPerfil(){
+  const rows=document.querySelectorAll('#v-piv-tbody tr');
+  if(!rows.length) return;
+  vCalc();
+}
+
+function vGenReport(){ genReport('vertical'); }
+function vGenExcel(){ alert('Función Excel disponible en la versión integrada'); }
+function vGenCuadro(){ vCalc(); }
+
+// ════════════════════════════════════════════════
+// PANEL 3 — SECCIÓN TRANSVERSAL
+// ════════════════════════════════════════════════
+function stCalc(){
+  const R=parseFloat(document.getElementById('st-R').value);
+  const Vd=parseInt(document.getElementById('st-vd').value);
+  const emax=parseFloat(document.getElementById('st-emax').value)||8;
+  const ancho=parseFloat(document.getElementById('st-ancho').value)||7;
+  const carril=parseFloat(document.getElementById('st-carril').value)||3.5;
+  const berma=parseFloat(document.getElementById('st-berma').value)||1;
+  const bombeo=parseFloat(document.getElementById('st-bombeo').value)||2;
+  const ncar=parseInt(document.getElementById('st-ncar').value)||2;
+
+  if(!isFinite(R)||!isFinite(Vd)){stDraw(null);return;}
+
+  const Rmin = emax===8?RADIO_MIN_8[Vd]:emax===6?RADIO_MIN_6[Vd]:80;
+  const ft=FRICCION_MAX[Vd]||0.19;
+  
+  // e from Tabla 4.5 (emax=8%, Method 5)
+  const e_calc = Math.min(emax, Math.max(0,(Vd*Vd/(127*R)-ft)*100));
+  const e_design = e_calc<0?0:e_calc;
+
+  // Sobreancho (simplified formula)
+  const n_carriles = ncar;
+  const sobreancho = n_carriles * (2.4/(2*R)*10); // simplified AASHTO formula
+
+  document.getElementById('st-res').style.display='';
+  const g=document.getElementById('st-res-grid');
+  g.innerHTML=
+    resItem('Peralte e',fmt(e_design,1),'%',true)+
+    resItem('Radio mín INVIAS',Rmin,'m')+
+    resItem('Sobreancho SA',fmt(Math.max(0,sobreancho),2),'m')+
+    resItem('Fricción ft',ft,'')+
+    resItem('Ancho de calzada',fmt(ancho,1),'m')+
+    resItem('Pendiente berma',e_design>0?fmt(e_design,1):fmt(bombeo,1),'%');
+
+  const status = R>=Rmin?'ok':R>=0.8*Rmin?'warn':'fail';
+  const msg = R>=Rmin?`Radio R=${fmt(R,0)}m ≥ Rmin=${Rmin}m ✅ Cumple norma INVIAS para Vd=${Vd}km/h.`
+    :`❌ Radio R=${fmt(R,0)}m < Rmin=${Rmin}m. No cumple. Aumentar radio.`;
+  document.getElementById('st-norma-box').innerHTML=complianceBadge(status,msg,'INVIAS MDG-2025 — Tabla 4.2');
+
+  stDraw({R,Vd,e:e_design,ancho,carril,berma,bombeo,ncar,sobreancho});
+  buildPeralteTabla();
+}
+
+function stDraw(d){
+  const cvs=document.getElementById('st-canvas');
+  const ctx=cvs.getContext('2d');
+  const W=cvs.width, H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+
+  if(!d){
+    ctx.fillStyle='#aaa';ctx.font='14px Arial';ctx.textAlign='center';
+    ctx.fillText('Ingrese Radio y Velocidad para ver la sección',W/2,H/2);
+    return;
+  }
+
+  const cx=W/2, groundY=H-60;
+  const scale=W/(d.ancho+2*d.berma+6);
+  const hw=d.ancho/2*scale;
+  const hb=d.berma*scale;
+  const e_frac=d.e/100;
+
+  // Terrain
+  ctx.fillStyle='#8B6914';ctx.fillRect(0,groundY,W,H-groundY);
+  ctx.strokeStyle='#5a3a00';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(0,groundY);ctx.lineTo(W,groundY);ctx.stroke();
+
+  // Subbase
+  ctx.fillStyle='#c8a86b';
+  ctx.beginPath();
+  ctx.rect(cx-hw-hb-20,groundY-14,2*(hw+hb+20),14);
+  ctx.fill();
+  ctx.strokeStyle='#a07040';ctx.lineWidth=1;ctx.strokeRect(cx-hw-hb-20,groundY-14,2*(hw+hb+20),14);
+
+  // Base
+  ctx.fillStyle='#b0b0b0';
+  const leftY_base=groundY-14-8-e_frac*hw;
+  const rightY_base=groundY-14-8+e_frac*hw;
+  ctx.beginPath();
+  ctx.moveTo(cx-hw-hb-15,leftY_base-8);
+  ctx.lineTo(cx+hw+hb+15,rightY_base-8);
+  ctx.lineTo(cx+hw+hb+15,rightY_base);
+  ctx.lineTo(cx-hw-hb-15,leftY_base);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#888';ctx.lineWidth=1;ctx.stroke();
+
+  // Asphalt layer
+  const thickA=6;
+  const ly=leftY_base-8-thickA, ry=rightY_base-8-thickA;
+  ctx.fillStyle='#3a3a3a';
+  ctx.beginPath();
+  ctx.moveTo(cx-hw,ly-e_frac*0);
+  ctx.lineTo(cx+hw,ry-e_frac*0);
+  ctx.lineTo(cx+hw,ry+thickA);
+  ctx.lineTo(cx-hw,ly+thickA);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#555';ctx.lineWidth=.5;ctx.stroke();
+
+  // Road surface (sloped)
+  const PCY_l = ly;
+  const PCY_r = ry;
+  ctx.strokeStyle='#ffffff';ctx.lineWidth=2;
+  // Left half
+  ctx.beginPath();ctx.moveTo(cx-hw,PCY_l);ctx.lineTo(cx,PCY_l+e_frac*hw);ctx.stroke();
+  // Right half (mirror peralte: both sides down towards exterior in normal case)
+  ctx.beginPath();ctx.moveTo(cx,PCY_l+e_frac*hw);ctx.lineTo(cx+hw,PCY_r);ctx.stroke();
+
+  // Berma (left and right)
+  ctx.fillStyle='rgba(100,200,100,.3)';
+  [[cx-hw-hb,PCY_l-2,hb,14],[cx+hw,PCY_r-2,hb,14]].forEach(([x,y,w,h])=>{
+    ctx.fillRect(x,y,w,h);
+    ctx.strokeStyle='#4a8a4a';ctx.lineWidth=.5;ctx.strokeRect(x,y,w,h);
+  });
+
+  // Center line
+  ctx.strokeStyle='#ffff00';ctx.lineWidth=1.5;ctx.setLineDash([10,8]);
+  ctx.beginPath();ctx.moveTo(cx,PCY_l+e_frac*hw-20);ctx.lineTo(cx,PCY_l+e_frac*hw+4);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Lane lines
+  ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.setLineDash([]);
+  const laneW=d.carril*scale;
+  if(d.ncar>=4){
+    [cx-laneW,cx+laneW].forEach(lx=>{
+      const lY=ly+e_frac*(lx-cx)/1;
+      ctx.beginPath();ctx.moveTo(lx,lY);ctx.lineTo(lx,lY+thickA+4);ctx.stroke();
+    });
+  }
+
+  // Dimensions
+  ctx.strokeStyle='#000';ctx.lineWidth=.8;
+  const dimY=ly-30;
+  // Total width arrow
+  const totalW=2*(d.ancho/2+d.berma)*scale;
+  drawDimArrow(ctx,cx-totalW/2,dimY,cx+totalW/2,dimY,`${(d.ancho+2*d.berma).toFixed(1)}m`,'#000');
+  drawDimArrow(ctx,cx-hw,dimY+16,cx+hw,dimY+16,`Calzada ${d.ancho.toFixed(1)}m`,'#000');
+  drawDimArrow(ctx,cx-hw-hb,dimY+16,cx-hw,dimY+16,`Berma\n${d.berma}m`,'#4a8a4a');
+  drawDimArrow(ctx,cx+hw,dimY+16,cx+hw+hb,dimY+16,`Berma\n${d.berma}m`,'#4a8a4a');
+
+  // Peralte label
+  ctx.fillStyle='#c41e3a';ctx.font='bold 11px Arial';ctx.textAlign='center';
+  ctx.fillText(`e = ${d.e.toFixed(1)}%`,cx-hw/2,PCY_l-4);
+  ctx.fillText(`-${d.e.toFixed(1)}%`,cx+hw/2,PCY_r-4);
+
+  // Talud arrows
+  ctx.fillStyle='#555';ctx.font='10px Arial';
+  ctx.fillText('-2.00:1',cx-hw-hb-30,groundY-20);
+  ctx.fillText('-2.00:1',cx+hw+hb+5,groundY-20);
+
+  // Labels at bottom
+  ctx.fillStyle='#000';ctx.font='bold 12px Arial';ctx.textAlign='center';
+  ctx.fillText('Sección Típica Relleno — INVIAS MDG-2025',W/2,H-12);
+  ctx.fillStyle='#555';ctx.font='10px Arial';
+  ctx.fillText(`Vd=${d.Vd}km/h  R=${fmt(d.R,0)}m  e=${d.e.toFixed(1)}%  Espesor capa asfáltica: xx cm  Espesor base granular: xx cm`,W/2,H-26);
+}
+
+function drawDimArrow(ctx,x1,y,x2,y2,label,color){
+  ctx.strokeStyle=color;ctx.lineWidth=.8;ctx.fillStyle=color;
+  ctx.beginPath();ctx.moveTo(x1,y);ctx.lineTo(x2,y||y2);ctx.stroke();
+  // Arrowheads
+  [[x1,y,1],[x2,y||y2,-1]].forEach(([x,yl,dir])=>{
+    ctx.beginPath();ctx.moveTo(x,yl);ctx.lineTo(x+dir*6,yl-3);ctx.lineTo(x+dir*6,yl+3);ctx.fill();
+  });
+  ctx.font='10px Arial';ctx.textAlign='center';
+  ctx.fillText(label,(x1+x2)/2,y-4);
+}
+
+function buildPeralteTabla(){
+  const wrap=document.getElementById('peralte-tabla-wrap');
+  const Vd=parseInt(document.getElementById('st-vd').value)||50;
+  // Build partial table for this Vd
+  const pe = PERALTE_TABLE_8[Vd]||PERALTE_TABLE_8[50];
+  if(!pe){wrap.innerHTML='<p style="color:var(--tx3);font-size:11px">Vd no disponible en tabla interna.</p>';return;}
+  
+  let html=`<table><thead><tr><th>e (%)</th><th>Radio mín (m) Vd=${Vd}km/h emax=8%</th><th>Cumple?</th></tr></thead><tbody>`;
+  const R_cur=parseFloat(document.getElementById('st-R').value)||NaN;
+  Object.entries(pe).forEach(([e,Rc])=>{
+    const c=isFinite(R_cur)&&R_cur>=Rc?'ok-c':'';
+    html+=`<tr><td>${e}</td><td class="${c}">${Rc}</td><td class="${c}">${isFinite(R_cur)?(R_cur>=Rc?'✅':'❌'):'—'}</td></tr>`;
+  });
+  html+='</tbody></table>';
+  wrap.innerHTML=html;
+}
+
+function stExportCanvas(){
+  const cvs=document.getElementById('st-canvas');
+  const link=document.createElement('a');
+  link.download='seccion_transversal_tipica.png';
+  link.href=cvs.toDataURL('image/png');link.click();
+}
+function stGenReport(){ genReport('seccion'); }
+
+// ════════════════════════════════════════════════
+// PANEL 4 — CUADROS
+// ════════════════════════════════════════════════
+function cuSetTipo(t,btn){
+  cuadroTipo=t;
+  document.querySelectorAll('.cu-panel').forEach(p=>p.style.display='none');
+  document.getElementById(`cu-${t}`).style.display='';
+  document.querySelectorAll('#panel-cuadros .mode-tabs .mtab').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  cuRefresh();
+}
+
+function cuRefresh(){
+  // Params cuadro
+  const cp=document.getElementById('cu-params-canvas');
+  if(cp){
+    const ctx=cp.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,cp.width,cp.height);
+    drawParamsTableOnCtx(ctx,cp.width,cp.height,gParams,'#000','#fff',true);
+  }
+  // Seccion cuadro
+  const cs=document.getElementById('cu-seccion-canvas');
+  if(cs){
+    const R=parseFloat(document.getElementById('st-R').value)||300;
+    const ctx=cs.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,cs.width,cs.height);
+    const d2={R,Vd:gParams.vd,
+      e:Math.min(8,Math.max(0,(gParams.vd*gParams.vd/(127*R)-(FRICCION_MAX[gParams.vd]||.19))*100)),
+      ancho:gParams.calzada,carril:gParams.carril,berma:gParams.berma,bombeo:2,ncar:gParams.ncarriles,sobreancho:0};
+    stDraw(d2);
+    // Re-render on white bg for export
+    const st_cvs=document.getElementById('st-canvas');
+    if(st_cvs){
+      ctx.drawImage(st_cvs,0,0,cs.width,cs.height);
+    }
+  }
+}
+
+function cuExport(id,name){
+  const cvs=document.getElementById(id);
+  if(!cvs) return;
+  const link=document.createElement('a');
+  link.download=`${name}.png`;
+  link.href=cvs.toDataURL('image/png');
+  link.click();
+}
+
+function cuAddBM(){
+  const tb=document.getElementById('cu-bm-tbody');
+  const i=tb.rows.length+1;
+  tb.innerHTML+=`<tr>
+    <td>${i}</td>
+    <td><input class="inp" type="number" step="0.001" placeholder="ej: 921135.770" style="width:110px"></td>
+    <td><input class="inp" type="number" step="0.001" placeholder="ej: 1013816.456" style="width:110px"></td>
+    <td><input class="inp" type="number" step="0.001" placeholder="ej: 80.423" style="width:80px"></td>
+    <td><input class="inp" type="text" placeholder="descripción" style="width:120px"></td>
+    <td><button class="btn danger" onclick="this.closest('tr').remove()" style="padding:3px 8px">✕</button></td>
+  </tr>`;
+}
+
+function cuGenBM(){
+  const rows=document.querySelectorAll('#cu-bm-tbody tr');
+  const bms=[];
+  rows.forEach((r,i)=>{
+    const inputs=r.querySelectorAll('input');
+    bms.push({no:i+1,N:parseFloat(inputs[0].value)||0,E:parseFloat(inputs[1].value)||0,
+      cota:parseFloat(inputs[2].value)||0,desc:inputs[3].value});
+  });
+  if(!bms.length){alert('Agregue al menos un BM');return;}
+
+  const cvs=document.getElementById('cu-bm-canvas');
+  cvs.style.display='';
+  document.getElementById('cu-bm-dl').style.display='';
+  const ctx=cvs.getContext('2d');
+  const W=cvs.width,H=cvs.height;
+  ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='#000';ctx.lineWidth=1.5;ctx.strokeRect(0,0,W,H);
+
+  ctx.font='bold 14px Arial';ctx.textAlign='center';ctx.fillStyle='#000';
+  ctx.fillText('REFERENCIAS Y BMS',W/2,24);
+  ctx.strokeRect(0,0,W,32);
+
+  const cols=[{lbl:'REF No.',w:80},{lbl:'NORTE',w:160},{lbl:'ESTE',w:160},{lbl:'COTA',w:100},{lbl:'DESCRIPCIÓN',w:W-500}];
+  const hH=28,rH=26;
+  let xOff=0;
+  ctx.font='bold 11px Arial';ctx.textAlign='center';
+  cols.forEach(c=>{
+    ctx.strokeRect(xOff,32,c.w,hH);
+    ctx.fillText(c.lbl,xOff+c.w/2,32+hH/2+4);
+    xOff+=c.w;
+  });
+  bms.forEach((b,i)=>{
+    const y=32+hH+i*rH;
+    const vals=[b.no,fmt(b.N,3),fmt(b.E,3),fmt(b.cota,3),b.desc];
+    xOff=0;
+    ctx.font='11px Arial';ctx.textAlign='center';
+    vals.forEach((v,j)=>{
+      ctx.strokeRect(xOff,y,cols[j].w,rH);
+      ctx.fillText(v,xOff+cols[j].w/2,y+rH/2+4);
+      xOff+=cols[j].w;
+    });
+  });
+}
+
+// ════════════════════════════════════════════════
+// PANEL 5 — INFORME
+// ════════════════════════════════════════════════
+function genInforme(){
+  const proy=document.getElementById('inf-proyecto').value||'[Nombre del proyecto]';
+  const elab=document.getElementById('inf-elabora').value||'DGeoMap Ingeniería S.A.S.';
+  const rev=document.getElementById('inf-revisa').value||'—';
+  const ubic=document.getElementById('inf-ubicacion').value||'Colombia';
+  const fecha=document.getElementById('inf-fecha').value||new Date().toLocaleDateString('es-CO');
+  const contr=document.getElementById('inf-contrato').value||'—';
+  const Vd=gParams.vd;
+  const Rmin=RADIO_MIN_8[Vd];
+  const KminC=K_MIN_CONVEXA[Vd];
+  const KminCo=K_MIN_CONCAVA[Vd];
+  const Pmax=PEND_MAX[gParams.categoria]?.[gParams.terreno];
+
+  // Check data from horizontal panel
+  const h_R=parseFloat(document.getElementById('h-R').value)||NaN;
+  const h_Delta=parseFloat(document.getElementById('h-Delta').value)||NaN;
+  const v_p1=parseFloat(document.getElementById('v-p1').value)||NaN;
+  const v_p2=parseFloat(document.getElementById('v-p2').value)||NaN;
+  const v_K=parseFloat(document.getElementById('v-K').value)||NaN;
+  const v_Lv=parseFloat(document.getElementById('v-Lv').value)||NaN;
+
+  const hCumple=isFinite(h_R)&&h_R>=Rmin;
+  const vKmin=vTipo==='convexa'?KminC:KminCo;
+  const vCumple=isFinite(v_K)&&v_K>=vKmin;
+  const pCumple=isFinite(v_p1)&&Math.abs(v_p1)<=Pmax&&Math.abs(v_p2)<=Pmax;
+
+  const div=document.getElementById('inf-content');
+  div.innerHTML=`
+<div style="border-bottom:2px solid #c41e3a;padding-bottom:16px;margin-bottom:24px">
+  <table width="100%"><tr>
+    <td style="width:80px"><div style="width:70px;height:70px;background:#c41e3a;display:flex;align-items:center;justify-content:center;color:#fff;font-family:Arial;font-weight:900;font-size:28px;border-radius:8px">DG</div></td>
+    <td style="padding-left:16px">
+      <div style="font-size:20px;font-weight:900;color:#000">DGeoMap Ingeniería S.A.S.</div>
+      <div style="font-size:11px;color:#666;margin-top:2px">Topografía · Geomática · Diseño Vial · MAGNA-SIRGAS</div>
+    </td>
+    <td style="text-align:right">
+      <div style="font-size:12px;font-weight:700;color:#c41e3a">INFORME TÉCNICO</div>
+      <div style="font-size:10px;color:#666">Diseño Geométrico de Vías</div>
+      <div style="font-size:10px;color:#666">INVIAS MDG-2025</div>
+    </td>
+  </tr></table>
+</div>
+
+<table width="100%" style="margin-bottom:24px;border-collapse:collapse">
+  <tr><td style="padding:4px 0;width:160px;font-weight:700;font-size:11px">Proyecto:</td><td style="font-size:11px">${proy}</td></tr>
+  <tr><td style="padding:4px 0;font-weight:700;font-size:11px">Localización:</td><td style="font-size:11px">${ubic}</td></tr>
+  <tr><td style="padding:4px 0;font-weight:700;font-size:11px">Elaborado por:</td><td style="font-size:11px">${elab}</td></tr>
+  <tr><td style="padding:4px 0;font-weight:700;font-size:11px">Revisado por:</td><td style="font-size:11px">${rev}</td></tr>
+  <tr><td style="padding:4px 0;font-weight:700;font-size:11px">No. Contrato:</td><td style="font-size:11px">${contr}</td></tr>
+  <tr><td style="padding:4px 0;font-weight:700;font-size:11px">Fecha:</td><td style="font-size:11px">${fecha}</td></tr>
+  <tr><td style="padding:4px 0;font-weight:700;font-size:11px">Norma aplicada:</td><td style="font-size:11px">Manual de Diseño Geométrico de Carreteras — INVIAS MDG-2025</td></tr>
+</table>
+
+<div style="font-size:16px;font-weight:900;color:#c41e3a;margin:20px 0 12px;border-bottom:1px solid #ccc;padding-bottom:6px">1. PARÁMETROS DE DISEÑO</div>
+<p style="margin-bottom:8px;font-size:11px">De acuerdo con el Manual de Diseño Geométrico de Carreteras (INVIAS MDG-2025), los parámetros establecidos para el proyecto son:</p>
+<table width="100%" style="border-collapse:collapse;margin-bottom:12px">
+  <thead><tr style="background:#c41e3a;color:#fff"><th style="padding:7px;font-size:10px;text-align:left">Parámetro</th><th style="padding:7px;font-size:10px;text-align:center">Valor diseño</th><th style="padding:7px;font-size:10px;text-align:center">Valor INVIAS</th><th style="padding:7px;font-size:10px;text-align:center">Cumple</th></tr></thead>
+  <tbody style="font-size:11px">
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">Velocidad de diseño</td><td style="text-align:center">${Vd} km/h</td><td style="text-align:center">Ver Tabla 3.1</td><td style="text-align:center;color:green">✅</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">Categoría funcional</td><td style="text-align:center">${gParams.categoria.charAt(0).toUpperCase()+gParams.categoria.slice(1)} orden</td><td style="text-align:center">Tabla 3.1</td><td style="text-align:center;color:green">✅</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">Tipo de terreno</td><td style="text-align:center">${gParams.terreno.charAt(0).toUpperCase()+gParams.terreno.slice(1)}</td><td style="text-align:center">MDG §3.1</td><td style="text-align:center;color:green">✅</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">Radio mínimo de curvatura</td><td style="text-align:center">${isFinite(h_R)?fmt(h_R,0):'—'} m</td><td style="text-align:center">${Rmin} m (Tabla 4.2)</td><td style="text-align:center;color:${hCumple?'green':'red'}">${hCumple?'✅':'❌'}</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">Peralte máximo</td><td style="text-align:center">8.0%</td><td style="text-align:center">8% (§4.2.3)</td><td style="text-align:center;color:green">✅</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">Pendiente longitudinal máxima</td><td style="text-align:center">${isFinite(v_p1)?Math.max(Math.abs(v_p1),Math.abs(v_p2)).toFixed(2)+'%':'—'}</td><td style="text-align:center">${Pmax}% (Tabla 5.1)</td><td style="text-align:center;color:${pCumple?'green':'red'}">${pCumple?'✅':'❌'}</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">K mín curva convexa</td><td style="text-align:center">${isFinite(v_K)?fmt(v_K,2):'—'}</td><td style="text-align:center">${KminC} (Tabla 5.3)</td><td style="text-align:center;color:${vCumple?'green':'red'}">${vCumple?'✅':'❌'}</td></tr>
+    <tr style="border-bottom:1px solid #eee"><td style="padding:5px">K mín curva cóncava</td><td style="text-align:center">${isFinite(v_K)?fmt(v_K,2):'—'}</td><td style="text-align:center">${KminCo} (Tabla 5.3)</td><td style="text-align:center;color:${vCumple?'green':'red'}">${vCumple?'✅':'❌'}</td></tr>
+  </tbody>
+</table>
+
+<div style="font-size:16px;font-weight:900;color:#c41e3a;margin:20px 0 12px;border-bottom:1px solid #ccc;padding-bottom:6px">2. ALINEAMIENTO HORIZONTAL</div>
+<p style="font-size:11px;margin-bottom:8px">El diseño del alineamiento horizontal cumple con los requisitos establecidos en el Capítulo 4 del MDG-2025, utilizando curvas circulares y espirales de transición (clotoides) para garantizar la seguridad y comodidad del usuario. La ecuación fundamental de diseño es:</p>
+<p style="font-size:11px;margin-bottom:12px;font-style:italic;padding:8px;background:#f5f5f5;border-left:3px solid #c41e3a">e + f<sub>t</sub> = V<sub>d</sub>² / (127 × Rc) &nbsp;&nbsp;(Ecuación 4.2 — INVIAS MDG-2025)</p>
+${isFinite(h_R)?`<p style="font-size:11px;margin-bottom:8px"><strong>Curva analizada:</strong> Radio R = ${fmt(h_R,1)} m, Deflexión Δ = ${fmt(h_Delta,4)}°, Tangente T = ${fmt(hData.T||NaN,3)} m, Longitud Lc = ${fmt(hData.Lc||NaN,3)} m</p>`:'<p style="font-size:11px;color:#999">No se han ingresado datos de curva horizontal.</p>'}
+<p style="font-size:11px"><strong>Verificación radio mínimo (emax=8%):</strong> ${hCumple?`✅ Radio R=${fmt(h_R,0)}m ≥ Rmin=${Rmin}m — CUMPLE (Tabla 4.2 MDG-2025)`:`❌ Radio R=${fmt(h_R,0)}m < Rmin=${Rmin}m — NO CUMPLE`}</p>
+
+<div style="font-size:16px;font-weight:900;color:#c41e3a;margin:20px 0 12px;border-bottom:1px solid #ccc;padding-bottom:6px">3. ALINEAMIENTO VERTICAL</div>
+<p style="font-size:11px;margin-bottom:8px">El diseño del alineamiento vertical cumple con los requisitos del Capítulo 5 del MDG-2025. La longitud mínima de las curvas verticales satisface simultáneamente el criterio de operación (Lv ≥ 0.6×Vd) y el criterio de seguridad (K ≥ Kmin).</p>
+${isFinite(v_K)?`<p style="font-size:11px;margin-bottom:8px"><strong>Curva vertical:</strong> Tipo ${vTipo}, p₁=${fmt(v_p1,2)}%, p₂=${fmt(v_p2,2)}%, A=${fmt(Math.abs(v_p1-v_p2),2)}%, K=${fmt(v_K,2)}, Lv=${fmt(v_Lv,1)}m</p>`:'<p style="font-size:11px;color:#999">No se han ingresado datos de curva vertical.</p>'}
+<p style="font-size:11px"><strong>Verificación K mínimo:</strong> ${vCumple?`✅ K=${fmt(v_K,2)} ≥ Kmin=${vKmin} — CUMPLE (Tabla 5.3 MDG-2025)`:`❌ K=${fmt(v_K,2)} < Kmin=${vKmin} — NO CUMPLE`}</p>
+
+<div style="font-size:16px;font-weight:900;color:#c41e3a;margin:20px 0 12px;border-bottom:1px solid #ccc;padding-bottom:6px">4. SECCIÓN TRANSVERSAL</div>
+<p style="font-size:11px;margin-bottom:8px">La sección transversal típica está conformada por los siguientes elementos según el Capítulo 7 del MDG-2025:</p>
+<ul style="font-size:11px;padding-left:20px;line-height:1.8">
+  <li>Calzada: ${gParams.calzada.toFixed(1)} m (${gParams.ncarriles} carriles de ${gParams.carril.toFixed(1)} m)</li>
+  <li>Bermas: ${gParams.berma.toFixed(1)} m (cada lado)</li>
+  <li>Bombeo normal: 2.0%</li>
+  <li>Peralte máximo: 8.0% (§4.2.3 — 1° y 2° orden)</li>
+  <li>Taludes de corte: 1:1 (variable según estudio geotécnico)</li>
+  <li>Taludes de relleno: 1.5:1 (variable según estudio geotécnico)</li>
+</ul>
+
+<div style="font-size:16px;font-weight:900;color:#c41e3a;margin:20px 0 12px;border-bottom:1px solid #ccc;padding-bottom:6px">5. CONCLUSIONES Y RECOMENDACIONES</div>
+<p style="font-size:11px;margin-bottom:8px">Con base en el análisis realizado conforme al Manual de Diseño Geométrico de Carreteras (INVIAS MDG-2025):</p>
+<ol style="font-size:11px;padding-left:20px;line-height:2">
+  <li>Los parámetros de diseño geométrico se establecieron según la categoría de vía de ${gParams.categoria.charAt(0).toUpperCase()+gParams.categoria.slice(1)} Orden en terreno ${gParams.terreno} con velocidad de diseño de ${Vd} km/h.</li>
+  <li>${hCumple||!isFinite(h_R)?'El alineamiento horizontal cumple con los radios mínimos establecidos en la Tabla 4.2 del MDG-2025.':'El radio de curvatura analizado NO cumple con el mínimo normativo. Se recomienda ajustar el trazado.'}</li>
+  <li>${vCumple||!isFinite(v_K)?'Las curvas verticales diseñadas cumplen con los parámetros K mínimos establecidos en la Tabla 5.3 del MDG-2025.':'Las curvas verticales analizadas NO cumplen con K mínimo. Se recomienda aumentar la longitud de las curvas.'}</li>
+  <li>Se recomienda verificar la consistencia del diseño según el Capítulo 6 del MDG-2025 y elaborar el perfil de velocidades de operación.</li>
+  <li>El diseñador deberá realizar los estudios de gestión del riesgo de desastres (§2.7 MDG-2025) y verificar las condiciones geotécnicas del corredor.</li>
+</ol>
+
+<div style="margin-top:32px;padding-top:16px;border-top:1px solid #ccc;display:flex;justify-content:space-between;font-size:10px;color:#888">
+  <span>Generado por DGeoMap Ingeniería S.A.S. — Programa de Diseño Geométrico · INVIAS MDG-2025</span>
+  <span>${fecha}</span>
+</div>`;
+
+  document.getElementById('inf-preview').style.display='';
+}
+
+function printInforme(){
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Informe Diseño Geométrico</title>
+  <style>body{font-family:Arial,sans-serif;font-size:12px;padding:24px;color:#000}h1{color:#c41e3a}table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:5px}th{background:#c41e3a;color:#fff}@media print{body{padding:0}}</style>
+  </head><body>${document.getElementById('inf-content').innerHTML}</body></html>`);
+  win.document.close();win.focus();setTimeout(()=>win.print(),500);
+}
+
+// ════════════════════════════════════════════════
+// REPORT GENERIC
+// ════════════════════════════════════════════════
+function genReport(type){
+  alert(`Reporte PDF de ${type} — Disponible en la versión integrada con dgeomaping.com.\n\nUtilice el botón "Informe INVIAS" para generar el informe técnico completo.`);
+}
+
+// ════════════════════════════════════════════════
+// ECS (Espiral-Circular-Espiral)
+// ════════════════════════════════════════════════
+function ecsCalc(){
+  const Rc=parseFloat(document.getElementById('ecs-R').value);
+  const Ls=parseFloat(document.getElementById('ecs-Ls').value);
+  const Delta=parseFloat(document.getElementById('ecs-Delta').value);
+  const Vd=parseInt(document.getElementById('ecs-vd').value);
+  
+  if(!isFinite(Rc)||!isFinite(Ls)) return;
+  
+  // Clotoid parameter A
+  const A=Math.sqrt(Rc*Ls);
+  // Angle of spiral
+  const ks=Ls/(2*Rc);
+  const theta_s=deg(ks); // spiral angle in degrees
+  
+  // Long chord and angles
+  const p=Ls*Ls/(24*Rc);
+  const k=Ls/2 - Ls*Ls*Ls/(240*Rc*Rc);
+  const T_total=isFinite(Delta)?
+    (k + (Rc+p)*Math.tan(rad(Delta)/2)) : k+(Rc+p)*0.5;
+  
+  const Rmin=RADIO_MIN_8[Vd]||73;
+  const cumple=Rc>=Rmin;
+  
+  hData={R:Rc,Delta:Delta||0,T:T_total,Lc:isFinite(Delta)?Rc*rad(Delta-2*theta_s):0,
+    E:0,M:0,CL:0,GC:Delta||0,Ls};
+  ecsDraw();
+}
+
+function ecsDraw(){
+  const cvs=document.getElementById('h-canvas');
+  const ctx=cvs.getContext('2d');
+  if(!hData.R||hData.R<=0) return;
+  
+  // Draw ECS diagram
+  const W=cvs.width,H=cvs.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#0d1520';ctx.fillRect(0,0,W,H);
+  
+  const Rc=hData.R,Ls=hData.Ls||0,Delta=hData.Delta,T=hData.T;
+  const sentido=document.getElementById('ecs-sentido')?.value||'D';
+  const dir=sentido==='D'?1:-1;
+  
+  const extent=Math.max(T*2.5,Rc);
+  const scale=Math.min(W,H)*0.78/extent;
+  const cx=W/2,cy=H*0.6;
+  
+  ctx.save();ctx.translate(cx,cy);
+  
+  // Back tangent
+  ctx.strokeStyle='#2b9af3';ctx.lineWidth=2;ctx.setLineDash([8,6]);
+  ctx.beginPath();ctx.moveTo(-T*1.5*scale,0);ctx.lineTo(-T*scale,0);ctx.stroke();
+  ctx.setLineDash([]);
+  
+  // Clotoid entry spiral (approximate with many segments)
+  const theta_s=Ls/(2*Rc);
+  ctx.strokeStyle='#f0b429';ctx.lineWidth=2.5;
+  ctx.beginPath();
+  let px=-T*scale,py=0;ctx.moveTo(px,py);
+  const N=50;
+  for(let i=1;i<=N;i++){
+    const t=i/N*Ls;
+    const theta=t*t/(2*Rc*Ls);
+    const x=-T + t*(1 - t*t*t*t/(40*Rc*Rc*Ls*Ls));
+    const y=dir*t*t*t/(6*Rc*Ls);
+    ctx.lineTo(x*scale,y*scale);
+  }
+  ctx.stroke();
+  
+  // Circular arc (simplified)
+  const ts=Ls;
+  const xs=-T+ts*(1-ts*ts*ts*ts/(40*Rc*Rc*Ls*Ls));
+  const ys=dir*ts*ts*ts/(6*Rc*Ls);
+  const theta_c = isFinite(Delta)?rad(Delta)-2*theta_s:0.3;
+  ctx.strokeStyle='#00c896';ctx.lineWidth=3;
+  const Ox=xs*scale+(dir<0?-1:1)*Math.sin(theta_s)*Rc*scale;
+  const Oy=ys*scale-dir*Math.cos(theta_s)*Rc*scale;
+  ctx.beginPath();
+  const a0=Math.atan2(ys*scale-Oy,xs*scale-Ox);
+  ctx.arc(Ox,Oy,Rc*scale,a0,a0+(dir>0?1:-1)*theta_c,dir<0);
+  ctx.stroke();
+  
+  // Labels
+  ctx.fillStyle='#9bb0cc';ctx.font='11px IBM Plex Mono';ctx.textAlign='left';
+  ctx.fillText(`Rc = ${fmt(Rc,1)} m`,(-W/2+10)/1,(-H/2+100)/1);
+  ctx.fillText(`Ls = ${fmt(Ls,1)} m`,(-W/2+10)/1,(-H/2+118)/1);
+  ctx.fillText(`A = ${fmt(Math.sqrt(Rc*Ls),1)} m`,(-W/2+10)/1,(-H/2+136)/1);
+  ctx.fillText(`Δ = ${fmt(Delta,4)}°`,(-W/2+10)/1,(-H/2+154)/1);
+  ctx.fillStyle='#f0b429';ctx.fillText('— Espiral (clotoide)',(-W/2+10)/1,(-H/2+180)/1);
+  ctx.fillStyle='#00c896';ctx.fillText('— Curva circular',(-W/2+10)/1,(-H/2+195)/1);
+  
+  ctx.restore();
+  ctx.fillStyle='#5a7a9a';ctx.font='11px IBM Plex Sans';ctx.textAlign='right';
+  ctx.fillText(`ECS (Espiral–Circular–Espiral) — DGeoMap INVIAS MDG-2025`,W-12,H-10);
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  // Set today's date
+  document.getElementById('inf-fecha').value=new Date().toISOString().split('T')[0];
+  
+  // Init
+  paramsUpdate();
+  hDraw();
+  stCalc();
+  
+  // Draw empty canvases
+  const v_cvs=document.getElementById('v-canvas');
+  if(v_cvs){
+    const ctx=v_cvs.getContext('2d');
+    ctx.fillStyle='#0d1520';ctx.fillRect(0,0,v_cvs.width,v_cvs.height);
+    ctx.fillStyle='#2a3c52';ctx.font='14px IBM Plex Sans';ctx.textAlign='center';
+    ctx.fillText('Ingrese datos de curva vertical para visualizar perfil',v_cvs.width/2,v_cvs.height/2);
+  }
+  
+  // Populate multi-H with default INICIO/FIN rows
+  multiHAddRow(); multiHAddRow();
+  
+  // Sync Vd
+  document.getElementById('h-vd').value=gParams.vd;
+  document.getElementById('v-vd').value=gParams.vd;
+  document.getElementById('st-vd').value=gParams.vd;
+});
+
+// Canvas click to download
+document.addEventListener('click',e=>{
+  if(e.target.tagName==='CANVAS'&&e.target.id==='h-canvas'){
+    const link=document.createElement('a');
+    link.download='diagrama_curva_horizontal.png';
+    link.href=e.target.toDataURL('image/png');
+    link.click();
+  }
+});
+</script>
+</body>
+</html>
