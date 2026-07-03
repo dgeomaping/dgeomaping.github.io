@@ -959,6 +959,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   <button class="mmitem" onclick="goPage('servicios');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🔺 Servicios Topográficos</button>
   <button class="mmitem" onclick="goPage('cursos');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🎓 Cursos Online</button>
   <button class="mmitem" onclick="goPage('digital');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">💻 Servicios Digitales</button>
+  <button class="mmitem" id="mm-topografia" onclick="goPage('topografia');closeMenu()">🛰️ Aplicaciones</button>
   <button class="mmitem cta" onclick="goPage('contacto');closeMenu()">💬 Cotizar</button>
 </div>
 
@@ -15866,21 +15867,13 @@ async function gateVerify(){
       btn.addEventListener('click', function(e){
         e.preventDefault();
         e.stopPropagation();
+        if(typeof closeMenu==='function') closeMenu();
         if(_topoAuth){
           goPage('topografia');
         } else {
           gateShow();
         }
       });
-    });
-    // Menú móvil también
-    var mmItems = document.querySelectorAll('.mmitem');
-    mmItems.forEach(function(item){
-      if(item.textContent && item.textContent.includes('Topograf')){
-        item.addEventListener('click', function(e){
-          if(!_topoAuth){ e.stopImmediatePropagation(); gateShow(); }
-        }, true);
-      }
     });
   }
   if(document.readyState==='loading'){
