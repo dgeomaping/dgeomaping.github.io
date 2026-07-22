@@ -21,6 +21,35 @@
 <meta property="og:url" content="https://www.dgeomaping.com/">
 <meta property="og:type" content="website">
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "DGeoMap Ingeniería",
+  "legalName": "DGeoMap Ingeniería S.A.S.",
+  "alternateName": "DGeoMap",
+  "url": "https://www.dgeomaping.com/",
+  "logo": "https://www.dgeomaping.com/img/logo-dgeomap.png",
+  "image": "https://www.dgeomaping.com/img/logo-dgeomap.png",
+  "description": "Empresa de topografía, geomática, geodesia, cartografía y fotogrametría con dron en Bogotá, Colombia. Levantamientos topográficos, procesamiento GNSS y servicios GIS referenciados en MAGNA-SIRGAS CTM-12.",
+  "telephone": "+57-311-279-2204",
+  "email": "topografia@dgeomaping.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bogotá",
+    "addressRegion": "Bogotá D.C.",
+    "addressCountry": "CO"
+  },
+  "areaServed": { "@type": "Country", "name": "Colombia" },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "08:00",
+    "closes": "18:00"
+  },
+  "priceRange": "$$"
+}
+</script>
 <style>
 :root{
   --bg1:#f4f8f2;--bg2:#eaf2e6;--bg3:#d8e8d4;--bg4:#ffffff;
@@ -970,7 +999,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 <div class="page active" id="page-inicio">
   <div class="hero-wrap">
     <div class="hero-left">
-      <h1 id="h-h1">Precisión Digital<span class="acc" id="h-l2">en el Territorio Colombiano</span><span class="sm" id="h-sub">Topografía · Geomática · Cartografía · Ingeniería</span></h1>
+      <h1 id="h-h1">Precisión Digital<span class="acc" id="h-l2">en el Territorio Colombiano</span><span class="sm" id="h-sub">Topografía · Geomática · Cartografía · Ingeniería</span><span style="display:block;margin-top:10px;font-size:.32em;font-weight:700;letter-spacing:1.5px;color:#2e7d1a;text-transform:uppercase">DGeoMap Ingeniería</span></h1>
       <p class="hero-desc" id="h-desc">Soluciones integrales de topografía, geomática, geodesia, cartografía y gestión ambiental, referenciadas en el sistema MAGNA-SIRGAS CTM-12 de Colombia.</p>
       <div class="hero-btns">
         <button class="hbtn p" onclick="goPage('servicios')">📐 Ver servicios</button>
@@ -5199,6 +5228,16 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 </div>
 
 </div><!-- /pages -->
+<footer style="flex-shrink:0;background:#162212;color:rgba(255,255,255,.65);font-size:11px;padding:8px 22px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;border-top:1px solid rgba(255,255,255,.08)">
+  <span>© <span id="ft-year">2026</span> <strong style="color:#fff;font-weight:700">DGeoMap Ingeniería</strong> S.A.S.</span>
+  <span style="opacity:.5">·</span>
+  <span>Bogotá D.C., Colombia</span>
+  <span style="opacity:.5">·</span>
+  <span>📱 311 279 2204</span>
+  <span style="opacity:.5">·</span>
+  <span>✉️ topografia@dgeomaping.com</span>
+</footer>
+<script>document.getElementById('ft-year').textContent = new Date().getFullYear();</script>
 </div><!-- /app -->
 
 <script>
