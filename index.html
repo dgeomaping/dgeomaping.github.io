@@ -942,7 +942,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <button class="ntab on"  id="tab-inicio"     onclick="goPage('inicio')">Inicio</button>
     <button class="ntab"     id="tab-nosotros"   onclick="goPage('nosotros')">Nosotros</button>
     <button class="ntab"     id="tab-portafolio" onclick="goPage('portafolio')">Galería</button>
-    <div class="nav-dropdown"><button class="ntab">🗂 Servicios ▾</button><div class="nav-drop-menu"><a onclick="goPage('servicios')">📐 Servicios Topográficos</a><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="alert('🛒 Tienda: Próximamente')">🛒 Tienda</a></div></div>
+    <div class="nav-dropdown"><button class="ntab">🗂 Servicios ▾</button><div class="nav-drop-menu"><a onclick="goPage('servicios')">📐 Servicios Topográficos</a><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="goPage('tienda')">🛒 Tienda</a></div></div>
     <button class="ntab"     id="tab-topografia" onclick="goPage('topografia')">🛰️ Aplicaciones</button>
     <button class="ntab cta" id="tab-contacto"   onclick="goPage('contacto')">Cotizar</button>
   </div>
@@ -959,7 +959,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   <button class="mmitem" onclick="goPage('servicios');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🔺 Servicios Topográficos</button>
   <button class="mmitem" onclick="goPage('cursos');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🎓 Cursos Online</button>
   <button class="mmitem" onclick="goPage('digital');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">💻 Servicios Digitales</button>
-  <button class="mmitem" onclick="alert('🛒 Tienda: Próximamente');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🛒 Tienda</button>
+  <button class="mmitem" onclick="goPage('tienda');closeMenu()" style="padding-left:40px;font-size:13px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🛒 Tienda</button>
   <button class="mmitem" id="mm-topografia" onclick="goPage('topografia');closeMenu()">🛰️ Aplicaciones</button>
   <button class="mmitem cta" onclick="goPage('contacto');closeMenu()">💬 Cotizar</button>
 </div>
@@ -1361,6 +1361,45 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <button onclick="goPage('contacto')" style="background:#fff;color:var(--dk1);border:none;padding:11px 28px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">📩 Contáctanos</button>
     </div>
 
+  </div>
+</div>
+<!-- TIENDA -->
+<div class="page" id="page-tienda">
+  <style>
+  @keyframes tdFly1{0%{left:-15%;top:18%;transform:rotate(-4deg)}50%{left:55%;top:8%;transform:rotate(3deg)}100%{left:125%;top:18%;transform:rotate(-4deg)}}
+  @keyframes tdFly2{0%{left:120%;top:52%;transform:scaleX(-1) rotate(4deg)}50%{left:45%;top:62%;transform:scaleX(-1) rotate(-3deg)}100%{left:-18%;top:52%;transform:scaleX(-1) rotate(4deg)}}
+  @keyframes tdFly3{0%{left:-15%;top:80%;transform:rotate(-2deg) scale(.75)}50%{left:60%;top:70%;transform:rotate(2deg) scale(.75)}100%{left:125%;top:80%;transform:rotate(-2deg) scale(.75)}}
+  @keyframes tdProp{from{transform:translateY(-50%) rotate(0deg)}to{transform:translateY(-50%) rotate(360deg)}}
+  @keyframes tdGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  @keyframes tdFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes tdPulse{0%,100%{opacity:.65}50%{opacity:1}}
+  .td-hero{position:relative;overflow:hidden;min-height:62vh;border-radius:20px;background:linear-gradient(135deg,#0f2410,#1e3318 45%,#2e7d1a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:50px 20px}
+  .td-drone{position:absolute;width:64px;height:34px}
+  .td-drone.f1{animation:tdFly1 9s linear infinite}
+  .td-drone.f2{animation:tdFly2 12s linear infinite}
+  .td-drone.f3{animation:tdFly3 10.5s linear infinite}
+  .td-body{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:11px;background:#16210f;border-radius:4px;box-shadow:0 3px 8px rgba(0,0,0,.35);z-index:2}
+  .td-body::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);width:9px;height:8px;background:var(--ac3);border-radius:0 0 4px 4px;opacity:.85}
+  .td-arm{position:absolute;left:50%;top:50%;width:26px;height:3px;background:#0d160a;transform-origin:0 50%}
+  .td-arm.a1{transform:rotate(35deg)}.td-arm.a2{transform:rotate(145deg)}.td-arm.a3{transform:rotate(-35deg)}.td-arm.a4{transform:rotate(-145deg)}
+  .td-prop{position:absolute;right:-7px;top:50%;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.85),rgba(255,255,255,.12) 55%,transparent 70%);animation:tdProp .1s linear infinite}
+  .td-title{font-family:var(--fd);font-size:clamp(38px,7vw,72px);font-weight:800;letter-spacing:2px;margin:18px 0 10px;background:linear-gradient(90deg,#ffffff,var(--ac4),#dff2d4,var(--ac3),#ffffff);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tdGrad 4s ease-in-out infinite,tdFloat 3s ease-in-out infinite}
+  .td-sub{color:rgba(255,255,255,.82);font-size:14px;max-width:480px;line-height:1.7;margin-bottom:26px;animation:tdPulse 3s ease-in-out infinite}
+  @media(max-width:640px){.td-drone{width:44px;height:24px}.td-body{width:17px;height:8px}.td-arm{width:18px}.td-prop{width:14px;height:14px}}
+  </style>
+  <div class="wrap" style="max-width:1200px;padding:24px 22px">
+    <div class="td-hero">
+      <div class="td-drone f1"><div class="td-body"></div><div class="td-arm a1"><div class="td-prop"></div></div><div class="td-arm a2"><div class="td-prop"></div></div><div class="td-arm a3"><div class="td-prop"></div></div><div class="td-arm a4"><div class="td-prop"></div></div></div>
+      <div class="td-drone f2"><div class="td-body"></div><div class="td-arm a1"><div class="td-prop"></div></div><div class="td-arm a2"><div class="td-prop"></div></div><div class="td-arm a3"><div class="td-prop"></div></div><div class="td-arm a4"><div class="td-prop"></div></div></div>
+      <div class="td-drone f3"><div class="td-body"></div><div class="td-arm a1"><div class="td-prop"></div></div><div class="td-arm a2"><div class="td-prop"></div></div><div class="td-arm a3"><div class="td-prop"></div></div><div class="td-arm a4"><div class="td-prop"></div></div></div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#dff2d4;display:flex;align-items:center;gap:10px;justify-content:center;z-index:2">
+        <span style="width:20px;height:2px;background:var(--ac4);display:inline-block"></span>DGeoMap — Tienda Online<span style="width:20px;height:2px;background:var(--ac4);display:inline-block"></span>
+      </div>
+      <div class="td-title">Próximamente</div>
+      <div class="td-sub">Estamos preparando una tienda online con equipos, accesorios y servicios de topografía y geomática. Muy pronto podrás comprar directamente desde aquí.</div>
+      <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20quiero%20que%20me%20avisen%20cuando%20abra%20la%20Tienda%20Online.','_blank')" style="background:#fff;color:var(--dk1);border:none;padding:12px 28px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2">🔔 Avísame cuando esté lista</button>
+    </div>
   </div>
 </div>
 <!-- TOPOGRAFÍA -->
@@ -6415,7 +6454,7 @@ window.addEventListener('popstate', function(e) {
 window.addEventListener('DOMContentLoaded', function() {
   try {
     var hash = window.location.hash.replace('#','');
-    var paginas = ['inicio','nosotros','servicios','portafolio','contacto','topografia'];
+    var paginas = ['inicio','nosotros','servicios','portafolio','contacto','topografia','digital','cursos','tienda'];
     if(hash && paginas.indexOf(hash) >= 0) {
       goPage(hash, false);
     } else {
