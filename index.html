@@ -971,7 +971,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <button class="ntab on"  id="tab-inicio"     onclick="goPage('inicio')">Inicio</button>
     <button class="ntab"     id="tab-nosotros"   onclick="goPage('nosotros')">Nosotros</button>
     <button class="ntab"     id="tab-portafolio" onclick="goPage('portafolio')">Galería</button>
-    <div class="nav-dropdown"><button class="ntab">🗂 Servicios ▾</button><div class="nav-drop-menu"><a onclick="goPage('servicios')">📐 Servicios Topográficos</a><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="goPage('tienda')">🛒 Tienda</a></div></div>
+    <div class="nav-dropdown"><button class="ntab" id="tab-servicios-menu">🗂 Servicios ▾</button><div class="nav-drop-menu"><a onclick="goPage('servicios')">📐 Servicios Topográficos</a><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="goPage('tienda')">🛒 Tienda</a></div></div>
     <button class="ntab"     id="tab-topografia" onclick="goPage('topografia')">🛰️ Aplicaciones</button>
     <button class="ntab cta" id="tab-contacto"   onclick="goPage('contacto')">Cotizar</button>
   </div>
@@ -6461,6 +6461,7 @@ function goPage(id, addHistory) {
   document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
   const tab = document.getElementById('tab-'+id);
   if(tab) tab.classList.add('on');
+  if(['servicios','digital','cursos','tienda'].indexOf(id)>=0) document.getElementById('tab-servicios-menu').classList.add('on');
   // Menú móvil
   const mmItems = document.querySelectorAll('.mmitem');
   mmItems.forEach(m => m.classList.remove('on'));
