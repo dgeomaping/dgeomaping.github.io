@@ -1303,80 +1303,172 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 </div>
 <!-- CURSOS ONLINE -->
 <div class="page" id="page-cursos">
+  <style>
+  .curso-card{background:#fff;border:1px solid var(--bg3);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease}
+  .curso-card:hover{transform:translateY(-6px);box-shadow:var(--shadow2)}
+  .curso-thumb{position:relative;height:175px;overflow:hidden}
+  .curso-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+  .curso-card:hover .curso-thumb img{transform:scale(1.08)}
+  .curso-chip{position:absolute;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+  .curso-feat{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx3);line-height:1.4}
+  .curso-temario-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:10px 14px;font-size:12px;font-weight:700;color:var(--ac1);cursor:pointer;font-family:inherit;margin-bottom:10px;transition:background .15s}
+  .curso-temario-btn:hover{background:var(--bg3)}
+  .curso-temario-ic{transition:transform .25s ease;display:inline-block}
+  .curso-temario{display:none;font-size:11.5px;color:var(--tx2);line-height:2;margin:-2px 0 14px;padding:10px 14px;background:var(--bg1);border-radius:8px;border:1px dashed var(--bg3)}
+  .curso-temario div{padding-left:4px}
+  </style>
   <div class="wrap" style="max-width:1200px;padding:24px 22px">
     <div class="pg-eye anim-left d1">🎓 DGeoMap — Formación Profesional</div>
     <div class="pg-title anim-up d2" style="margin-bottom:10px">Cursos Online</div>
-    <div class="anim-up d2" style="background:linear-gradient(135deg,rgba(30,51,24,0.06),rgba(46,125,26,0.04));border:1px solid rgba(46,125,26,0.18);border-left:4px solid var(--ac1);border-radius:10px;padding:14px 18px;margin-bottom:28px;font-size:12.5px;color:var(--tx2);line-height:1.75">
+    <div class="anim-up d2" style="background:linear-gradient(135deg,rgba(30,51,24,0.06),rgba(46,125,26,0.04));border:1px solid rgba(46,125,26,0.18);border-left:4px solid var(--ac1);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:12.5px;color:var(--tx2);line-height:1.75">
       <div style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">🎓 Formación Técnica Especializada — DGeoMap Ingeniería S.A.S.</div>
-      Capacítate con los mejores cursos de geomática y topografía diseñados por profesionales colombianos. Aprende a tu ritmo con contenido práctico, actualizado y enfocado en la normativa colombiana vigente. Todos nuestros cursos incluyen certificado digital emitido por <strong style="color:var(--dk1)">DGeoMap Ingeniería S.A.S.</strong>
+      Capacítate con cursos de geomática y topografía diseñados por profesionales colombianos. Contenido práctico, actualizado y enfocado en la normativa colombiana vigente. Todos incluyen certificado digital emitido por <strong style="color:var(--dk1)">DGeoMap Ingeniería S.A.S.</strong>
+    </div>
+
+    <!-- INSTRUCTOR -->
+    <div class="anim-up d2" style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--bg3);border-radius:12px;padding:14px 18px;margin-bottom:24px;box-shadow:var(--shadow)">
+      <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#1e3318,#2e7d1a);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">👷</div>
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--dk1)">Dictados por Ing. Diego Gutiérrez</div>
+        <div style="font-size:11.5px;color:var(--tx3);line-height:1.5">Ingeniero Topográfico · +15 años de experiencia · Piloto UAS certificado · Fundador de DGeoMap Ingeniería S.A.S.</div>
+      </div>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="anim-up d3" id="curso-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="ptab on" onclick="filterCursos('all',this)">Todos los cursos</button>
+      <button class="ptab" onclick="filterCursos('gnss',this)">📡 GNSS &amp; Geodesia</button>
+      <button class="ptab" onclick="filterCursos('vias',this)">🛣️ Diseño Vial</button>
+      <button class="ptab" onclick="filterCursos('dron',this)">🚁 Drones y Fotogrametría</button>
     </div>
 
     <!-- GRID DE CURSOS -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:40px">
+    <div id="curso-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:40px">
 
-      <!-- CURSO 1 -->
-      <div style="background:var(--bg1);border:1.5px solid var(--bg3);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow2)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--shadow)'">
-        <div style="background:linear-gradient(135deg,#1e3318,#2e7d1a);padding:24px 20px;text-align:center">
-          <div style="font-size:48px;margin-bottom:8px">📡</div>
-          <div style="font-size:16px;font-weight:800;color:#fff;font-family:var(--fd);letter-spacing:.5px">PROCESAMIENTO DE DATOS GNSS</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px">Leica Geo Office · Trimble Business Center · Topcon Tools · Leica Infinity</div>
+      <!-- CURSO 1: GNSS -->
+      <div class="curso-card" data-cat="gnss">
+        <div class="curso-thumb">
+          <img src="img/servicio-geodesia-gnss.jpg" alt="Procesamiento de Datos GNSS" loading="lazy">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,36,10,.05) 40%,rgba(10,24,7,.9) 100%)"></div>
+          <div class="curso-chip" style="top:12px;left:12px;background:rgba(255,255,255,.94);color:var(--ac1)">Nivel intermedio</div>
+          <div class="curso-chip" style="top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff">⏱ 20 horas</div>
+          <div style="position:absolute;bottom:12px;left:16px;right:16px">
+            <div style="font-family:var(--fd);font-size:18px;font-weight:800;color:#fff;letter-spacing:.3px;line-height:1.2">Procesamiento de Datos GNSS</div>
+            <div style="font-size:10.5px;color:rgba(255,255,255,.8);margin-top:3px">Leica Geo Office · Trimble Business Center · Topcon Tools</div>
+          </div>
         </div>
         <div style="padding:20px">
-          <div style="font-size:12px;color:var(--tx2);line-height:1.8;margin-bottom:14px">Aprende a procesar observaciones GNSS diferenciales con los softwares más utilizados en Colombia. Cálculo de vectores, ajuste de red, exportación de coordenadas en MAGNA-SIRGAS CTM12 y generación de informes bajo la Resolución IGAC 643/2018.</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
-            <span style="background:var(--ac2);color:var(--ac1);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px">Nivel intermedio</span>
-            <span style="background:var(--bg2);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:20px">20 horas</span>
-            <span style="background:var(--bg2);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:20px">Certificado DGeoMap incluido</span>
+          <p style="font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Procesa observaciones GNSS diferenciales con los softwares más usados en Colombia: cálculo de vectores, ajuste de red y generación de informes bajo la Resolución IGAC 643/2018.</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
+            <div class="curso-feat">🎥 Clases grabadas HD</div>
+            <div class="curso-feat">💬 Soporte por WhatsApp</div>
+            <div class="curso-feat">📄 Plantillas incluidas</div>
+            <div class="curso-feat">🏆 Certificado digital</div>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div style="font-size:22px;font-weight:800;color:var(--dk1)">$180.000</div>
-            <div style="font-size:11px;color:var(--tx3)">COP · Pago único</div>
+          <button class="curso-temario-btn" onclick="toggleTemario('gnss')">
+            <span>📋 Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-gnss">▾</span>
+          </button>
+          <div class="curso-temario" id="temario-gnss">
+            <div>1. Fundamentos GNSS y sistema MAGNA-SIRGAS</div>
+            <div>2. Planeación de líneas base y configuración de equipos</div>
+            <div>3. Procesamiento diferencial (Leica, Trimble, Topcon)</div>
+            <div>4. Ajuste de redes geodésicas y control de calidad</div>
+            <div>5. Transformación y exportación a CTM-12</div>
+            <div>6. Informes técnicos bajo Resolución IGAC 643/2018</div>
+            <div>7. Caso práctico con datos reales de campo</div>
           </div>
-          <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Datos%20GNSS.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:var(--ac1);color:#fff;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#3d9424'" onmouseout="this.style.background='var(--ac1)'">📩 Solicitar información</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-top:12px;border-top:1px dashed var(--bg3)">
+            <div>
+              <div style="font-size:24px;font-weight:800;color:var(--dk1)">$280.000</div>
+              <div style="font-size:10.5px;color:var(--tx3)">COP · Pago único</div>
+            </div>
+            <div style="font-size:10px;color:var(--ac1);font-weight:700;background:rgba(46,125,26,.08);padding:5px 11px;border-radius:20px;white-space:nowrap">⭐ Recomendado</div>
+          </div>
+          <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Datos%20GNSS.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:var(--ac1);color:#fff;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#3d9424'" onmouseout="this.style.background='var(--ac1)'">📲 Inscribirme por WhatsApp</button>
         </div>
       </div>
 
-      <!-- CURSO 2 -->
-      <div style="background:var(--bg1);border:1.5px solid var(--bg3);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow2)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--shadow)'">
-        <div style="background:linear-gradient(135deg,#1a3a5c,#1F4E79);padding:24px 20px;text-align:center">
-          <div style="font-size:48px;margin-bottom:8px">🛣️</div>
-          <div style="font-size:16px;font-weight:800;color:#fff;font-family:var(--fd);letter-spacing:.5px">DISEÑO GEOMÉTRICO DE CARRETERAS</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px">AutoCAD Civil 3D · MDG-2025 INVIAS</div>
+      <!-- CURSO 2: VÍAS -->
+      <div class="curso-card" data-cat="vias">
+        <div class="curso-thumb">
+          <img src="img/testimonio-levantamiento-vial-rural.jpg" alt="Diseño Geométrico de Carreteras" loading="lazy">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,36,.05) 40%,rgba(7,17,30,.9) 100%)"></div>
+          <div class="curso-chip" style="top:12px;left:12px;background:rgba(255,255,255,.94);color:#1F4E79">Nivel intermedio</div>
+          <div class="curso-chip" style="top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff">⏱ 20 horas</div>
+          <div style="position:absolute;bottom:12px;left:16px;right:16px">
+            <div style="font-family:var(--fd);font-size:18px;font-weight:800;color:#fff;letter-spacing:.3px;line-height:1.2">Diseño Geométrico de Carreteras</div>
+            <div style="font-size:10.5px;color:rgba(255,255,255,.8);margin-top:3px">AutoCAD Civil 3D · MDG-2025 INVIAS</div>
+          </div>
         </div>
         <div style="padding:20px">
-          <div style="font-size:12px;color:var(--tx2);line-height:1.8;margin-bottom:14px">Domina el diseño geométrico de vías en AutoCAD Civil 3D aplicando el Manual de Diseño Geométrico INVIAS MDG-2025. Alineamientos horizontales y verticales, secciones transversales, volúmenes de movimiento de tierra y generación de planos.</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
-            <span style="background:#e3f0ff;color:#1F4E79;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px">Nivel intermedio</span>
-            <span style="background:var(--bg2);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:20px">20 horas</span>
-            <span style="background:var(--bg2);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:20px">Certificado DGeoMap incluido</span>
+          <p style="font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Domina el diseño vial en Civil 3D aplicando el Manual de Diseño Geométrico INVIAS MDG-2025: alineamientos, secciones transversales y volúmenes de movimiento de tierra.</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
+            <div class="curso-feat">🎥 Clases grabadas HD</div>
+            <div class="curso-feat">💬 Soporte por WhatsApp</div>
+            <div class="curso-feat">📄 Plantillas incluidas</div>
+            <div class="curso-feat">🏆 Certificado digital</div>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div style="font-size:22px;font-weight:800;color:var(--dk1)">$200.000</div>
-            <div style="font-size:11px;color:var(--tx3)">COP · Pago único</div>
+          <button class="curso-temario-btn" onclick="toggleTemario('vias')">
+            <span>📋 Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-vias">▾</span>
+          </button>
+          <div class="curso-temario" id="temario-vias">
+            <div>1. Superficies y alineamientos en Civil 3D</div>
+            <div>2. Alineamiento horizontal: curvas circulares y espirales</div>
+            <div>3. Alineamiento vertical y curvas verticales</div>
+            <div>4. Secciones transversales y peraltes (MDG-2025)</div>
+            <div>5. Cálculo de volúmenes de corte y relleno</div>
+            <div>6. Generación de planos planta-perfil</div>
+            <div>7. Proyecto final: diseño de un corredor vial real</div>
           </div>
-          <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Diseño%20Geométrico%20de%20Carreteras%20en%20Civil%203D.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#1F4E79;color:#fff;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#2E75B6'" onmouseout="this.style.background='#1F4E79'">📩 Solicitar información</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-top:12px;border-top:1px dashed var(--bg3)">
+            <div>
+              <div style="font-size:24px;font-weight:800;color:var(--dk1)">$320.000</div>
+              <div style="font-size:10.5px;color:var(--tx3)">COP · Pago único</div>
+            </div>
+          </div>
+          <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Diseño%20Geométrico%20de%20Carreteras%20en%20Civil%203D.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#1F4E79;color:#fff;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#2E75B6'" onmouseout="this.style.background='#1F4E79'">📲 Inscribirme por WhatsApp</button>
         </div>
       </div>
 
-      <!-- CURSO 3 -->
-      <div style="background:var(--bg1);border:1.5px solid var(--bg3);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='var(--shadow2)'" onmouseout="this.style.transform='';this.style.boxShadow='var(--shadow)'">
-        <div style="background:linear-gradient(135deg,#4a1a00,#c14a00);padding:24px 20px;text-align:center">
-          <div style="font-size:48px;margin-bottom:8px">🚁</div>
-          <div style="font-size:16px;font-weight:800;color:#fff;font-family:var(--fd);letter-spacing:.5px">PROCESAMIENTO DE IMÁGENES DE DRON</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px">Agisoft Metashape · Pix4D Mapper</div>
+      <!-- CURSO 3: DRON -->
+      <div class="curso-card" data-cat="dron">
+        <div class="curso-thumb">
+          <img src="img/servicio-fotogrametria-drones.jpg" alt="Procesamiento de Imágenes de Dron" loading="lazy">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,20,5,.05) 40%,rgba(30,15,3,.9) 100%)"></div>
+          <div class="curso-chip" style="top:12px;left:12px;background:rgba(255,255,255,.94);color:#c14a00">Básico-intermedio</div>
+          <div class="curso-chip" style="top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff">⏱ 20 horas</div>
+          <div style="position:absolute;bottom:12px;left:16px;right:16px">
+            <div style="font-family:var(--fd);font-size:18px;font-weight:800;color:#fff;letter-spacing:.3px;line-height:1.2">Procesamiento de Imágenes de Dron</div>
+            <div style="font-size:10.5px;color:rgba(255,255,255,.8);margin-top:3px">Agisoft Metashape · Pix4D Mapper</div>
+          </div>
         </div>
         <div style="padding:20px">
-          <div style="font-size:12px;color:var(--tx2);line-height:1.8;margin-bottom:14px">Aprende a procesar vuelos fotogramétricos con Agisoft Metashape y Pix4D Mapper. Generación de nubes de puntos densas, modelos digitales de superficie, ortomosaicos de alta resolución y reportes de precisión para proyectos de ingeniería.</div>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
-            <span style="background:#fff3e0;color:#c14a00;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px">Nivel básico-intermedio</span>
-            <span style="background:var(--bg2);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:20px">20 horas</span>
-            <span style="background:var(--bg2);color:var(--tx3);font-size:10px;padding:3px 8px;border-radius:20px">Certificado DGeoMap incluido</span>
+          <p style="font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Procesa vuelos fotogramétricos con Agisoft Metashape y Pix4D Mapper: nubes de puntos densas, ortomosaicos de alta resolución y reportes de precisión.</p>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
+            <div class="curso-feat">🎥 Clases grabadas HD</div>
+            <div class="curso-feat">💬 Soporte por WhatsApp</div>
+            <div class="curso-feat">📄 Plantillas incluidas</div>
+            <div class="curso-feat">🏆 Certificado digital</div>
           </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-            <div style="font-size:22px;font-weight:800;color:var(--dk1)">$160.000</div>
-            <div style="font-size:11px;color:var(--tx3)">COP · Pago único</div>
+          <button class="curso-temario-btn" onclick="toggleTemario('dron')">
+            <span>📋 Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-dron">▾</span>
+          </button>
+          <div class="curso-temario" id="temario-dron">
+            <div>1. Planeación de vuelo fotogramétrico y traslapes</div>
+            <div>2. Puntos de control terrestre (GCP) y georreferenciación</div>
+            <div>3. Procesamiento en Agisoft Metashape</div>
+            <div>4. Procesamiento en Pix4D Mapper</div>
+            <div>5. Ortomosaicos y modelos digitales (MDS/MDT)</div>
+            <div>6. Control de calidad y reportes de precisión</div>
+            <div>7. Exportación para catastro, agricultura e ingeniería</div>
           </div>
-          <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Imágenes%20de%20Dron.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#c14a00;color:#fff;border:none;padding:11px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#e05a00'" onmouseout="this.style.background='#c14a00'">📩 Solicitar información</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-top:12px;border-top:1px dashed var(--bg3)">
+            <div>
+              <div style="font-size:24px;font-weight:800;color:var(--dk1)">$260.000</div>
+              <div style="font-size:10.5px;color:var(--tx3)">COP · Pago único</div>
+            </div>
+          </div>
+          <button onclick="window.open('https://wa.me/573112792204?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Imágenes%20de%20Dron.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#c14a00;color:#fff;border:none;padding:12px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#e05a00'" onmouseout="this.style.background='#c14a00'">📲 Inscribirme por WhatsApp</button>
         </div>
       </div>
 
@@ -6530,6 +6622,22 @@ function filtP(el, cat) {
   document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
   renderPort(cat);
+}
+
+function filterCursos(cat, btn) {
+  document.querySelectorAll('#curso-grid .curso-card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+  });
+  document.querySelectorAll('#curso-filters .ptab').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+function toggleTemario(id) {
+  var el = document.getElementById('temario-' + id);
+  var ic = document.getElementById('temario-ic-' + id);
+  var open = el.style.display === 'block';
+  el.style.display = open ? 'none' : 'block';
+  if (ic) ic.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
 // ── MODAL ──
