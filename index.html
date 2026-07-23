@@ -1306,7 +1306,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   <style>
   .curso-card{background:#fff;border:1px solid var(--bg3);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:transform .25s ease,box-shadow .25s ease}
   .curso-card:hover{transform:translateY(-6px);box-shadow:var(--shadow2)}
-  .curso-thumb{position:relative;height:175px;overflow:hidden}
+  .curso-thumb{position:relative;height:215px;overflow:hidden}
   .curso-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
   .curso-card:hover .curso-thumb img{transform:scale(1.08)}
   .curso-chip{position:absolute;font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
@@ -1334,13 +1334,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       </div>
     </div>
 
-    <!-- FILTROS -->
-    <div class="anim-up d3" id="curso-filters" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-      <button class="ptab on" onclick="filterCursos('all',this)">Todos los cursos</button>
-      <button class="ptab" onclick="filterCursos('gnss',this)">📡 GNSS &amp; Geodesia</button>
-      <button class="ptab" onclick="filterCursos('vias',this)">🛣️ Diseño Vial</button>
-      <button class="ptab" onclick="filterCursos('dron',this)">🚁 Drones y Fotogrametría</button>
-    </div>
+    <div class="anim-up d3" style="font-size:13px;font-weight:800;color:var(--dk1);text-transform:uppercase;letter-spacing:.6px;margin-bottom:16px">Todos los cursos</div>
 
     <!-- GRID DE CURSOS -->
     <div id="curso-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:40px">
@@ -1348,7 +1342,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <!-- CURSO 1: GNSS -->
       <div class="curso-card" data-cat="gnss">
         <div class="curso-thumb">
-          <img src="img/servicio-geodesia-gnss.jpg" alt="Procesamiento de Datos GNSS" loading="lazy">
+          <img src="img/servicio-geodesia-gnss.jpg" alt="Procesamiento de Datos GNSS" loading="lazy" style="object-position:center 40%">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,36,10,.05) 40%,rgba(10,24,7,.9) 100%)"></div>
           <div class="curso-chip" style="top:12px;left:12px;background:rgba(255,255,255,.94);color:var(--ac1)">Nivel intermedio</div>
           <div class="curso-chip" style="top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff">⏱ 20 horas</div>
@@ -1358,7 +1352,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           </div>
         </div>
         <div style="padding:20px">
-          <p style="font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Procesa observaciones GNSS diferenciales con los softwares más usados en Colombia: cálculo de vectores, ajuste de red y generación de informes bajo la Resolución IGAC 643/2018.</p>
+          <p style="font-size:12.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Procesa observaciones GNSS diferenciales con los softwares más usados en Colombia: cálculo de vectores, ajuste de red y generación de informes bajo normas técnicas colombianas.</p>
           <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
             <div class="curso-feat">🎥 Clases grabadas HD</div>
             <div class="curso-feat">💬 Soporte por WhatsApp</div>
@@ -1374,7 +1368,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
             <div>3. Procesamiento diferencial (Leica, Trimble, Topcon)</div>
             <div>4. Ajuste de redes geodésicas y control de calidad</div>
             <div>5. Transformación y exportación a CTM-12</div>
-            <div>6. Informes técnicos bajo Resolución IGAC 643/2018</div>
+            <div>6. Informes técnicos bajo normas técnicas colombianas</div>
             <div>7. Caso práctico con datos reales de campo</div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-top:12px;border-top:1px dashed var(--bg3)">
@@ -1391,7 +1385,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <!-- CURSO 2: VÍAS -->
       <div class="curso-card" data-cat="vias">
         <div class="curso-thumb">
-          <img src="img/testimonio-levantamiento-vial-rural.jpg" alt="Diseño Geométrico de Carreteras" loading="lazy">
+          <img src="img/via.jpeg" alt="Diseño Geométrico de Carreteras" loading="lazy">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,20,36,.05) 40%,rgba(7,17,30,.9) 100%)"></div>
           <div class="curso-chip" style="top:12px;left:12px;background:rgba(255,255,255,.94);color:#1F4E79">Nivel intermedio</div>
           <div class="curso-chip" style="top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff">⏱ 20 horas</div>
@@ -1433,7 +1427,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <!-- CURSO 3: DRON -->
       <div class="curso-card" data-cat="dron">
         <div class="curso-thumb">
-          <img src="img/servicio-fotogrametria-drones.jpg" alt="Procesamiento de Imágenes de Dron" loading="lazy">
+          <img src="img/servicio-fotogrametria-drones.jpg" alt="Procesamiento de Imágenes de Dron" loading="lazy" style="object-position:center 20%">
           <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(36,20,5,.05) 40%,rgba(30,15,3,.9) 100%)"></div>
           <div class="curso-chip" style="top:12px;left:12px;background:rgba(255,255,255,.94);color:#c14a00">Básico-intermedio</div>
           <div class="curso-chip" style="top:12px;right:12px;background:rgba(0,0,0,.5);color:#fff">⏱ 20 horas</div>
@@ -6622,14 +6616,6 @@ function filtP(el, cat) {
   document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
   renderPort(cat);
-}
-
-function filterCursos(cat, btn) {
-  document.querySelectorAll('#curso-grid .curso-card').forEach(c => {
-    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
-  });
-  document.querySelectorAll('#curso-filters .ptab').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
 }
 
 function toggleTemario(id) {
