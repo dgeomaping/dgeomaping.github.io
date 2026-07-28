@@ -297,20 +297,24 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .mobile-menu .mmitem.cta{background:var(--ac1);color:#fff !important;margin-top:8px;font-weight:700;text-align:center;border-radius:8px}
 
 /* ANIMACIONES */
-@keyframes fadeUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeLeft{from{opacity:0;transform:translateX(-60px)}to{opacity:1;transform:translateX(0)}}
-@keyframes fadeRight{from{opacity:0;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeRight{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
 @keyframes scaleIn{from{opacity:0;transform:scale(.78) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
 @keyframes popIn{from{opacity:0;transform:scale(.7) rotate(-3deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
-.anim-up{opacity:0;animation:fadeUp .7s cubic-bezier(.22,.68,0,1.2) forwards}
-.anim-left{opacity:0;animation:fadeLeft .7s cubic-bezier(.22,.68,0,1.1) forwards}
-.anim-right{opacity:0;animation:fadeRight .7s cubic-bezier(.22,.68,0,1.1) forwards}
+.anim-up{opacity:0;animation:fadeUp .8s cubic-bezier(.16,.8,.3,1) forwards}
+.anim-left{opacity:0;animation:fadeLeft .8s cubic-bezier(.16,.8,.3,1) forwards}
+.anim-right{opacity:0;animation:fadeRight .8s cubic-bezier(.16,.8,.3,1) forwards}
 .anim-scale{opacity:0;animation:scaleIn .65s cubic-bezier(.34,1.3,.64,1) forwards}
 .anim-pop{opacity:0;animation:popIn .6s cubic-bezier(.34,1.56,.64,1) forwards}
 .d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.31s}
 .d4{animation-delay:.44s}.d5{animation-delay:.57s}.d6{animation-delay:.70s}
 @keyframes caretBlink{0%,100%{border-color:transparent}50%{border-color:#2e7d1a}}
 .typing-caret{border-right:3px solid #2e7d1a;animation:caretBlink .8s step-end infinite;padding-right:2px}
+/* Revelado al hacer scroll (parrafos y contenido general) */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .75s cubic-bezier(.16,.8,.3,1),transform .75s cubic-bezier(.16,.8,.3,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.anim-up,.anim-left,.anim-right,.anim-scale,.anim-pop{animation:none;opacity:1}}
 .d7{animation-delay:.83s}.d8{animation-delay:.96s}
 .mvc{transition:all .25s cubic-bezier(.34,1.3,.64,1)}
 .mvc:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 16px 36px rgba(30,90,15,.18)}
@@ -6622,6 +6626,31 @@ window.addEventListener('DOMContentLoaded', function () {
   setTimeout(runHeroIntro, 80);
 });
 
+// ── REVELADO AL HACER SCROLL (párrafos y contenido de las páginas) ──
+function initScrollReveal(pg) {
+  if (!pg || typeof IntersectionObserver === 'undefined') return;
+  var targets = pg.querySelectorAll('p, .mvc, .team-card, .prof-card, .ctc-it, .curso-card, .foto-carousel');
+  var list = [];
+  targets.forEach(function (el) {
+    if (el.closest('.hero-wrap')) return; // ya animado por el intro de Inicio
+    if (/\banim-/.test(el.className)) return; // ya tiene su propia animación de entrada
+    if (el.classList.contains('reveal')) { el.classList.remove('in'); }
+    el.classList.add('reveal');
+    list.push(el);
+  });
+  if (!list.length) return;
+  var obs = new IntersectionObserver(function (entries, o) {
+    entries.forEach(function (entry, i) {
+      if (entry.isIntersecting) {
+        var el = entry.target;
+        setTimeout(function () { el.classList.add('in'); }, (i % 4) * 70);
+        o.unobserve(el);
+      }
+    });
+  }, { root: pg, rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
+  list.forEach(function (el) { obs.observe(el); });
+}
+
 function goPage(id, addHistory) {
   if(addHistory !== false) {
     try { history.pushState({ page: id }, '', '#' + id); } catch(e) {}
@@ -6650,6 +6679,7 @@ function goPage(id, addHistory) {
   }, 50);
   if(id==='topografia') setTimeout(function(){if(typeof initMapa==='function')initMapa();},150);
   if(id==='inicio') setTimeout(runHeroIntro, 80);
+  if(id!=='inicio' && id!=='topografia') setTimeout(function(){initScrollReveal(pg);}, 60);
 }
 
 // Escuchar el botón ATRÁS del navegador/celular
