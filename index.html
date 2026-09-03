@@ -1019,7 +1019,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <button class="ntab on"  id="tab-inicio"     onclick="goPage('inicio')">Inicio</button>
     <button class="ntab"     id="tab-nosotros"   onclick="goPage('nosotros')">Nosotros</button>
     <button class="ntab"     id="tab-portafolio" onclick="goPage('portafolio')">Galería</button>
-    <div class="nav-dropdown"><button class="ntab" id="tab-servicios-menu" onclick="goPage('servicios')">🗂 Servicios ▾</button><div class="nav-drop-menu"><a onclick="goPage('servicios')">📐 Servicios Topográficos</a><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="goPage('tienda')">🛒 Tienda</a></div></div>
+    <button class="ntab"     id="tab-servicios"  onclick="goPage('servicios')">📐 Servicios</button>
+    <div class="nav-dropdown"><button class="ntab" id="tab-digital-menu">💻 DGeoMap Digital ▾</button><div class="nav-drop-menu"><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="goPage('tienda')">🛒 Tienda</a></div></div>
     <button class="ntab"     id="tab-topografia" onclick="goPage('topografia')">🛰️ Aplicaciones</button>
     <button class="ntab cta" id="tab-contacto"   onclick="goPage('contacto')">Cotizar</button>
   </div>
@@ -1032,10 +1033,10 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   <button class="mmitem" onclick="goPage('inicio');closeMenu()">🏠 Inicio</button>
   <button class="mmitem" onclick="goPage('nosotros');closeMenu()">👷 Nosotros</button>
   <button class="mmitem" onclick="goPage('portafolio');closeMenu()">🗂 Galería</button>
-  <button class="mmitem" onclick="goPage('servicios');closeMenu()">🔺 Servicios</button>
-  <button class="mmitem" onclick="goPage('servicios');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🔺 Servicios Topográficos</button>
-  <button class="mmitem" onclick="goPage('cursos');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🎓 Cursos Online</button>
+  <button class="mmitem" onclick="goPage('servicios');closeMenu()">📐 Servicios</button>
+  <button class="mmitem" onclick="goPage('digital');closeMenu()">💻 DGeoMap Digital</button>
   <button class="mmitem" onclick="goPage('digital');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">💻 Servicios Digitales</button>
+  <button class="mmitem" onclick="goPage('cursos');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🎓 Cursos Online</button>
   <button class="mmitem" onclick="goPage('tienda');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🛒 Tienda</button>
   <button class="mmitem" id="mm-topografia" onclick="goPage('topografia');closeMenu()">🛰️ Aplicaciones</button>
   <button class="mmitem cta" onclick="goPage('contacto');closeMenu()">💬 Cotizar</button>
@@ -6791,7 +6792,7 @@ function goPage(id, addHistory) {
   document.querySelectorAll('.ntab').forEach(t => t.classList.remove('on'));
   const tab = document.getElementById('tab-'+id);
   if(tab) tab.classList.add('on');
-  if(['servicios','digital','cursos','tienda'].indexOf(id)>=0) document.getElementById('tab-servicios-menu').classList.add('on');
+  if(['digital','cursos','tienda'].indexOf(id)>=0) document.getElementById('tab-digital-menu').classList.add('on');
   // Menú móvil
   const mmItems = document.querySelectorAll('.mmitem');
   mmItems.forEach(m => m.classList.remove('on'));
