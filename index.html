@@ -176,6 +176,21 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .srv-alc-ic{transition:transform .25s ease;display:inline-block}
 .srv-alc{max-height:0;overflow:hidden;font-size:12px;color:var(--tx2);line-height:1.8;background:var(--bg1);border-radius:8px;border:1px dashed transparent;transition:max-height .35s ease,padding .35s ease,margin .35s ease,border-color .35s ease}
 .srv-alc.open{max-height:260px;padding:11px 13px;margin-top:8px;border-color:var(--bg3)}
+.srv-card{cursor:pointer}
+.srv-back-btn{background:var(--bg2);border:1px solid var(--bg3);color:var(--ac1);font-weight:700;font-size:13px;padding:9px 16px;border-radius:8px;cursor:pointer;font-family:inherit;margin-bottom:18px;transition:background .15s}
+.srv-back-btn:hover{background:var(--bg3)}
+.srv-detail-hero{position:relative;border-radius:16px;overflow:hidden;height:280px;box-shadow:var(--shadow2)}
+.srv-detail-hero img{width:100%;height:100%;object-fit:cover}
+.srv-detail-hero-ov{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,20,8,.82),rgba(10,20,8,.05) 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:22px 26px;gap:8px}
+.srv-detail-hero-ov h2{font-family:var(--fd);font-size:29px;color:#fff;font-weight:800}
+.srv-detail-desc{font-size:14px;color:var(--tx2);line-height:1.85;margin:20px 0}
+.srv-detail-alc{background:rgba(46,125,26,.06);border:1px solid rgba(46,125,26,.18);border-left:4px solid var(--ac1);border-radius:10px;padding:16px 18px;font-size:13px;color:var(--tx2);line-height:1.8;margin-bottom:26px}
+.srv-detail-alc-h{font-weight:800;color:var(--ac1);font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.srv-detail-gal-h{font-family:var(--fd);font-size:16px;font-weight:800;color:var(--dk1);margin-bottom:12px}
+.srv-gal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:10px}
+.srv-gal-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:var(--shadow)}
+.srv-gal-img:hover{transform:translateY(-4px) scale(1.02);box-shadow:var(--shadow2)}
+@media(max-width:640px){.srv-detail-hero{height:200px}.srv-detail-hero-ov h2{font-size:22px}}
 
 /* PORTAFOLIO */
 .port-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:26px}
@@ -1169,10 +1184,13 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 <!-- SERVICIOS -->
 <div class="page" id="page-servicios">
   <div class="wrap">
-    <div class="pg-eye anim-left d1">Lo que hacemos</div>
-    <div class="pg-title anim-up d2">Servicios Profesionales</div>
-    <p class="pg-sub">Soluciones geoespaciales completas desde levantamientos de campo hasta productos cartográficos digitales, bajo la normativa colombiana vigente.</p>
-    <div class="srv-grid" id="srv-cont"></div>
+    <div id="srv-list-view">
+      <div class="pg-eye anim-left d1">Lo que hacemos</div>
+      <div class="pg-title anim-up d2">Servicios Profesionales</div>
+      <p class="pg-sub">Soluciones geoespaciales completas desde levantamientos de campo hasta productos cartográficos digitales, bajo la normativa colombiana vigente.</p>
+      <div class="srv-grid" id="srv-cont"></div>
+    </div>
+    <div id="srv-detail-view" style="display:none"></div>
   </div>
 </div>
 
@@ -6537,21 +6555,29 @@ const D = {
   pass:'dgeomaping2025',
   servicios:[
     {img:'topo', t:'Topografía de precisión', d:'Levantamientos planimétricos y altimétricos con estación total y GPS diferencial. Replanteos, curvas de nivel e informes técnicos para licencias y diseños de ingeniería.', tag:'Campo',
-      alc:'Al finalizar recibes: plano topográfico georreferenciado en MAGNA-SIRGAS CTM-12, curvas de nivel, cartera de campo digital, coordenadas de mojones y linderos, e informe técnico listo para trámites ante curadurías, notarías y entidades públicas.'},
+      alc:'Al finalizar recibes: plano topográfico georreferenciado en MAGNA-SIRGAS CTM-12, curvas de nivel, cartera de campo digital, coordenadas de mojones y linderos, e informe técnico listo para trámites ante curadurías, notarías y entidades públicas.',
+      rel:['f04','f10','f12','cur']},
     {img:'geom', t:'Geomática y SIG', d:'Procesamiento de datos geoespaciales, Sistemas de Información Geográfica, análisis territorial y modelado digital de terreno.', tag:'Digital',
-      alc:'Entregables: mapas temáticos y bases de datos geoespaciales (SHP, GeoJSON, KML), modelo digital de terreno, análisis de aptitud de uso del suelo y visores cartográficos listos para apoyar la toma de decisiones sobre el territorio.'},
+      alc:'Entregables: mapas temáticos y bases de datos geoespaciales (SHP, GeoJSON, KML), modelo digital de terreno, análisis de aptitud de uso del suelo y visores cartográficos listos para apoyar la toma de decisiones sobre el territorio.',
+      rel:['sub','cur','ori','f12']},
     {img:'geo',  t:'Geodesia y GNSS', d:'Control geodésico, redes de nivelación y posicionamiento GNSS diferencial referenciado en MAGNA-SIRGAS CTM-12.', tag:'Geodesia',
-      alc:'Alcance: red de puntos de control geodésico ajustada, informe de procesamiento diferencial con precisión centimétrica, certificado de coordenadas en MAGNA-SIRGAS y respaldo técnico conforme a la normativa IGAC vigente.'},
+      alc:'Alcance: red de puntos de control geodésico ajustada, informe de procesamiento diferencial con precisión centimétrica, certificado de coordenadas en MAGNA-SIRGAS y respaldo técnico conforme a la normativa IGAC vigente.',
+      rel:['f01','gps1','gps2','f07']},
     {img:'cart', t:'Cartografía', d:'Cartografía básica y temática, planimetría catastral, mapas de usos del suelo, POT y planes de ordenamiento territorial bajo normativa colombiana.', tag:'Cartografía',
-      alc:'Obtienes: planos cartográficos básicos y temáticos, cartografía predial y catastral actualizada, mapas de uso del suelo y documentos de soporte para Planes de Ordenamiento Territorial (POT/EOT).'},
+      alc:'Obtienes: planos cartográficos básicos y temáticos, cartografía predial y catastral actualizada, mapas de uso del suelo y documentos de soporte para Planes de Ordenamiento Territorial (POT/EOT).',
+      rel:['sub','ori','cur','f12']},
     {img:'drone',t:'Fotogrametría con drones', d:'Vuelos fotogramétricos con drones de ala fija y multirotor, ortofotomosaicos de alta resolución y modelos digitales de superficie y terreno.', tag:'Aerofotografía',
-      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).'},
+      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).',
+      rel:['f08','f09','dji','dron']},
     {img:'amb',  t:'Gestión ambiental', d:'Cartografía ambiental, delimitación de rondas hídricas, cobertura vegetal, zonificación y apoyo para licencias ambientales ante entidades competentes.', tag:'Ambiente',
-      alc:'Alcance: delimitación de rondas hídricas y áreas de protección, mapas de cobertura vegetal y uso del suelo, y documentación técnica de soporte para trámites de licenciamiento ambiental.'},
+      alc:'Alcance: delimitación de rondas hídricas y áreas de protección, mapas de cobertura vegetal y uso del suelo, y documentación técnica de soporte para trámites de licenciamiento ambiental.',
+      rel:['f07','gps2','f09','f08']},
     {img:'catastro',t:'Catastro', d:'Actualización catastral urbana y rural, levantamiento predial, avalúos técnicos y gestión predial conforme a la normativa colombiana vigente.', tag:'Catastro',
-      alc:'Entregables: ficha predial actualizada, plano catastral georreferenciado, avalúo técnico y trámite de actualización ante la autoridad catastral correspondiente (IGAC o catastro descentralizado).'},
+      alc:'Entregables: ficha predial actualizada, plano catastral georreferenciado, avalúo técnico y trámite de actualización ante la autoridad catastral correspondiente (IGAC o catastro descentralizado).',
+      rel:['sub','ori','f04','cur']},
     {img:'inf',  t:'Informes y estudios técnicos', d:'Memorias de cálculo, informes topográficos, diagnósticos territoriales y documentos para trámites ante entidades públicas y privadas.', tag:'Consultoría',
-      alc:'Recibes: memorias de cálculo detalladas, informes técnicos firmados por ingeniero topográfico, diagnósticos territoriales y documentación lista para radicar ante entidades públicas o privadas.'},
+      alc:'Recibes: memorias de cálculo detalladas, informes técnicos firmados por ingeniero topográfico, diagnósticos territoriales y documentación lista para radicar ante entidades públicas o privadas.',
+      rel:['f12','f10','cur','f04']},
   ],
   trabajos:[
     {t:'GPS GNSS — Predio zona cafetera', d:'Posicionamiento GNSS diferencial en zona de cultivos, montaña colombiana. Control de mojón en campo.', tags:['Geodesia'], cat:'geo', img:'f01'},
@@ -6783,6 +6809,7 @@ function goPage(id, addHistory) {
   }, 50);
   if(id==='topografia') setTimeout(function(){if(typeof initMapa==='function')initMapa();},150);
   if(id==='inicio') setTimeout(runHeroIntro, 80);
+  if(id==='servicios' && typeof closeServicio==='function') closeServicio();
   if(id!=='topografia') setTimeout(function(){initScrollReveal(pg);}, 60);
 }
 
@@ -6812,21 +6839,46 @@ window.addEventListener('DOMContentLoaded', function() {
 // ── RENDER ──
 function renderSitio() {
   document.getElementById('srv-cont').innerHTML = D.servicios.map((s,i) =>
-    `<div class="srv-card"><img class="srv-img" src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/><div class="srv-body"><h4>${s.t}</h4><p>${s.d}</p><span class="srv-tag">${s.tag}</span>
-      <button class="srv-alc-btn" onclick="toggleSrvAlcance(${i})"><span>🎯 Ver alcance del servicio</span><span class="srv-alc-ic" id="srv-alc-ic-${i}">▾</span></button>
-      <div class="srv-alc" id="srv-alc-${i}">${s.alc}</div>
+    `<div class="srv-card" onclick="openServicio(${i})"><img class="srv-img" src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/><div class="srv-body"><h4>${s.t}</h4><p>${s.d}</p><span class="srv-tag">${s.tag}</span>
+      <button class="srv-alc-btn" onclick="event.stopPropagation();openServicio(${i})"><span>🖼️ Ver detalle y galería</span><span class="srv-alc-ic">▸</span></button>
     </div></div>`
   ).join('');
   renderPort('all');
 }
 
-function toggleSrvAlcance(i) {
-  var el = document.getElementById('srv-alc-' + i);
-  var ic = document.getElementById('srv-alc-ic-' + i);
-  if (!el) return;
-  var open = el.classList.contains('open');
-  el.classList.toggle('open', !open);
-  if (ic) ic.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+function openServicio(i) {
+  var s = D.servicios[i];
+  if (!s) return;
+  var gallery = (s.rel || []).map(function (key) {
+    var src = IMGS[key]; if (!src) return '';
+    return `<img class="srv-gal-img" src="${src}" alt="${s.t}" loading="lazy" onclick="openModal('${key}','${s.t}')"/>`;
+  }).join('');
+  var waMsg = encodeURIComponent('Hola DGeoMap, quiero cotizar el servicio de ' + s.t + '.');
+  document.getElementById('srv-detail-view').innerHTML = `
+    <button class="srv-back-btn" onclick="closeServicio()">← Regresar a Servicios</button>
+    <div class="srv-detail-hero">
+      <img src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/>
+      <div class="srv-detail-hero-ov">
+        <span class="srv-tag" style="background:rgba(255,255,255,.9)">${s.tag}</span>
+        <h2>${s.t}</h2>
+      </div>
+    </div>
+    <p class="srv-detail-desc">${s.d}</p>
+    <div class="srv-detail-alc"><div class="srv-detail-alc-h">🎯 Alcance del servicio</div>${s.alc}</div>
+    ${gallery ? `<div class="srv-detail-gal-h">📷 Proyectos relacionados</div><div class="srv-gal-grid">${gallery}</div>` : ''}
+    <button class="sf-cta" style="margin-top:22px" onclick="window.open('https://wa.me/573222139210?text=${waMsg}','_blank')">💬 Cotizar este servicio</button>
+  `;
+  document.getElementById('srv-list-view').style.display = 'none';
+  var dv = document.getElementById('srv-detail-view');
+  dv.style.display = 'block';
+  document.getElementById('page-servicios').scrollTop = 0;
+  if (typeof initScrollReveal === 'function') setTimeout(function () { initScrollReveal(dv); }, 40);
+}
+
+function closeServicio() {
+  document.getElementById('srv-detail-view').style.display = 'none';
+  document.getElementById('srv-list-view').style.display = '';
+  document.getElementById('page-servicios').scrollTop = 0;
 }
 
 function renderPort(cat) {
@@ -6860,7 +6912,7 @@ function toggleTemario(id) {
 
 // ── MODAL ──
 function openModal(key, cap) {
-  const src = IMGS[key]; if(!src) return;
+  const src = IMGS[key] || SRV_IMGS[key]; if(!src) return;
   document.getElementById('modal-img').src = src;
   document.getElementById('modal-cap').textContent = cap;
   document.getElementById('modal').classList.add('open');
