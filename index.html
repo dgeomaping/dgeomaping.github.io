@@ -171,6 +171,11 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .srv-card h4{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--dk1);margin-bottom:5px}
 .srv-card p{font-size:13px;color:var(--tx3);line-height:1.65}
 .srv-tag{display:inline-block;background:rgba(61,122,42,.07);color:var(--ac1);font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;margin-top:7px;text-transform:uppercase;letter-spacing:.5px}
+.srv-alc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--bg3);border-radius:8px;padding:9px 12px;font-size:12px;font-weight:700;color:var(--ac1);cursor:pointer;font-family:inherit;margin-top:11px;transition:background .15s}
+.srv-alc-btn:hover{background:var(--bg3)}
+.srv-alc-ic{transition:transform .25s ease;display:inline-block}
+.srv-alc{max-height:0;overflow:hidden;font-size:12px;color:var(--tx2);line-height:1.8;background:var(--bg1);border-radius:8px;border:1px dashed transparent;transition:max-height .35s ease,padding .35s ease,margin .35s ease,border-color .35s ease}
+.srv-alc.open{max-height:260px;padding:11px 13px;margin-top:8px;border-color:var(--bg3)}
 
 /* PORTAFOLIO */
 .port-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:26px}
@@ -6531,14 +6536,22 @@ const VID = 'data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAA
 const D = {
   pass:'dgeomaping2025',
   servicios:[
-    {img:'topo', t:'Topografía de precisión', d:'Levantamientos planimétricos y altimétricos con estación total y GPS diferencial. Replanteos, curvas de nivel e informes técnicos para licencias y diseños de ingeniería.', tag:'Campo'},
-    {img:'geom', t:'Geomática y SIG', d:'Procesamiento de datos geoespaciales, Sistemas de Información Geográfica, análisis territorial y modelado digital de terreno.', tag:'Digital'},
-    {img:'geo',  t:'Geodesia y GNSS', d:'Control geodésico, redes de nivelación y posicionamiento GNSS diferencial referenciado en MAGNA-SIRGAS CTM-12.', tag:'Geodesia'},
-    {img:'cart', t:'Cartografía', d:'Cartografía básica y temática, planimetría catastral, mapas de usos del suelo, POT y planes de ordenamiento territorial bajo normativa colombiana.', tag:'Cartografía'},
-    {img:'drone',t:'Fotogrametría con drones', d:'Vuelos fotogramétricos con drones de ala fija y multirotor, ortofotomosaicos de alta resolución y modelos digitales de superficie y terreno.', tag:'Aerofotografía'},
-    {img:'amb',  t:'Gestión ambiental', d:'Cartografía ambiental, delimitación de rondas hídricas, cobertura vegetal, zonificación y apoyo para licencias ambientales ante entidades competentes.', tag:'Ambiente'},
-    {img:'catastro',t:'Catastro', d:'Actualización catastral urbana y rural, levantamiento predial, avalúos técnicos y gestión predial conforme a la normativa colombiana vigente.', tag:'Catastro'},
-    {img:'inf',  t:'Informes y estudios técnicos', d:'Memorias de cálculo, informes topográficos, diagnósticos territoriales y documentos para trámites ante entidades públicas y privadas.', tag:'Consultoría'},
+    {img:'topo', t:'Topografía de precisión', d:'Levantamientos planimétricos y altimétricos con estación total y GPS diferencial. Replanteos, curvas de nivel e informes técnicos para licencias y diseños de ingeniería.', tag:'Campo',
+      alc:'Al finalizar recibes: plano topográfico georreferenciado en MAGNA-SIRGAS CTM-12, curvas de nivel, cartera de campo digital, coordenadas de mojones y linderos, e informe técnico listo para trámites ante curadurías, notarías y entidades públicas.'},
+    {img:'geom', t:'Geomática y SIG', d:'Procesamiento de datos geoespaciales, Sistemas de Información Geográfica, análisis territorial y modelado digital de terreno.', tag:'Digital',
+      alc:'Entregables: mapas temáticos y bases de datos geoespaciales (SHP, GeoJSON, KML), modelo digital de terreno, análisis de aptitud de uso del suelo y visores cartográficos listos para apoyar la toma de decisiones sobre el territorio.'},
+    {img:'geo',  t:'Geodesia y GNSS', d:'Control geodésico, redes de nivelación y posicionamiento GNSS diferencial referenciado en MAGNA-SIRGAS CTM-12.', tag:'Geodesia',
+      alc:'Alcance: red de puntos de control geodésico ajustada, informe de procesamiento diferencial con precisión centimétrica, certificado de coordenadas en MAGNA-SIRGAS y respaldo técnico conforme a la normativa IGAC vigente.'},
+    {img:'cart', t:'Cartografía', d:'Cartografía básica y temática, planimetría catastral, mapas de usos del suelo, POT y planes de ordenamiento territorial bajo normativa colombiana.', tag:'Cartografía',
+      alc:'Obtienes: planos cartográficos básicos y temáticos, cartografía predial y catastral actualizada, mapas de uso del suelo y documentos de soporte para Planes de Ordenamiento Territorial (POT/EOT).'},
+    {img:'drone',t:'Fotogrametría con drones', d:'Vuelos fotogramétricos con drones de ala fija y multirotor, ortofotomosaicos de alta resolución y modelos digitales de superficie y terreno.', tag:'Aerofotografía',
+      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).'},
+    {img:'amb',  t:'Gestión ambiental', d:'Cartografía ambiental, delimitación de rondas hídricas, cobertura vegetal, zonificación y apoyo para licencias ambientales ante entidades competentes.', tag:'Ambiente',
+      alc:'Alcance: delimitación de rondas hídricas y áreas de protección, mapas de cobertura vegetal y uso del suelo, y documentación técnica de soporte para trámites de licenciamiento ambiental.'},
+    {img:'catastro',t:'Catastro', d:'Actualización catastral urbana y rural, levantamiento predial, avalúos técnicos y gestión predial conforme a la normativa colombiana vigente.', tag:'Catastro',
+      alc:'Entregables: ficha predial actualizada, plano catastral georreferenciado, avalúo técnico y trámite de actualización ante la autoridad catastral correspondiente (IGAC o catastro descentralizado).'},
+    {img:'inf',  t:'Informes y estudios técnicos', d:'Memorias de cálculo, informes topográficos, diagnósticos territoriales y documentos para trámites ante entidades públicas y privadas.', tag:'Consultoría',
+      alc:'Recibes: memorias de cálculo detalladas, informes técnicos firmados por ingeniero topográfico, diagnósticos territoriales y documentación lista para radicar ante entidades públicas o privadas.'},
   ],
   trabajos:[
     {t:'GPS GNSS — Predio zona cafetera', d:'Posicionamiento GNSS diferencial en zona de cultivos, montaña colombiana. Control de mojón en campo.', tags:['Geodesia'], cat:'geo', img:'f01'},
@@ -6799,9 +6812,21 @@ window.addEventListener('DOMContentLoaded', function() {
 // ── RENDER ──
 function renderSitio() {
   document.getElementById('srv-cont').innerHTML = D.servicios.map((s,i) =>
-    `<div class="srv-card"><img class="srv-img" src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/><div class="srv-body"><h4>${s.t}</h4><p>${s.d}</p><span class="srv-tag">${s.tag}</span></div></div>`
+    `<div class="srv-card"><img class="srv-img" src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/><div class="srv-body"><h4>${s.t}</h4><p>${s.d}</p><span class="srv-tag">${s.tag}</span>
+      <button class="srv-alc-btn" onclick="toggleSrvAlcance(${i})"><span>🎯 Ver alcance del servicio</span><span class="srv-alc-ic" id="srv-alc-ic-${i}">▾</span></button>
+      <div class="srv-alc" id="srv-alc-${i}">${s.alc}</div>
+    </div></div>`
   ).join('');
   renderPort('all');
+}
+
+function toggleSrvAlcance(i) {
+  var el = document.getElementById('srv-alc-' + i);
+  var ic = document.getElementById('srv-alc-ic-' + i);
+  if (!el) return;
+  var open = el.classList.contains('open');
+  el.classList.toggle('open', !open);
+  if (ic) ic.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
 }
 
 function renderPort(cat) {
