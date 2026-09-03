@@ -315,6 +315,28 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .reveal{opacity:0;transform:translateY(18px);transition:opacity .75s cubic-bezier(.16,.8,.3,1),transform .75s cubic-bezier(.16,.8,.3,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.anim-up,.anim-left,.anim-right,.anim-scale,.anim-pop{animation:none;opacity:1}}
+
+/* PIE DE PÁGINA */
+.site-footer{flex-shrink:0;margin-top:auto;background:linear-gradient(160deg,#152a0f,#1e3318 55%,#16240f);color:rgba(255,255,255,.68);padding:44px 32px 0}
+.sf-wrap{max-width:1200px;margin:0 auto}
+.sf-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:36px;padding-bottom:32px}
+.sf-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sf-logo img{width:40px;height:40px;object-fit:contain;background:#fff;border-radius:8px;padding:3px}
+.sf-logo span{font-family:var(--fd);font-size:18px;font-weight:800;color:#fff;letter-spacing:.3px}
+.sf-desc{font-size:12.5px;line-height:1.85;color:rgba(255,255,255,.62);margin-bottom:16px}
+.sf-info{display:flex;flex-direction:column;gap:8px;font-size:12px;color:rgba(255,255,255,.7)}
+.sf-info div{display:flex;align-items:center;gap:8px}
+.sf-h{font-family:var(--fd);font-size:14px;font-weight:800;color:#fff;letter-spacing:.4px;margin-bottom:8px;text-transform:uppercase}
+.sf-h::after{content:'';display:block;width:32px;height:3px;background:var(--ac4);border-radius:2px;margin-top:8px}
+.sf-links{display:flex;flex-direction:column;gap:9px}
+.sf-links a{color:rgba(255,255,255,.68);font-size:12.5px;text-decoration:none;cursor:pointer;transition:color .15s,transform .15s;display:inline-flex;align-items:center;gap:7px;width:fit-content}
+.sf-links a::before{content:'▸';color:var(--ac4);font-size:10px}
+.sf-links a:hover{color:#fff;transform:translateX(3px)}
+.sf-cta{display:inline-flex;align-items:center;gap:8px;background:var(--ac2);color:#fff;font-weight:700;font-size:12.5px;padding:10px 16px;border-radius:8px;text-decoration:none;margin-top:6px;transition:background .15s;width:fit-content}
+.sf-cta:hover{background:var(--ac3)}
+.sf-bottom{border-top:1px solid rgba(255,255,255,.12);padding:16px 0;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,.5);text-align:center}
+@media(max-width:860px){.sf-grid{grid-template-columns:1fr 1fr;row-gap:30px}}
+@media(max-width:520px){.sf-grid{grid-template-columns:1fr}.site-footer{padding:36px 20px 0}}
 .d7{animation-delay:.83s}.d8{animation-delay:.96s}
 .mvc{transition:all .25s cubic-bezier(.34,1.3,.64,1)}
 .mvc:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 16px 36px rgba(30,90,15,.18)}
@@ -5329,16 +5351,6 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 </div>
 
 </div><!-- /pages -->
-<footer style="flex-shrink:0;background:#162212;color:rgba(255,255,255,.65);font-size:11px;padding:8px 22px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;border-top:1px solid rgba(255,255,255,.08)">
-  <span>© <span id="ft-year">2026</span> <strong style="color:#fff;font-weight:700">DGeoMap Ingeniería</strong> S.A.S.</span>
-  <span style="opacity:.5">·</span>
-  <span>Bogotá D.C., Colombia</span>
-  <span style="opacity:.5">·</span>
-  <span>📱 322 213 9210</span>
-  <span style="opacity:.5">·</span>
-  <span>✉️ topografia@dgeomaping.com</span>
-</footer>
-<script>document.getElementById('ft-year').textContent = new Date().getFullYear();</script>
 </div><!-- /app -->
 
 <script>
@@ -6626,6 +6638,85 @@ window.addEventListener('DOMContentLoaded', function () {
   setTimeout(runHeroIntro, 80);
 });
 
+// ── PIE DE PÁGINA (una sola plantilla, insertada al final de cada pestaña) ──
+function dgFooterHTML() {
+  return `
+  <footer class="site-footer">
+    <div class="sf-wrap">
+      <div class="sf-grid">
+        <div>
+          <div class="sf-logo"><img src="img/logo-dgeomap.png" alt="DGeoMap"/><span>DGeoMap Ingeniería</span></div>
+          <p class="sf-desc">Empresa colombiana especializada en topografía, geomática, geodesia, cartografía y gestión ambiental. Soluciones de precisión referenciadas en el sistema MAGNA-SIRGAS CTM-12, con cobertura en todo el territorio nacional.</p>
+          <div class="sf-info">
+            <div>📍 Bogotá D.C., Colombia</div>
+            <div>📱 322 213 9210</div>
+            <div>✉️ topografia@dgeomaping.com</div>
+          </div>
+        </div>
+        <div>
+          <div class="sf-h">Enlaces</div>
+          <div class="sf-links">
+            <a onclick="goPage('inicio')">Inicio</a>
+            <a onclick="goPage('nosotros')">Nosotros</a>
+            <a onclick="goPage('portafolio')">Galería</a>
+            <a onclick="goPage('servicios')">Servicios</a>
+            <a onclick="goPage('topografia')">Aplicaciones</a>
+            <a onclick="goPage('contacto')">Cotizar</a>
+          </div>
+        </div>
+        <div>
+          <div class="sf-h">Servicios</div>
+          <div class="sf-links">
+            <a onclick="goPage('servicios')">Topografía de precisión</a>
+            <a onclick="goPage('servicios')">Geomática y SIG</a>
+            <a onclick="goPage('servicios')">Geodesia y GNSS</a>
+            <a onclick="goPage('servicios')">Cartografía</a>
+            <a onclick="goPage('servicios')">Fotogrametría con drones</a>
+            <a onclick="goPage('servicios')">Gestión ambiental</a>
+            <a onclick="goPage('servicios')">Catastro</a>
+            <a onclick="goPage('servicios')">Informes técnicos</a>
+          </div>
+        </div>
+        <div>
+          <div class="sf-h">Contáctenos</div>
+          <div class="sf-info" style="margin-bottom:14px">
+            <div>🕐 Lun–Vie: 8:00 a.m.–6:00 p.m.</div>
+            <div>🗺️ Cobertura nacional — Colombia</div>
+          </div>
+          <a class="sf-cta" href="https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener">💬 Cotizar por WhatsApp</a>
+        </div>
+      </div>
+      <div class="sf-bottom">
+        <span>© <span class="ft-year">2026</span> DGeoMap Ingeniería S.A.S.</span>
+        <span style="opacity:.5">·</span>
+        <span>Todos los derechos reservados</span>
+        <span style="opacity:.5">·</span>
+        <span>www.dgeomaping.com</span>
+      </div>
+    </div>
+  </footer>`;
+}
+
+function injectFooters() {
+  var pages = ['inicio', 'nosotros', 'servicios', 'portafolio', 'contacto', 'digital', 'cursos', 'tienda'];
+  pages.forEach(function (id) {
+    var pg = document.getElementById('page-' + id);
+    if (pg && !pg.querySelector('.site-footer')) {
+      pg.insertAdjacentHTML('beforeend', dgFooterHTML());
+    }
+  });
+  document.querySelectorAll('.ft-year').forEach(function (el) {
+    el.textContent = new Date().getFullYear();
+  });
+}
+window.addEventListener('DOMContentLoaded', function () {
+  injectFooters();
+  setTimeout(function () {
+    var pg = document.getElementById('page-inicio');
+    if (pg && typeof initScrollReveal === 'function') initScrollReveal(pg);
+  }, 100);
+});
+
 // ── REVELADO AL HACER SCROLL (párrafos y contenido de las páginas) ──
 function initScrollReveal(pg) {
   if (!pg || typeof IntersectionObserver === 'undefined') return;
@@ -6679,7 +6770,7 @@ function goPage(id, addHistory) {
   }, 50);
   if(id==='topografia') setTimeout(function(){if(typeof initMapa==='function')initMapa();},150);
   if(id==='inicio') setTimeout(runHeroIntro, 80);
-  if(id!=='inicio' && id!=='topografia') setTimeout(function(){initScrollReveal(pg);}, 60);
+  if(id!=='topografia') setTimeout(function(){initScrollReveal(pg);}, 60);
 }
 
 // Escuchar el botón ATRÁS del navegador/celular
