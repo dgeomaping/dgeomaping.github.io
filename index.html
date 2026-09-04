@@ -182,9 +182,9 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 @media(max-width:860px){.srv-feat-row{flex-direction:column}.srv-feat-thumb{width:100% !important}.srv-feat-info{padding:24px}.srv-feat-info h2{font-size:26px}}
 
 /* PORTAFOLIO */
-.port-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:26px}
-.ptab{background:var(--bg4);border:1px solid var(--bg3);color:var(--tx3);font-size:14px;font-weight:600;padding:6px 15px;border-radius:20px;cursor:pointer;font-family:var(--fb);transition:all .15s;box-shadow:var(--shadow)}
-.ptab.on{background:var(--ac1);color:#fff;border-color:var(--ac1)}
+.port-label{margin-bottom:26px}
+.port-label-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(61,122,42,.09);border:1px solid rgba(61,122,42,.22);color:var(--ac1);font-size:13px;font-weight:700;padding:6px 16px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+.port-label-desc{font-size:14.5px;color:var(--tx3);line-height:1.7;margin-top:10px;max-width:640px}
 .port-grid{columns:4 250px;column-gap:18px}
 @media(max-width:900px){.port-grid{columns:2 220px}}
 @media(max-width:560px){.port-grid{columns:1}}
@@ -1193,13 +1193,9 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <div class="pg-eye anim-left d1">Proyectos y equipos</div>
     <div class="pg-title anim-up d2">Galería</div>
     <p class="pg-sub">Proyectos reales ejecutados en Colombia. Haz clic en cualquier imagen para ampliarla.</p>
-    <div class="port-tabs anim-up d4">
-      <button class="ptab on" onclick="filtP(this,'all')">Todos</button>
-      <button class="ptab" onclick="filtP(this,'topo')">Topografía</button>
-      <button class="ptab" onclick="filtP(this,'cart')">Cartografía</button>
-      <button class="ptab" onclick="filtP(this,'drone')">Drones</button>
-      <button class="ptab" onclick="filtP(this,'geo')">Geodesia</button>
-      <button class="ptab" onclick="filtP(this,'vid')">Video</button>
+    <div class="port-label anim-up d4">
+      <span class="port-label-pill">📷 Imágenes de DGeoMap Ingeniería</span>
+      <p class="port-label-desc">Fotografías reales tomadas en campo por nuestro equipo, que documentan proyectos de topografía, geodesia, cartografía y fotogrametría con drones ejecutados en distintas regiones de Colombia.</p>
     </div>
     <div class="port-grid" id="port-cont"></div>
   </div>
@@ -6837,7 +6833,7 @@ function srvCardHTML(s, i) {
 
 function renderSitio() {
   renderServiciosView();
-  renderPort('all');
+  renderPort();
 }
 
 function renderServiciosView() {
@@ -6883,9 +6879,8 @@ document.addEventListener('click', function (e) {
   }
 });
 
-function renderPort(cat) {
-  const items = cat === 'all' ? D.trabajos : D.trabajos.filter(t => t.cat === cat);
-  document.getElementById('port-cont').innerHTML = items.map((t,i) => {
+function renderPort() {
+  document.getElementById('port-cont').innerHTML = D.trabajos.map((t,i) => {
     const tagsHtml = `<div class="pc-tags">${t.tags.map(tg=>`<span class="pctag">${tg}</span>`).join('')}</div>`;
     if(t.isVideo) {
       return `<div class="pc pc-video"><div class="vid-box"><video controls preload="metadata" muted><source src="${VID}" type="video/mp4"></video></div><div class="pc-body"><h4>${t.t}</h4><p>${t.d}</p>${tagsHtml}</div></div>`;
@@ -6895,12 +6890,6 @@ function renderPort(cat) {
       : `<div class="pc-ph">📐</div>`;
     return `<div class="pc">${mediaHtml}<div class="pc-body"><h4>${t.t}</h4><p>${t.d}</p>${tagsHtml}</div></div>`;
   }).join('');
-}
-
-function filtP(el, cat) {
-  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  renderPort(cat);
 }
 
 function toggleTemario(id) {
