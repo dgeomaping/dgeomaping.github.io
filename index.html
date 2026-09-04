@@ -172,8 +172,12 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .srv-card p{font-size:14px;color:var(--tx3);line-height:1.65}
 .srv-tag{display:inline-block;background:rgba(61,122,42,.07);color:var(--ac1);font-size:12px;font-weight:700;padding:2px 8px;border-radius:4px;margin-top:7px;text-transform:uppercase;letter-spacing:.5px}
 .srv-feat-row{display:flex;align-items:stretch;gap:26px;margin-bottom:26px}
-.srv-feat-thumb{flex:0 0 auto;cursor:default}
+.srv-feat-thumb{flex:0 0 auto;cursor:default;display:flex;flex-direction:column}
 .srv-feat-thumb:hover{transform:none;box-shadow:0 3px 14px rgba(30,90,15,.09);border-color:#cce4c4}
+.srv-feat-thumb .srv-body{flex:0 0 auto}
+.srv-feat-thumb-fill{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:20px;min-height:70px;background:linear-gradient(180deg,#fff,var(--bg1));border-top:1px solid var(--bg3)}
+.srv-feat-thumb-fill img{width:46px;height:46px;object-fit:contain;opacity:.9}
+.srv-feat-thumb-fill span{font-size:11px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.6px;text-align:center}
 .srv-feat-info{flex:1;min-width:0;background:#fff;border-radius:var(--rl);border:1px solid #cce4c4;box-shadow:0 8px 30px rgba(30,90,15,.16);padding:32px 36px;display:flex;flex-direction:column;justify-content:center;animation:fadeRight .4s cubic-bezier(.16,.8,.3,1)}
 .srv-feat-info h2{font-family:var(--fd);font-size:33px;font-weight:800;color:var(--dk1);margin:10px 0 14px}
 .srv-feat-desc{font-size:17px;color:var(--tx2);line-height:1.75;margin-bottom:18px}
@@ -6544,29 +6548,29 @@ const D = {
   pass:'dgeomaping2025',
   servicios:[
     {img:'topo', t:'Topografía de precisión', d:'Levantamientos planimétricos y altimétricos con estación total y GPS diferencial. Replanteos, curvas de nivel e informes técnicos para licencias y diseños de ingeniería.', tag:'Campo',
-      alc:'Al finalizar recibes: plano topográfico georreferenciado en MAGNA-SIRGAS CTM-12, curvas de nivel, cartera de campo digital, coordenadas de mojones y linderos, e informe técnico listo para trámites ante curadurías, notarías y entidades públicas.',
-      },
+      info:'La topografía de precisión es la base de cualquier proyecto de construcción, diseño vial o urbanístico: sin un levantamiento correcto, los diseños pueden arrastrar errores costosos en volúmenes de excavación, pendientes o linderos. La aplicamos en edificaciones, vías, acueductos, alcantarillados, parcelaciones y cualquier obra que requiera conocer con exactitud la geometría y las cotas del terreno.',
+      alc:'Al finalizar recibes: plano topográfico georreferenciado bajo normativa colombiana vigente, curvas de nivel, cartera de campo digital, coordenadas de mojones y linderos, e informe técnico listo para trámites ante curadurías, notarías y entidades públicas.'},
     {img:'geom', t:'Geomática y SIG', d:'Procesamiento de datos geoespaciales, Sistemas de Información Geográfica, análisis territorial y modelado digital de terreno.', tag:'Digital',
-      alc:'Entregables: mapas temáticos y bases de datos geoespaciales (SHP, GeoJSON, KML), modelo digital de terreno, análisis de aptitud de uso del suelo y visores cartográficos listos para apoyar la toma de decisiones sobre el territorio.',
-      },
-    {img:'geo',  t:'Geodesia y GNSS', d:'Control geodésico, redes de nivelación y posicionamiento GNSS diferencial referenciado en MAGNA-SIRGAS CTM-12.', tag:'Geodesia',
-      alc:'Alcance: red de puntos de control geodésico ajustada, informe de procesamiento diferencial con precisión centimétrica, certificado de coordenadas en MAGNA-SIRGAS y respaldo técnico conforme a la normativa IGAC vigente.',
-      },
+      info:'La geomática integra la captura, el procesamiento y el análisis de información geoespacial para apoyar la toma de decisiones territoriales de entidades públicas y privadas. La aplicamos en planificación urbana y rural, gestión del riesgo, seguimiento ambiental, infraestructura de servicios públicos y análisis de cobertura, mediante sistemas de información geográfica que permiten visualizar, consultar y actualizar los datos del territorio en tiempo real.',
+      alc:'Entregables: mapas temáticos y bases de datos geoespaciales (SHP, GeoJSON, KML), modelo digital de terreno, análisis de aptitud de uso del suelo y visores cartográficos listos para apoyar la toma de decisiones sobre el territorio.'},
+    {img:'geo',  t:'Geodesia y GNSS', d:'Control geodésico, redes de nivelación y posicionamiento GNSS diferencial bajo normativa colombiana vigente.', tag:'Geodesia',
+      info:'La geodesia y el posicionamiento GNSS garantizan que todo trabajo topográfico quede correctamente ubicado dentro del sistema de referencia oficial de Colombia. Es indispensable en proyectos que exigen precisión centimétrica, como catastro, escrituración y diseño de infraestructura vial, y en trámites ante entidades como el IGAC, las curadurías urbanas y las corporaciones ambientales.',
+      alc:'Alcance: red de puntos de control geodésico ajustada, informe de procesamiento diferencial con precisión centimétrica, certificado de coordenadas bajo normativa colombiana vigente y respaldo técnico conforme a los lineamientos del IGAC.'},
     {img:'cart', t:'Cartografía', d:'Cartografía básica y temática, planimetría catastral, mapas de usos del suelo, POT y planes de ordenamiento territorial bajo normativa colombiana.', tag:'Cartografía',
-      alc:'Obtienes: planos cartográficos básicos y temáticos, cartografía predial y catastral actualizada, mapas de uso del suelo y documentos de soporte para Planes de Ordenamiento Territorial (POT/EOT).',
-      },
+      info:'La cartografía es el lenguaje visual del territorio: representa de forma clara y técnica la información espacial para planes de ordenamiento territorial, licencias de construcción, estudios de uso del suelo y gestión predial. Elaboramos cartografía técnica bajo las normas del IGAC y referenciada al sistema oficial vigente, garantizando su validez ante cualquier entidad pública o privada.',
+      alc:'Obtienes: planos cartográficos básicos y temáticos, cartografía predial y catastral actualizada, mapas de uso del suelo y documentos de soporte para Planes de Ordenamiento Territorial (POT/EOT).'},
     {img:'drone',t:'Fotogrametría con drones', d:'Vuelos fotogramétricos con drones de ala fija y multirotor, ortofotomosaicos de alta resolución y modelos digitales de superficie y terreno.', tag:'Aerofotografía',
-      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).',
-      },
+      info:'La fotogrametría con drones ha revolucionado el levantamiento topográfico: en pocas horas obtenemos ortofotos de alta resolución, modelos digitales del terreno y nubes de puntos 3D de grandes extensiones, con una precisión que antes tomaba semanas de trabajo en campo. La aplicamos en minería, agrimensura, agricultura de precisión, seguimiento de obras civiles, inventarios forestales y estudios ambientales.',
+      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).'},
     {img:'amb',  t:'Gestión ambiental', d:'Cartografía ambiental, delimitación de rondas hídricas, cobertura vegetal, zonificación y apoyo para licencias ambientales ante entidades competentes.', tag:'Ambiente',
-      alc:'Alcance: delimitación de rondas hídricas y áreas de protección, mapas de cobertura vegetal y uso del suelo, y documentación técnica de soporte para trámites de licenciamiento ambiental.',
-      },
+      info:'La gestión ambiental aplicada a la topografía y la geomática es clave para cumplir con la normativa ambiental colombiana. La delimitación de rondas hídricas, la identificación de coberturas vegetales y la zonificación ambiental son insumos obligatorios para licencias ambientales, planes de manejo y proyectos que intervienen ecosistemas estratégicos. Trabajamos en coordinación con las corporaciones autónomas regionales y el Ministerio de Ambiente.',
+      alc:'Alcance: delimitación de rondas hídricas y áreas de protección, mapas de cobertura vegetal y uso del suelo, y documentación técnica de soporte para trámites de licenciamiento ambiental.'},
     {img:'catastro',t:'Catastro', d:'Actualización catastral urbana y rural, levantamiento predial, avalúos técnicos y gestión predial conforme a la normativa colombiana vigente.', tag:'Catastro',
-      alc:'Entregables: ficha predial actualizada, plano catastral georreferenciado, avalúo técnico y trámite de actualización ante la autoridad catastral correspondiente (IGAC o catastro descentralizado).',
-      },
+      info:'El catastro es el inventario oficial del territorio. La actualización catastral urbana y rural, el levantamiento predial y los avalúos técnicos son esenciales para la formalización de la propiedad, el cobro justo del impuesto predial y la planificación territorial. Trabajamos bajo el enfoque de catastro multipropósito, integrando información jurídica, física y económica de cada predio conforme a la normativa vigente del IGAC y la Superintendencia de Notariado y Registro.',
+      alc:'Entregables: ficha predial actualizada, plano catastral georreferenciado, avalúo técnico y trámite de actualización ante la autoridad catastral correspondiente (IGAC o catastro descentralizado).'},
     {img:'inf',  t:'Informes y estudios técnicos', d:'Memorias de cálculo, informes topográficos, diagnósticos territoriales y documentos para trámites ante entidades públicas y privadas.', tag:'Consultoría',
-      alc:'Recibes: memorias de cálculo detalladas, informes técnicos firmados por ingeniero topográfico, diagnósticos territoriales y documentación lista para radicar ante entidades públicas o privadas.',
-      },
+      info:'Los informes y estudios técnicos respaldan cualquier trámite ante entidades públicas o privadas: desde una memoria técnica de levantamiento hasta un diagnóstico territorial completo. Los elaboramos con rigor técnico, claridad y cumplimiento de la normativa colombiana, listos para curadurías urbanas, notarías, juzgados, corporaciones ambientales, entidades financieras y procesos de licitación pública.',
+      alc:'Recibes: memorias de cálculo detalladas, informes técnicos firmados por ingeniero topográfico, diagnósticos territoriales y documentación lista para radicar ante entidades públicas o privadas.'},
   ],
   trabajos:[
     {t:'GPS GNSS — Predio zona cafetera', d:'Posicionamiento GNSS diferencial en zona de cultivos, montaña colombiana. Control de mojón en campo.', tags:['Geodesia'], cat:'geo', img:'f01'},
@@ -6849,11 +6853,15 @@ function renderServiciosView() {
   const waMsg = encodeURIComponent('Hola DGeoMap, quiero cotizar el servicio de ' + s.t + '.');
   feat.style.display = 'flex';
   feat.innerHTML = `
-    <div class="srv-card srv-feat-thumb" id="srv-feat-thumb"><img class="srv-img" src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/><div class="srv-body"><h4>${s.t}</h4><span class="srv-tag">${s.tag}</span></div></div>
+    <div class="srv-card srv-feat-thumb" id="srv-feat-thumb">
+      <img class="srv-img" src="${SRV_IMGS[s.img]}" alt="${s.t}" loading="lazy"/>
+      <div class="srv-body"><h4>${s.t}</h4><span class="srv-tag">${s.tag}</span></div>
+      <div class="srv-feat-thumb-fill"><img src="img/logo-dgeomap.png" alt="DGeoMap Ingeniería"/><span>DGeoMap Ingeniería S.A.S.</span></div>
+    </div>
     <div class="srv-feat-info">
       <span class="srv-tag">${s.tag}</span>
       <h2>${s.t}</h2>
-      <p class="srv-feat-desc">${s.d}</p>
+      <p class="srv-feat-desc">${s.info || s.d}</p>
       <div class="srv-feat-alc"><div class="srv-feat-alc-h">🎯 Alcance del servicio</div>${s.alc}</div>
       <button class="sf-cta" onclick="window.open('https://wa.me/573222139210?text=${waMsg}','_blank')">💬 Cotizar este servicio</button>
     </div>`;
