@@ -179,13 +179,14 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .srv-feat-slideshow .srv-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
 .srv-feat-slideshow .srv-slide.active{opacity:1}
 .srv-feat-thumb-fill{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;min-height:90px;background:linear-gradient(180deg,#fff,var(--bg1));border-top:1px solid var(--bg3)}
-.srv-feat-thumb-fill img{width:100%;max-width:150px;height:auto;object-fit:contain;opacity:.95}
+.srv-feat-thumb-fill img{width:100%;max-width:225px;height:auto;object-fit:contain;opacity:.95}
 .srv-feat-info{flex:1;min-width:0;background:#fff;border-radius:var(--rl);border:1px solid #cce4c4;box-shadow:0 8px 30px rgba(30,90,15,.16);padding:32px 36px;display:flex;flex-direction:column;justify-content:center;animation:fadeRight .4s cubic-bezier(.16,.8,.3,1)}
 .srv-feat-info h2{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--dk1);margin:10px 0 14px}
 .srv-feat-desc{font-size:16px;color:var(--tx2);line-height:1.75;margin-bottom:18px}
 .srv-feat-alc{background:rgba(46,125,26,.06);border:1px solid rgba(46,125,26,.18);border-left:4px solid var(--ac1);border-radius:10px;padding:16px 18px;font-size:14px;color:var(--tx2);line-height:1.75;margin-bottom:20px}
 .srv-feat-alc-h{font-weight:800;color:var(--ac1);font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-@media(max-width:860px){.srv-feat-row{flex-direction:column}.srv-feat-thumb{width:100% !important}.srv-feat-info{padding:24px}.srv-feat-info h2{font-size:25px}}
+@media(max-width:860px){.srv-feat-row{flex-direction:column}.srv-feat-thumb{width:100% !important;max-width:380px;margin:0 auto}.srv-feat-info{padding:24px}.srv-feat-info h2{font-size:25px}}
+@media(max-width:480px){.srv-feat-thumb{max-width:300px}.srv-feat-thumb-fill img{max-width:150px}}
 
 /* PORTAFOLIO */
 .port-label{margin-bottom:26px}
@@ -6552,7 +6553,7 @@ const D = {
     {img:'topo', t:'Topografía de precisión', d:'Levantamientos planimétricos y altimétricos con estación total y GPS diferencial. Replanteos, curvas de nivel e informes técnicos para licencias y diseños de ingeniería.', tag:'Campo',
       info:'La topografía de precisión es la base de cualquier proyecto de construcción, diseño vial o urbanístico: sin un levantamiento correcto, los diseños pueden arrastrar errores costosos en volúmenes de excavación, pendientes o linderos. La aplicamos en edificaciones, vías, acueductos, alcantarillados, parcelaciones y cualquier obra que requiera conocer con exactitud la geometría y las cotas del terreno.',
       alc:'Al finalizar recibes: plano topográfico georreferenciado bajo normativa colombiana vigente, curvas de nivel, cartera de campo digital, coordenadas de mojones y linderos, e informe técnico listo para trámites ante curadurías, notarías y entidades públicas.',
-      slides:['img/servicio-topografia.jpg','img/topo-campo-via.jpg','img/topo-campo-cerro.jpg']},
+      slides:['img/servicio-topografia.jpg','img/topo-campo-via.jpg','img/topo-campo-cerro.jpg','img/topo-nivel-campo.jpg','img/topo-museo-equipos.jpg']},
     {img:'geom', t:'Geomática y SIG', d:'Procesamiento de datos geoespaciales, Sistemas de Información Geográfica, análisis territorial y modelado digital de terreno.', tag:'Digital',
       info:'La geomática integra la captura, el procesamiento y el análisis de información geoespacial para apoyar la toma de decisiones territoriales de entidades públicas y privadas. La aplicamos en planificación urbana y rural, gestión del riesgo, seguimiento ambiental, infraestructura de servicios públicos y análisis de cobertura, mediante sistemas de información geográfica que permiten visualizar, consultar y actualizar los datos del territorio en tiempo real.',
       alc:'Entregables: mapas temáticos y bases de datos geoespaciales (SHP, GeoJSON, KML), modelo digital de terreno, análisis de aptitud de uso del suelo y visores cartográficos listos para apoyar la toma de decisiones sobre el territorio.'},
@@ -6564,7 +6565,8 @@ const D = {
       alc:'Obtienes: planos cartográficos básicos y temáticos, cartografía predial y catastral actualizada, mapas de uso del suelo y documentos de soporte para Planes de Ordenamiento Territorial (POT/EOT).'},
     {img:'drone',t:'Fotogrametría con drones', d:'Vuelos fotogramétricos con drones de ala fija y multirotor, ortofotomosaicos de alta resolución y modelos digitales de superficie y terreno.', tag:'Aerofotografía',
       info:'La fotogrametría con drones ha revolucionado el levantamiento topográfico: en pocas horas obtenemos ortofotos de alta resolución, modelos digitales del terreno y nubes de puntos 3D de grandes extensiones, con una precisión que antes tomaba semanas de trabajo en campo. La aplicamos en minería, agrimensura, agricultura de precisión, seguimiento de obras civiles, inventarios forestales y estudios ambientales.',
-      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).'},
+      alc:'Productos finales: ortofotomosaico de alta resolución, modelo digital de superficie (MDS) y de terreno (MDT), nube de puntos densa y reporte de precisión con puntos de control terrestre (GCP).',
+      slides:['img/servicio-fotogrametria-drones.jpg','img/drone-vista-aerea-rio.jpg','img/drone-equipos-agricolas.jpg']},
     {img:'amb',  t:'Gestión ambiental', d:'Cartografía ambiental, delimitación de rondas hídricas, cobertura vegetal, zonificación y apoyo para licencias ambientales ante entidades competentes.', tag:'Ambiente',
       info:'La gestión ambiental aplicada a la topografía y la geomática es clave para cumplir con la normativa ambiental colombiana. La delimitación de rondas hídricas, la identificación de coberturas vegetales y la zonificación ambiental son insumos obligatorios para licencias ambientales, planes de manejo y proyectos que intervienen ecosistemas estratégicos. Trabajamos en coordinación con las corporaciones autónomas regionales y el Ministerio de Ambiente.',
       alc:'Alcance: delimitación de rondas hídricas y áreas de protección, mapas de cobertura vegetal y uso del suelo, y documentación técnica de soporte para trámites de licenciamiento ambiental.'},
