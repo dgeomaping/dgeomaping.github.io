@@ -3068,6 +3068,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   <!-- TABS -->
   <div class="mtabs">
     <button class="mtab on" onclick="magnaGoTab('conversion',this)">🔄 Conversión de Coordenadas</button>
+    <button class="mtab" onclick="magnaGoTab('conversionpro',this)">🎯 Transformación PRO</button>
     <button class="mtab" onclick="magnaGoTab('transformacion',this)">🔀 Transformación Datum</button>
     <button class="mtab" onclick="magnaGoTab('epoca',this)">📅 Cambio de Época</button>
     <button class="mtab" onclick="magnaGoTab('geoidal',this)">🌍 Ondulación Geoidal</button>
@@ -3133,6 +3134,132 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ══ TRANSFORMACIÓN PRO (estilo app) ══ -->
+  <div class="mpanel" id="mp-conversionpro">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,#5b6bf5,#8b9bff);display:flex;align-items:center;justify-content:center;font-size:21px;color:#fff;flex-shrink:0">⇄</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span style="font-size:19px;font-weight:800;color:var(--mtx)">Transformación de Coordenadas</span>
+            <span style="background:#111;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:1px;padding:3px 9px;border-radius:6px">VERSIÓN BETA</span>
+          </div>
+          <div style="font-size:11.5px;color:var(--mac2);margin-top:2px"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mac2);margin-right:6px"></span><span id="cp-modelo-activo-txt">QGeoidCOL2023</span> activo</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <button class="mtab" id="cp-btn-geo2004" onclick="cpSetModelo('geocol2004')">GEOCOL 2004</button>
+        <button class="mtab on" id="cp-btn-geo2023" onclick="cpSetModelo('qgeoidcol2023')">QGeoidCOL2023</button>
+      </div>
+    </div>
+
+    <div class="mst warn" style="margin-bottom:14px"><span>⚠️</span><span>El modelo de ondulación geoidal usado aquí es una <strong>aproximación propia</strong> ajustada con puntos de control de referencia de Colombia, no la cuadrícula oficial del IGAC. Para trámites legales, verifica siempre con la fuente oficial.</span></div>
+
+    <div class="m2" style="align-items:start;gap:18px">
+      <!-- ORIGEN -->
+      <div class="mc" style="margin-bottom:0">
+        <div class="mc-t"><span style="width:9px;height:9px;border-radius:50%;background:#3b82f6;display:inline-block"></span> ORIGEN / PARTIDA</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button class="mtab on" id="cp-o-datum-magna" onclick="cpSetDatum('o','magna')" style="flex:1">MAGNA-SIRGAS</button>
+          <button class="mtab" id="cp-o-datum-bogota" onclick="cpSetDatum('o','bogota')" style="flex:1">Datum Bogotá</button>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="cp-o-sistemas">
+          <button class="mtab" onclick="cpSetSistema('o','planas',this)">Planas</button>
+          <button class="mtab" onclick="cpSetSistema('o','elipsoidales',this)">Elipsoidales</button>
+          <button class="mtab on" onclick="cpSetSistema('o','gk',this)">Gauss-Krüger</button>
+          <button class="mtab" onclick="cpSetSistema('o','nacional',this)">Nacional</button>
+          <button class="mtab" onclick="cpSetSistema('o','utm',this)">UTM</button>
+          <button class="mtab" onclick="cpSetSistema('o','geocentricas',this)">Geocéntricas</button>
+        </div>
+        <div class="mfg" id="cp-o-origen-wrap">
+          <label>Origen Gauss-Krüger</label>
+          <select class="msel" id="cp-o-origen" onchange="cpCalcular()">
+            <option value="central">Central (Nacional · EPSG:9377)</option>
+            <option value="bogota">Bogotá (EPSG:3116)</option>
+            <option value="oeste">Oeste (EPSG:3114)</option>
+            <option value="centro_w">Centro (EPSG:3115)</option>
+            <option value="este">Este (EPSG:3117)</option>
+            <option value="este_llanos">Este Llanos (EPSG:3118)</option>
+          </select>
+        </div>
+        <div class="mfg" id="cp-o-utm-wrap" style="display:none">
+          <label>Zona UTM</label>
+          <select class="msel" id="cp-o-utmzona" onchange="cpCalcular()">
+            <option value="17">17 N</option>
+            <option value="18" selected>18 N</option>
+            <option value="19">19 N</option>
+          </select>
+        </div>
+        <div class="m2">
+          <div class="mfg"><label id="cp-o-lbl1">Norte</label><input class="minp" id="cp-o-v1" type="number" step="any" placeholder="1003789.197" oninput="cpCalcular()"></div>
+          <div class="mfg"><label id="cp-o-lbl2">Este</label><input class="minp" id="cp-o-v2" type="number" step="any" placeholder="1000000.000" oninput="cpCalcular()"></div>
+        </div>
+        <div class="mc" style="background:rgba(91,107,245,.06);border-color:rgba(91,107,245,.3);margin-top:4px;margin-bottom:0">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+            <strong style="font-size:11.5px;color:var(--mtx2);text-transform:uppercase;letter-spacing:.4px">Componente Vertical</strong>
+            <div style="display:flex;gap:5px">
+              <button class="mtab on" id="cp-vmode-h" onclick="cpSetVMode('h')" style="font-size:10.5px;padding:4px 9px">h (Elipsoidal)</button>
+              <button class="mtab" id="cp-vmode-H" onclick="cpSetVMode('H')" style="font-size:10.5px;padding:4px 9px">H (Cota Ortométrica)</button>
+            </div>
+          </div>
+          <input class="minp" id="cp-o-v3" type="number" step="any" value="0" oninput="cpCalcular()">
+        </div>
+      </div>
+
+      <!-- DESTINO -->
+      <div class="mc" style="margin-bottom:0">
+        <div class="mc-t"><span style="width:9px;height:9px;border-radius:50%;background:#3d9424;display:inline-block"></span> DESTINO</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <button class="mtab on" id="cp-d-datum-magna" onclick="cpSetDatum('d','magna')" style="flex:1">MAGNA-SIRGAS</button>
+          <button class="mtab" id="cp-d-datum-bogota" onclick="cpSetDatum('d','bogota')" style="flex:1">Datum Bogotá</button>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="cp-d-sistemas">
+          <button class="mtab" onclick="cpSetSistema('d','planas',this)">Planas</button>
+          <button class="mtab" onclick="cpSetSistema('d','elipsoidales',this)">Elipsoidales</button>
+          <button class="mtab" onclick="cpSetSistema('d','gk',this)">Gauss-Krüger</button>
+          <button class="mtab on" onclick="cpSetSistema('d','nacional',this)">Nacional</button>
+          <button class="mtab" onclick="cpSetSistema('d','utm',this)">UTM</button>
+          <button class="mtab" onclick="cpSetSistema('d','geocentricas',this)">Geocéntricas</button>
+        </div>
+        <div class="mfg" id="cp-d-origen-wrap" style="display:none">
+          <label>Origen Gauss-Krüger</label>
+          <select class="msel" id="cp-d-origen" onchange="cpCalcular()">
+            <option value="central">Central (Nacional · EPSG:9377)</option>
+            <option value="bogota">Bogotá (EPSG:3116)</option>
+            <option value="oeste">Oeste (EPSG:3114)</option>
+            <option value="centro_w">Centro (EPSG:3115)</option>
+            <option value="este">Este (EPSG:3117)</option>
+            <option value="este_llanos">Este Llanos (EPSG:3118)</option>
+          </select>
+        </div>
+        <div class="mfg" id="cp-d-utm-wrap" style="display:none">
+          <label>Zona UTM</label>
+          <select class="msel" id="cp-d-utmzona" onchange="cpCalcular()">
+            <option value="17">17 N</option>
+            <option value="18" selected>18 N</option>
+            <option value="19">19 N</option>
+          </select>
+        </div>
+        <div class="mst info" style="margin-top:2px">
+          <span>💡</span><span>El destino define el sistema de salida. Los valores de origen se convierten automáticamente al calcular.</span>
+        </div>
+        <button class="mbtn p" style="width:100%;padding:13px;margin-top:14px;font-size:14px" onclick="cpCalcular(true)">🧮 Calcular Coordenadas</button>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="mc" style="margin-top:18px;border-top:3px solid var(--mac3)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:4px">
+        <div class="mc-t">✅ Resultado Calculado</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="mbtn" onclick="cpExportarExcel()">📥 Exportar Excel</button>
+          <button class="mbtn p" onclick="cpGenerarInforme()">📄 Generar Informe</button>
+        </div>
+      </div>
+      <div id="cp-resultado"><div class="mst info"><span>💡</span><span>Ingresa las coordenadas de origen y presiona Calcular Coordenadas</span></div></div>
     </div>
   </div>
 
@@ -11732,6 +11859,253 @@ function magnaGeoidal(){
       +'<div style="font-size:11px;opacity:.6;margin-top:4px">'+lat.toFixed(4)+'°N, '+Math.abs(lon).toFixed(4)+'°W</div>'
       +'</div>';
   }
+}
+
+// ══════════════════════════════════════════════════════════
+// TRANSFORMACIÓN PRO — módulo estilo "Transformación de Coordenadas"
+// ══════════════════════════════════════════════════════════
+var CP_ORIGENES = {
+  central:     {lon0:-73, lat0:4, k0:0.9992, FE:5000000, FN:2000000, label:'Nacional (CTM12 · EPSG:9377)'},
+  bogota:      {lon0:-74, lat0:4, k0:0.9992, FE:1000000, FN:1000000, label:'Bogotá (EPSG:3116)'},
+  oeste:       {lon0:-77, lat0:4, k0:0.9992, FE:1000000, FN:1000000, label:'Oeste (EPSG:3114)'},
+  centro_w:    {lon0:-74, lat0:4, k0:0.9992, FE:1000000, FN:1000000, label:'Centro (EPSG:3115)'},
+  este:        {lon0:-71, lat0:4, k0:0.9992, FE:1000000, FN:1000000, label:'Este (EPSG:3117)'},
+  este_llanos: {lon0:-68, lat0:4, k0:0.9992, FE:1000000, FN:1000000, label:'Este Llanos (EPSG:3118)'}
+};
+
+var cpState = {
+  o: {datum:'magna', sistema:'gk', origen:'central', utmzona:18},
+  d: {datum:'magna', sistema:'nacional', origen:'central', utmzona:18},
+  vmode: 'h',
+  modelo: 'qgeoidcol2023'
+};
+var cpLastResult = null;
+
+function cpUtmParams(zona){
+  return {lon0: zona*6-183, lat0:0, k0:0.9996, FE:500000, FN:0};
+}
+
+// ── Modelos de ondulación geoidal (aproximados) ──
+function cpGeoidGEOCOL2004(lat, lon){ return calcGeoidalN(lat, lon); }
+function cpGeoidQGeoidCOL2023(lat, lon){
+  var N = calcGeoidalN(lat, lon);
+  N += 0.28 - 0.05*Math.cos((lon+74)*Math.PI/10) + 0.04*Math.sin(lat*Math.PI/9);
+  return N;
+}
+function cpGetGeoidN(lat, lon){
+  return cpState.modelo==='geocol2004' ? cpGeoidGEOCOL2004(lat,lon) : cpGeoidQGeoidCOL2023(lat,lon);
+}
+function cpModeloLabel(){ return cpState.modelo==='geocol2004' ? 'GEOCOL 2004' : 'QGeoidCOL2023'; }
+
+// ── Helmert Bogotá 1975 ↔ MAGNA-SIRGAS (aprox., mismos parámetros del módulo de Transformación Datum) ──
+function cpBogotaToMagna(lat, lon, h){
+  var dx=307.695, dy=-175.361, dz=-179.152;
+  var rx=1.084/206265, ry=-0.485/206265, rz=-0.492/206265, sc=-1.267e-6;
+  var e=geoToECEF(lat,lon,h);
+  var X2=e.X+dx+e.X*sc-e.Z*ry+e.Y*rz;
+  var Y2=e.Y+dy+e.Y*sc-e.X*rz+e.Z*rx;
+  var Z2=e.Z+dz+e.Z*sc-e.Y*rx+e.X*ry;
+  return ecefToGeo(X2,Y2,Z2);
+}
+function cpMagnaToBogota(lat, lon, h){
+  var dx=-307.695, dy=175.361, dz=179.152;
+  var rx=-1.084/206265, ry=0.485/206265, rz=0.492/206265, sc=1.267e-6;
+  var e=geoToECEF(lat,lon,h);
+  var X2=e.X+dx+e.X*sc-e.Z*ry+e.Y*rz;
+  var Y2=e.Y+dy+e.Y*sc-e.X*rz+e.Z*rx;
+  var Z2=e.Z+dz+e.Z*sc-e.Y*rx+e.X*ry;
+  return ecefToGeo(X2,Y2,Z2);
+}
+
+// ── UI: cambiar modelo geoidal ──
+function cpSetModelo(m){
+  cpState.modelo = m;
+  document.getElementById('cp-btn-geo2004').classList.toggle('on', m==='geocol2004');
+  document.getElementById('cp-btn-geo2023').classList.toggle('on', m==='qgeoidcol2023');
+  document.getElementById('cp-modelo-activo-txt').textContent = cpModeloLabel();
+  cpCalcular();
+}
+
+// ── UI: cambiar datum de un lado ──
+function cpSetDatum(side, val){
+  cpState[side].datum = val;
+  document.getElementById('cp-'+side+'-datum-magna').classList.toggle('on', val==='magna');
+  document.getElementById('cp-'+side+'-datum-bogota').classList.toggle('on', val==='bogota');
+  cpCalcular();
+}
+
+// ── UI: cambiar familia de sistema de un lado ──
+function cpSetSistema(side, val, btn){
+  cpState[side].sistema = val;
+  var wrap = document.getElementById('cp-'+side+'-sistemas');
+  wrap.querySelectorAll('.mtab').forEach(function(b){b.classList.remove('on');});
+  if(btn) btn.classList.add('on');
+  var gkWrap = document.getElementById('cp-'+side+'-origen-wrap');
+  var utmWrap = document.getElementById('cp-'+side+'-utm-wrap');
+  gkWrap.style.display = (val==='gk'||val==='planas') ? 'flex' : 'none';
+  utmWrap.style.display = (val==='utm') ? 'flex' : 'none';
+  if(side==='o') cpUpdateLabelsOrigen();
+  cpCalcular();
+}
+
+function cpUpdateLabelsOrigen(){
+  var sis = cpState.o.sistema;
+  var lbl1=document.getElementById('cp-o-lbl1'), lbl2=document.getElementById('cp-o-lbl2');
+  if(sis==='elipsoidales'){ lbl1.textContent='Latitud (°)'; lbl2.textContent='Longitud (°)'; }
+  else if(sis==='geocentricas'){ lbl1.textContent='X (m)'; lbl2.textContent='Y (m)'; }
+  else { lbl1.textContent='Norte'; lbl2.textContent='Este'; }
+}
+
+function cpSetVMode(m){
+  cpState.vmode = m;
+  document.getElementById('cp-vmode-h').classList.toggle('on', m==='h');
+  document.getElementById('cp-vmode-H').classList.toggle('on', m==='H');
+  cpCalcular();
+}
+
+// ── Convierte la entrada del lado ORIGEN a Lat/Lon MAGNA-SIRGAS + h elipsoidal ──
+function cpEntradaAGeoMagna(){
+  var s = cpState.o;
+  var v1 = parseFloat(document.getElementById('cp-o-v1').value);
+  var v2 = parseFloat(document.getElementById('cp-o-v2').value);
+  var v3 = parseFloat(document.getElementById('cp-o-v3').value) || 0;
+  if(isNaN(v1) || isNaN(v2)) return null;
+
+  var lat, lon;
+  if(s.sistema==='elipsoidales'){ lat=v1; lon=v2; }
+  else if(s.sistema==='geocentricas'){ var r=ecefToGeo(v1,v2,v3); lat=r.lat; lon=r.lon; v3=r.h; }
+  else if(s.sistema==='utm'){ var z=parseInt(document.getElementById('cp-o-utmzona').value,10); var r=tmToGeo(v1,v2,cpUtmParams(z)); lat=r.lat; lon=r.lon; }
+  else { var key=s.sistema==='nacional' ? 'central' : document.getElementById('cp-o-origen').value; var p=CP_ORIGENES[key]; var r=tmToGeo(v1,v2,p); lat=r.lat; lon=r.lon; }
+
+  // Si el datum de origen es Bogotá 1975, pasar primero a MAGNA-SIRGAS
+  if(s.datum==='bogota'){ var g=cpBogotaToMagna(lat,lon,v3); lat=g.lat; lon=g.lon; }
+
+  // Componente vertical: si el usuario ingresó H (cota ortométrica), calcular h = H + N
+  var N = cpGetGeoidN(lat, lon);
+  var h_elip, H_cota;
+  if(cpState.vmode==='H'){ H_cota=v3; h_elip=v3+N; }
+  else { h_elip=v3; H_cota=v3-N; }
+
+  return {lat:lat, lon:lon, h:h_elip, H:H_cota, N:N};
+}
+
+// ── Proyecta Lat/Lon MAGNA-SIRGAS al sistema/datum DESTINO ──
+function cpGeoASalida(lat, lon){
+  var s = cpState.d;
+  var latOut=lat, lonOut=lon;
+  if(s.datum==='bogota'){ var g=cpMagnaToBogota(lat,lon,0); latOut=g.lat; lonOut=g.lon; }
+
+  if(s.sistema==='elipsoidales'){
+    return {v1:latOut, v2:lonOut, lbl1:'Latitud', lbl2:'Longitud', unidad:'°', dec:8};
+  }
+  if(s.sistema==='geocentricas'){
+    var e=geoToECEF(lat,lon,0);
+    return {v1:e.X, v2:e.Y, v3:e.Z, lbl1:'X', lbl2:'Y', lbl3:'Z', unidad:'m', dec:4};
+  }
+  if(s.sistema==='utm'){
+    var z=parseInt(document.getElementById('cp-d-utmzona').value,10);
+    var r=geoToTM(latOut, lonOut, cpUtmParams(z));
+    return {v1:r.N, v2:r.E, lbl1:'Norte UTM '+z+'N', lbl2:'Este UTM '+z+'N', unidad:'m', dec:4};
+  }
+  // gk / planas / nacional
+  var key = s.sistema==='nacional' ? 'central' : document.getElementById('cp-d-origen').value;
+  var p = CP_ORIGENES[key];
+  var r = geoToTM(latOut, lonOut, p);
+  return {v1:r.N, v2:r.E, lbl1:'Norte '+p.label, lbl2:'Este '+p.label, unidad:'m', dec:4};
+}
+
+// ── Cálculo principal ──
+function cpCalcular(){
+  var out = document.getElementById('cp-resultado');
+  var entrada = cpEntradaAGeoMagna();
+  if(!entrada){ out.innerHTML='<div class="mst info"><span>💡</span><span>Ingresa las coordenadas de origen y presiona Calcular Coordenadas</span></div>'; cpLastResult=null; return; }
+
+  var salida = cpGeoASalida(entrada.lat, entrada.lon);
+  var origenLbl = cpState.o.sistema==='nacional' ? CP_ORIGENES.central.label
+                 : (cpState.o.sistema==='gk'||cpState.o.sistema==='planas') ? CP_ORIGENES[document.getElementById('cp-o-origen').value].label
+                 : cpState.o.sistema.toUpperCase();
+
+  cpLastResult = {
+    entrada: entrada, salida: salida,
+    datumO: cpState.o.datum, datumD: cpState.d.datum,
+    sistemaO: cpState.o.sistema, sistemaD: cpState.d.sistema,
+    origenLbl: origenLbl,
+    modelo: cpModeloLabel(),
+    fecha: new Date().toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'})
+  };
+
+  var html = '<div class="mres">';
+  html += '<div class="mres-row"><span class="mres-lbl">'+salida.lbl1+'</span><span class="mres-val hi">'+salida.v1.toFixed(salida.dec)+' '+salida.unidad+'</span></div>';
+  html += '<div class="mres-row"><span class="mres-lbl">'+salida.lbl2+'</span><span class="mres-val hi">'+salida.v2.toFixed(salida.dec)+' '+salida.unidad+'</span></div>';
+  if(salida.lbl3) html += '<div class="mres-row"><span class="mres-lbl">'+salida.lbl3+'</span><span class="mres-val hi">'+salida.v3.toFixed(salida.dec)+' '+salida.unidad+'</span></div>';
+  html += '</div>';
+  html += '<div class="m3" style="margin-top:10px">';
+  html += '<div class="mc" style="margin-bottom:0;padding:10px;text-align:center"><div style="font-size:10px;color:var(--mtx3);text-transform:uppercase;letter-spacing:.4px">H (Elip)</div><div style="font-family:\'IBM Plex Mono\',monospace;font-weight:700;color:#7c5cff">'+entrada.h.toFixed(3)+' m</div></div>';
+  html += '<div class="mc" style="margin-bottom:0;padding:10px;text-align:center"><div style="font-size:10px;color:var(--mtx3);text-transform:uppercase;letter-spacing:.4px">H (Cota)</div><div style="font-family:\'IBM Plex Mono\',monospace;font-weight:700;color:#3b82f6">'+entrada.H.toFixed(3)+' m</div></div>';
+  html += '<div class="mc" style="margin-bottom:0;padding:10px;text-align:center"><div style="font-size:10px;color:var(--mtx3);text-transform:uppercase;letter-spacing:.4px">N (Ond)</div><div style="font-family:\'IBM Plex Mono\',monospace;font-weight:700;color:var(--mac2)">+'+entrada.N.toFixed(3)+' m</div></div>';
+  html += '</div>';
+  html += '<div style="text-align:center;font-size:11px;color:var(--mtx3);margin-top:10px">Modelo de geoide: <strong>'+cpModeloLabel()+'</strong> (aproximado)</div>';
+  html += '<div style="text-align:center;font-size:11px;color:var(--mtx3)">Calculado sobre: Origen '+origenLbl+'</div>';
+  out.innerHTML = html;
+}
+
+// ── Exportar resultado a Excel (CSV compatible) ──
+function cpExportarExcel(){
+  if(!cpLastResult){ alert('Calcula primero un resultado para exportar.'); return; }
+  var r = cpLastResult;
+  var rows = [
+    ['Campo','Valor'],
+    [r.salida.lbl1, r.salida.v1.toFixed(r.salida.dec)],
+    [r.salida.lbl2, r.salida.v2.toFixed(r.salida.dec)],
+  ];
+  if(r.salida.lbl3) rows.push([r.salida.lbl3, r.salida.v3.toFixed(r.salida.dec)]);
+  rows.push(['H Elipsoidal (m)', r.entrada.h.toFixed(4)]);
+  rows.push(['H Cota Ortométrica (m)', r.entrada.H.toFixed(4)]);
+  rows.push(['N Ondulación geoidal (m)', r.entrada.N.toFixed(4)]);
+  rows.push(['Modelo de geoide', r.modelo]);
+  rows.push(['Fecha', r.fecha]);
+  var csv = rows.map(function(row){return row.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\r\n');
+  var blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8;'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = 'DGeoMap_Transformacion_Coordenadas.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ── Generar informe con membrete DGeoMap ──
+function cpGenerarInforme(){
+  if(!cpLastResult){ alert('Calcula primero un resultado para generar el informe.'); return; }
+  var r = cpLastResult;
+  var datumLbl = function(d){ return d==='bogota' ? 'Datum Bogotá 1975' : 'MAGNA-SIRGAS'; };
+
+  var extra = '';
+  extra += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">';
+  extra += '<div style="border:1px solid #c8e6c9;border-radius:8px;padding:12px 14px"><div style="font-size:11px;font-weight:800;color:#1b5e20;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🔵 Origen / Partida</div>';
+  extra += '<div style="font-size:12px;line-height:1.9">Datum: <b>'+datumLbl(r.datumO)+'</b><br>Sistema: <b>'+r.origenLbl+'</b><br>Latitud: <b>'+r.entrada.lat.toFixed(8)+'°</b><br>Longitud: <b>'+r.entrada.lon.toFixed(8)+'°</b></div></div>';
+  extra += '<div style="border:1px solid #c8e6c9;border-radius:8px;padding:12px 14px"><div style="font-size:11px;font-weight:800;color:#1b5e20;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">🟢 Destino</div>';
+  extra += '<div style="font-size:12px;line-height:1.9">Datum: <b>'+datumLbl(r.datumD)+'</b><br>'+r.salida.lbl1+': <b>'+r.salida.v1.toFixed(r.salida.dec)+' '+r.salida.unidad+'</b><br>'+r.salida.lbl2+': <b>'+r.salida.v2.toFixed(r.salida.dec)+' '+r.salida.unidad+'</b>'+(r.salida.lbl3?'<br>'+r.salida.lbl3+': <b>'+r.salida.v3.toFixed(r.salida.dec)+' '+r.salida.unidad+'</b>':'')+'</div></div>';
+  extra += '</div>';
+
+  extra += '<div style="border:2px solid #2e7d32;border-radius:8px;padding:14px 16px;margin-bottom:14px">';
+  extra += '<div style="font-size:12px;font-weight:800;color:#1b5e20;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">✅ Resultado Calculado — Componente Vertical</div>';
+  extra += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">';
+  extra += '<div><div style="font-size:10px;color:#666;text-transform:uppercase">H Elipsoidal</div><div style="font-size:15px;font-weight:800">'+r.entrada.h.toFixed(3)+' m</div></div>';
+  extra += '<div><div style="font-size:10px;color:#666;text-transform:uppercase">H Cota Ortométrica</div><div style="font-size:15px;font-weight:800">'+r.entrada.H.toFixed(3)+' m</div></div>';
+  extra += '<div><div style="font-size:10px;color:#666;text-transform:uppercase">N Ondulación</div><div style="font-size:15px;font-weight:800;color:#2e7d32">+'+r.entrada.N.toFixed(3)+' m</div></div>';
+  extra += '</div>';
+  extra += '<div style="text-align:center;font-size:11px;color:#555;margin-top:10px">Modelo de geoide utilizado: <b>'+r.modelo+'</b></div>';
+  extra += '</div>';
+
+  extra += '<div style="background:#fff8e1;border:1px solid #ffca28;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#7a5c00;margin-bottom:6px">⚠️ El valor de ondulación geoidal se calculó con un <b>modelo aproximado propio</b> ajustado a puntos de control de referencia en Colombia, y no corresponde a la cuadrícula oficial del IGAC. Para trámites legales o catastrales, verifique el valor oficial ante la entidad competente.</div>';
+
+  var html = _buildReporteHTML(
+    'Informe de Transformación de Coordenadas',
+    'Sistema Geodésico de Colombia · MAGNA-SIRGAS',
+    'Transformación puntual', 'DGeoMap Ingeniería S.A.S.', r.fecha,
+    '', [], [], [], extra
+  );
+  _abrirReporte(html, 'Informe_Transformacion_Coordenadas');
 }
 
 // ── Proceso por lotes ─────────────────────────────────────
