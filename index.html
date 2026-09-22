@@ -4397,7 +4397,36 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <div class="dcard">
           <div class="dcard-title"><span class="ico">🚁</span> Datos del Dron</div>
           <div class="dfgrp" style="margin-bottom:10px">
-            <label>Tipo de dron</label>
+            <label>Modelo de dron</label>
+            <select class="dsel" id="pv-dron-modelo" onchange="pvLoadDrone()">
+              <optgroup label="Multirrotor">
+                <option value="dji_mini4pro">DJI Mini 4 Pro</option>
+                <option value="dji_air3">DJI Air 3</option>
+                <option value="dji_mavic3e" selected>DJI Mavic 3 Enterprise (RTK)</option>
+                <option value="dji_mavic3m">DJI Mavic 3 Multispectral</option>
+                <option value="dji_p4rtk">DJI Phantom 4 RTK</option>
+                <option value="autel_evo2_rtk">Autel EVO II Pro RTK</option>
+                <option value="dji_m300_p1">DJI Matrice 300 RTK + Zenmuse P1</option>
+                <option value="dji_m300_l1">DJI Matrice 300 RTK + Zenmuse L1 (LiDAR)</option>
+                <option value="dji_m350_p1">DJI Matrice 350 RTK + Zenmuse P1</option>
+                <option value="dji_m30t">DJI Matrice 30T</option>
+              </optgroup>
+              <optgroup label="Ala fija / VTOL">
+                <option value="wingtra_one">WingtraOne GEN II (VTOL)</option>
+                <option value="sensefly_ebee_x">senseFly eBee X</option>
+              </optgroup>
+              <optgroup label="Agrícola">
+                <option value="dji_agras_t30">DJI Agras T30</option>
+                <option value="dji_agras_t40">DJI Agras T40</option>
+              </optgroup>
+              <optgroup label="Otro">
+                <option value="custom">Personalizado / otro modelo</option>
+              </optgroup>
+            </select>
+          </div>
+          <div id="pv-dron-info" style="font-size:11.5px;color:var(--dtx3);line-height:1.6;margin-bottom:10px"></div>
+          <div class="dfgrp" style="margin-bottom:10px">
+            <label>Categoría (según peso — automática)</label>
             <select class="dsel" id="pv-tipo-dron" onchange="pvEval()">
               <option value="multirotor_lt2">Multirrotor &lt; 200 g (sin registro)</option>
               <option value="multirotor_sm">Multirrotor 200 g – 2 kg</option>
@@ -4408,13 +4437,15 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <option value="asp">UAS aspersión/fumigación</option>
             </select>
           </div>
-          <div class="dfgrp" style="margin-bottom:10px">
-            <label>Peso bruto al despegue (kg)</label>
-            <input class="dinp" id="pv-peso" type="number" step="0.1" min="0" max="250" value="1.5" oninput="pvEval()">
-          </div>
-          <div class="dfgrp" style="margin-bottom:10px">
-            <label>Autonomía del fabricante (min)</label>
-            <input class="dinp" id="pv-autonomia" type="number" min="1" max="180" value="30" oninput="pvEval()">
+          <div class="dg2" style="margin-bottom:10px">
+            <div class="dfgrp">
+              <label>Peso bruto al despegue (kg)</label>
+              <input class="dinp" id="pv-peso" type="number" step="0.01" min="0" max="250" value="0.915" oninput="pvEval()">
+            </div>
+            <div class="dfgrp">
+              <label>Autonomía del fabricante (min)</label>
+              <input class="dinp" id="pv-autonomia" type="number" min="1" max="180" value="45" oninput="pvEval()">
+            </div>
           </div>
           <div class="dfgrp">
             <label>Tiempo de vuelo planificado (min)</label>
@@ -4477,6 +4508,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <button class="dbtn" style="font-size:12px;padding:6px 10px" onclick="pvMapTool('polygon')" id="btn-polygon">✏️ Polígono</button>
               <button class="dbtn" style="font-size:12px;padding:6px 10px" onclick="pvMapTool('marker')" id="btn-marker">📍 Punto</button>
               <button class="dbtn" style="font-size:12px;padding:6px 10px" onclick="pvMapTool('circle')" id="btn-circle">⭕ Radio</button>
+              <button class="dbtn prim" style="font-size:12px;padding:6px 10px" onclick="pvClosePolygon()" id="btn-close-poly" title="Cierra el polígono sin necesidad de doble clic — útil en pantallas táctiles">✅ Cerrar polígono</button>
               <button class="dbtn err" style="font-size:12px;padding:6px 10px" onclick="pvClearAll()">🗑️ Limpiar</button>
             </div>
           </div>
@@ -4521,21 +4553,22 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <!-- Parámetros líneas de vuelo -->
         <div class="dcard" style="margin-top:0">
           <div class="dcard-title"><span class="ico">📡</span> Parámetros de Misión / Sensor</div>
-          <div class="dg2" style="margin-bottom:10px">
-            <div class="dfgrp">
-              <label>Tipo de sensor / cámara</label>
-              <select class="dsel" id="pv-sensor" onchange="pvEval()">
-                <option value="rgb_24">RGB estándar (24mm eq.) — DJI Mini/Air/Phantom</option>
-                <option value="rgb_35">RGB (35mm eq.) — DJI Mavic 3</option>
-                <option value="multi">Multiespectral — MicaSense/Parrot</option>
-                <option value="lidar">LiDAR — Zenmuse L1/L2</option>
-                <option value="thermal">Térmico — FLIR/Zenmuse XT</option>
-                <option value="custom">Personalizado</option>
-              </select>
+          <div id="pv-gsd-box" style="background:var(--dbg3);border:1px solid var(--dac2);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+            <div>
+              <div style="font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--dtx3);font-weight:700">GSD real a la altura actual</div>
+              <div id="pv-gsd-real" style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--dac3);letter-spacing:.5px;line-height:1.1">—</div>
+              <div id="pv-footprint-real" style="font-size:11px;color:var(--dtx3)">Selecciona un dron para calcular</div>
             </div>
+            <div style="font-size:11px;color:var(--dtx3);max-width:190px;line-height:1.5">El GSD (tamaño de píxel en terreno) depende de la <strong>altura de vuelo</strong> y del <strong>sensor del dron</strong> seleccionado arriba.</div>
+          </div>
+          <div class="dg2" style="margin-bottom:10px">
             <div class="dfgrp">
               <label>GSD objetivo (cm/px)</label>
               <input class="dinp" id="pv-gsd" type="number" step="0.5" min="0.5" max="50" value="3" oninput="pvEval()">
+            </div>
+            <div class="dfgrp">
+              <label>&nbsp;</label>
+              <button class="dbtn" style="width:100%" onclick="pvAlturaParaGSD()" title="Calcula la altura de vuelo necesaria para lograr el GSD objetivo">🎯 Calcular altura para este GSD</button>
             </div>
           </div>
           <div class="dg2" style="margin-bottom:10px">
@@ -13811,21 +13844,71 @@ function qShowPluginInfo(){
 // ════════════════════════════════════════════════
 var pvLineasLayer = null;
 
-// Footprint del sensor según tipo y altura
-function pvGetFootprint(sensor, altm){
-  // Retorna {w, h} en metros (ancho y alto del footprint)
-  var specs = {
-    'rgb_24':  {fov_h:73.7, fov_v:53.1, ar:4/3},   // DJI Mini/Air 24mm eq.
-    'rgb_35':  {fov_h:63.6, fov_v:47.1, ar:4/3},   // DJI Mavic 3 35mm
-    'multi':   {fov_h:47.2, fov_v:35.4, ar:4/3},   // MicaSense RedEdge
-    'lidar':   {fov_h:70.4, fov_v:4.5,  ar:1},     // Livox AVIA (línea)
-    'thermal': {fov_h:45,   fov_v:37,   ar:4/3},   // FLIR 45°
-    'custom':  {fov_h:60,   fov_v:45,   ar:4/3},
-  };
-  var s = specs[sensor] || specs['rgb_24'];
-  var w = 2 * altm * Math.tan(s.fov_h * Math.PI / 360);
-  var h = 2 * altm * Math.tan(s.fov_v * Math.PI / 360);
+// Footprint real del sensor del dron seleccionado, según su altura de vuelo.
+// Usa las dimensiones físicas del sensor (mm) y la distancia focal real (mm)
+// del dron activo en PV_DRONES — mismo principio óptico que el cálculo de GSD.
+function pvGetFootprint(altm){
+  var s = window._pvSensor;
+  if(!s) return {w:0, h:0};
+  var w = s.sw * altm / s.f;
+  var h = s.sh * altm / s.f;
   return {w: w, h: h};
+}
+
+// Calcula el GSD real (cm/px) a la altura actual, según el sensor del dron seleccionado
+function pvCalcGSD(){
+  var boxGsd = document.getElementById('pv-gsd-real');
+  var boxFp  = document.getElementById('pv-footprint-real');
+  if(!boxGsd) return;
+  var s = window._pvSensor;
+  var alt = parseFloat(document.getElementById('pv-altura').value) || 80;
+  if(!s){
+    boxGsd.textContent = 'No aplica';
+    boxFp.textContent = 'Dron sin cámara de mapeo (uso agrícola/operativo)';
+    window._pvGsdReal = null;
+    return;
+  }
+  var gsd = (s.sw * alt) / (s.f * s.rw) * 100; // cm/píxel
+  var fp = pvGetFootprint(alt);
+  boxGsd.textContent = gsd.toFixed(2)+' cm/px';
+  boxFp.textContent = 'Huella de imagen: '+fp.w.toFixed(1)+' × '+fp.h.toFixed(1)+' m a '+alt+' m AGL';
+  window._pvGsdReal = gsd;
+}
+
+// Calcula la altura de vuelo necesaria para lograr el GSD objetivo, según el sensor activo
+function pvAlturaParaGSD(){
+  var s = window._pvSensor;
+  if(!s){ alert('El dron seleccionado no tiene cámara de mapeo — no aplica cálculo de GSD.'); return; }
+  var gsdObj = parseFloat(document.getElementById('pv-gsd').value) || 3;
+  var alt = (gsdObj/100) * s.f * s.rw / s.sw;
+  document.getElementById('pv-altura').value = Math.round(alt);
+  pvCalcGSD();
+  pvEval();
+}
+
+// Carga las características reales del dron seleccionado (peso, autonomía, sensor)
+function pvLoadDrone(){
+  var sel = document.getElementById('pv-dron-modelo');
+  var key = sel.value;
+  var d = PV_DRONES[key];
+  if(!d) return;
+  window._pvDroneKey = key;
+  window._pvSensor = d.sensor;
+
+  document.getElementById('pv-peso').value = d.peso;
+  document.getElementById('pv-autonomia').value = d.autonomia;
+  document.getElementById('pv-tipo-dron').value = d.tipo;
+
+  var info = '<strong>'+d.fabricante+'</strong> · Vel. máx. '+d.velmax+' m/s ('+Math.round(d.velmax*3.6)+' km/h) · Viento máx. '+d.viento+' m/s';
+  if(d.rtk) info += ' · <span style="color:var(--dac2);font-weight:700">RTK/PPK integrado</span>';
+  if(d.lidar) info += ' · <span style="color:var(--dac2);font-weight:700">LiDAR</span>';
+  if(d.sensor) info += '<br>Sensor: '+d.sensor.nom+' — '+d.sensor.sw+'×'+d.sensor.sh+' mm, f='+d.sensor.f+' mm, '+d.sensor.rw+'×'+d.sensor.rh+' px';
+  else info += '<br><span style="color:var(--dwarn2)">Sin cámara de mapeo — uso agrícola/operativo</span>';
+  info += '<br><span style="opacity:.7">Parámetros de fábrica (referencia pública) — verifique el manual oficial antes de volar.</span>';
+  document.getElementById('pv-dron-info').innerHTML = info;
+
+  pvCalcGSD();
+  pvEval();
 }
 
 function pvGenerarLineas(){
@@ -13833,14 +13916,17 @@ function pvGenerarLineas(){
     pvShowLineasInfo('err', '⚠️ Primero dibuja un área en el mapa (polígono, punto o círculo).');
     return;
   }
+  if(!window._pvSensor){
+    pvShowLineasInfo('err', '⚠️ El dron seleccionado no tiene cámara de mapeo — no se pueden generar líneas fotogramétricas. Selecciona un dron con sensor en "Datos del Dron".');
+    return;
+  }
 
   var altm    = parseFloat(document.getElementById('pv-altura').value) || 80;
   var solapF  = parseFloat(document.getElementById('pv-solap-f').value) / 100 || 0.80;
   var solapL  = parseFloat(document.getElementById('pv-solap-l').value) / 100 || 0.70;
   var angDeg  = parseFloat(document.getElementById('pv-angulo').value)  || 0;
-  var sensor  = document.getElementById('pv-sensor').value;
 
-  var fp      = pvGetFootprint(sensor, altm);
+  var fp      = pvGetFootprint(altm);
   var ancho   = fp.w;           // ancho del footprint (perpendicular a franja)
   var sep     = ancho * (1 - solapL); // separación entre franjas (m)
   var avance  = fp.h * (1 - solapF);  // avance entre fotos (m)
@@ -13966,17 +14052,18 @@ function pvGenerarLineas(){
 
   // Guardar waypoints para exportar
   pvMap._missionWaypoints = allWaypoints;
-  pvMap._missionStats = {lineas: totalLineas, fotos: totalFotos, dist: totalDist, altm: altm, sep: sep, avance: avance, fp: pvGetFootprint(sensor, altm)};
+  pvMap._missionStats = {lineas: totalLineas, fotos: totalFotos, dist: totalDist, altm: altm, sep: sep, avance: avance, fp: pvGetFootprint(altm), gsd: window._pvGsdReal};
 
   var distKm = (totalDist/1000).toFixed(2);
   var tiempoMin = Math.ceil(totalDist / 8 / 60); // 8 m/s velocidad media
   var batPct = Math.ceil(tiempoMin / (parseFloat(document.getElementById('pv-autonomia').value)||30) * 100);
+  var fpNow = pvGetFootprint(altm);
 
   pvShowLineasInfo('ok',
     '✅ <strong>'+totalLineas+' franjas</strong> · <strong>'+totalFotos+' fotos</strong> · '+distKm+' km recorrido<br>'+
     '⏱️ Tiempo estimado: ~'+tiempoMin+' min · 🔋 Batería: ~'+batPct+'%'+
     (batPct > 80 ? ' <span style="color:#c41e3a">(⚠️ supera 80% — considera dividir la misión)</span>':'')+'<br>'+
-    '📐 Footprint: '+pvGetFootprint(sensor, parseFloat(document.getElementById('pv-altura').value)||80).w.toFixed(1)+'m × '+pvGetFootprint(sensor, parseFloat(document.getElementById('pv-altura').value)||80).h.toFixed(1)+'m · '+
+    '📐 Footprint: '+fpNow.w.toFixed(1)+'m × '+fpNow.h.toFixed(1)+'m · GSD: '+(window._pvGsdReal?window._pvGsdReal.toFixed(2):'—')+' cm/px · '+
     'Sep. franjas: '+sep.toFixed(1)+'m · Avance: '+avance.toFixed(1)+'m'
   );
 }
@@ -14102,6 +14189,88 @@ var pvSatLayer = null, pvOsmLayer = null, pvCurrentTool = null;
 var pvShapes = [];
 var pvLayerActive = {znvd: false, aero: false, sat: false};
 
+// Base de datos de drones comerciales usados en Colombia para topografía,
+// fotogrametría, LiDAR y agricultura de precisión.
+// Parámetros de fábrica (fuente: especificaciones públicas del fabricante) — referencia;
+// verificar siempre el manual oficial del equipo antes de operar.
+var PV_DRONES = {
+  dji_mini4pro: {
+    nom:'DJI Mini 4 Pro', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.249, autonomia:34, velmax:16, viento:10.7,
+    sensor:{sw:9.53, sh:7.15, rw:8064, rh:6048, f:12.29, nom:'1/1.3" CMOS 48 MP (24 mm eq.)'}
+  },
+  dji_air3: {
+    nom:'DJI Air 3', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.720, autonomia:46, velmax:21, viento:12,
+    sensor:{sw:9.7, sh:7.3, rw:8064, rh:6048, f:6.72, nom:'1/1.3" CMOS 48 MP gran angular (24 mm eq.)'}
+  },
+  dji_mavic3e: {
+    nom:'DJI Mavic 3 Enterprise (RTK)', tipo:'multirotor_sm', fabricante:'DJI', rtk:true,
+    peso:0.915, autonomia:45, velmax:21, viento:12,
+    sensor:{sw:17.3, sh:13.0, rw:8064, rh:6048, f:12.29, nom:'4/3" CMOS 20 MP (24 mm eq.)'}
+  },
+  dji_mavic3m: {
+    nom:'DJI Mavic 3 Multispectral', tipo:'multirotor_sm', fabricante:'DJI', rtk:true,
+    peso:0.951, autonomia:43, velmax:21, viento:12,
+    sensor:{sw:9.53, sh:7.15, rw:5280, rh:3956, f:12.29, nom:'RGB + 4 bandas multiespectrales'}
+  },
+  dji_p4rtk: {
+    nom:'DJI Phantom 4 RTK', tipo:'multirotor_sm', fabricante:'DJI', rtk:true,
+    peso:1.391, autonomia:30, velmax:16, viento:10,
+    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:8.8, nom:'1" CMOS 20 MP + módulo RTK'}
+  },
+  autel_evo2_rtk: {
+    nom:'Autel EVO II Pro RTK', tipo:'multirotor_sm', fabricante:'Autel Robotics', rtk:true,
+    peso:1.19, autonomia:40, velmax:20, viento:11.5,
+    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:10.68, nom:'1" CMOS 20 MP + módulo RTK'}
+  },
+  dji_m300_p1: {
+    nom:'DJI Matrice 300 RTK + Zenmuse P1', tipo:'multirotor_md', fabricante:'DJI', rtk:true,
+    peso:6.3, autonomia:55, velmax:23, viento:15,
+    sensor:{sw:35.9, sh:24.0, rw:8192, rh:5460, f:24.0, nom:'Full-frame 45 MP'}
+  },
+  dji_m300_l1: {
+    nom:'DJI Matrice 300 RTK + Zenmuse L1 (LiDAR)', tipo:'multirotor_md', fabricante:'DJI', rtk:true, lidar:true,
+    peso:6.3, autonomia:55, velmax:23, viento:15,
+    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:8.8, nom:'LiDAR + cámara RGB 20 MP'}
+  },
+  dji_m350_p1: {
+    nom:'DJI Matrice 350 RTK + Zenmuse P1', tipo:'multirotor_md', fabricante:'DJI', rtk:true,
+    peso:6.5, autonomia:55, velmax:23, viento:15,
+    sensor:{sw:35.9, sh:24.0, rw:8192, rh:5460, f:24.0, nom:'Full-frame 45 MP'}
+  },
+  dji_m30t: {
+    nom:'DJI Matrice 30T', tipo:'multirotor_md', fabricante:'DJI', rtk:true,
+    peso:3.77, autonomia:41, velmax:23, viento:12,
+    sensor:{sw:9.53, sh:7.15, rw:8064, rh:6048, f:5.1, nom:'RGB 48 MP + térmico + zoom'}
+  },
+  wingtra_one: {
+    nom:'WingtraOne GEN II (VTOL)', tipo:'vtol', fabricante:'Wingtra', rtk:true,
+    peso:4.5, autonomia:59, velmax:16, viento:12,
+    sensor:{sw:35.9, sh:24.0, rw:7952, rh:5304, f:35.0, nom:'Sony RX1R II full-frame 42 MP'}
+  },
+  sensefly_ebee_x: {
+    nom:'senseFly eBee X', tipo:'ala_fija', fabricante:'senseFly (AgEagle)', rtk:true,
+    peso:1.6, autonomia:59, velmax:20, viento:12,
+    sensor:{sw:23.5, sh:15.6, rw:7264, rh:4802, f:15.0, nom:'Sensor S.O.D.A. 20 MP APS-C'}
+  },
+  dji_agras_t30: {
+    nom:'DJI Agras T30 (agrícola)', tipo:'asp', fabricante:'DJI',
+    peso:68.6, autonomia:16, velmax:10, viento:8,
+    sensor:null
+  },
+  dji_agras_t40: {
+    nom:'DJI Agras T40 (agrícola)', tipo:'asp', fabricante:'DJI',
+    peso:63.8, autonomia:18, velmax:10, viento:8,
+    sensor:null
+  },
+  custom: {
+    nom:'Personalizado / otro modelo', tipo:'multirotor_sm', fabricante:'—',
+    peso:1.5, autonomia:30, velmax:15, viento:10,
+    sensor:{sw:9.53, sh:7.15, rw:8064, rh:6048, f:12.29, nom:'Personalizado (editable en Categoría/Peso/Autonomía)'}
+  }
+};
+
 // Aeropuertos principales Colombia (coords aproximadas)
 var pvAeropuertos = [
   {n:'El Dorado — Bogotá',lat:4.7016,lng:-74.1469,r:9000},
@@ -14150,7 +14319,7 @@ function pvInitMap(){
   var fechaEl = document.getElementById('pv-fecha');
   if(fechaEl) fechaEl.value = yyyy+'-'+mm+'-'+dd;
 
-  pvMap = L.map('pv-map', {center: [4.5709, -74.2973], zoom: 6, zoomControl: true});
+  pvMap = L.map('pv-map', {center: [4.5709, -74.2973], zoom: 6, zoomControl: true, doubleClickZoom: false});
 
   pvOsmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution:'© OpenStreetMap · Datos aeronáuticos: UAEAC',maxZoom:19
@@ -14251,6 +14420,7 @@ function pvMapTool(tool){
   pvCurrentTool = tool;
   pvMap._drawState = tool;
   pvMap._drawPts = [];
+  pvClearVertexMarkers();
   if(pvMap._tempLine){ pvMap.removeLayer(pvMap._tempLine); pvMap._tempLine=null; }
   pvMap.getContainer().style.cursor = tool==='polygon'?'crosshair':tool==='circle'?'cell':'default';
   // Resaltar botón activo
@@ -14259,6 +14429,18 @@ function pvMapTool(tool){
     if(b) b.style.background = t===tool ? 'var(--dac)' : '';
     if(b) b.style.color = t===tool ? '#fff' : '';
   });
+  var hint = document.getElementById('pv-zona-info');
+  if(hint){
+    var msg = tool==='polygon' ? '✏️ Clic en el mapa para agregar cada vértice del área a volar. <strong>Doble clic para cerrar el polígono</strong> (mínimo 3 puntos).' :
+              tool==='marker'  ? '📍 Clic en el mapa para ubicar el punto de operación.' :
+              tool==='circle'  ? '⭕ Clic para el centro y un segundo clic para definir el radio.' : '';
+    if(msg) hint.innerHTML = '<div class="dstat info" style="font-size:12px"><span class="dico">💡</span><span>'+msg+'</span></div>';
+  }
+}
+
+function pvClearVertexMarkers(){
+  (pvMap._drawVertexMarkers||[]).forEach(function(m){ pvDrawLayer.removeLayer(m); });
+  pvMap._drawVertexMarkers = [];
 }
 
 function pvMapClick(e){
@@ -14300,6 +14482,9 @@ function pvMapClick(e){
   }
   if(state==='polygon'){
     pvMap._drawPts.push(e.latlng);
+    var vm = L.circleMarker(e.latlng,{radius:5,color:'#162212',fillColor:'#78c454',fillOpacity:1,weight:1.5}).addTo(pvDrawLayer);
+    if(!pvMap._drawVertexMarkers) pvMap._drawVertexMarkers=[];
+    pvMap._drawVertexMarkers.push(vm);
     if(pvMap._tempLine){ pvMap.removeLayer(pvMap._tempLine); }
     if(pvMap._drawPts.length>=2){
       pvMap._tempLine = L.polyline(pvMap._drawPts,{color:'#2e7d1a',weight:2,dashArray:'5,5'}).addTo(pvDrawLayer);
@@ -14311,8 +14496,40 @@ function pvMapDblClick(e){
   L.DomEvent.stopPropagation(e);
   if(pvMap._drawState!=='polygon') return;
   var pts = pvMap._drawPts;
-  if(pts.length<3){ pvMap._drawPts=[]; return; }
+  // Un doble clic dispara 2 eventos "click" en el mismo punto antes del "dblclick";
+  // se elimina el vértice duplicado que eso agrega para no dejar un punto repetido al cerrar.
+  while(pts.length>=2 && pvMap.distance(pts[pts.length-1], pts[pts.length-2]) < 3){
+    pts.pop();
+    var dup = pvMap._drawVertexMarkers && pvMap._drawVertexMarkers.pop();
+    if(dup) pvDrawLayer.removeLayer(dup);
+  }
+  pvFinishPolygon();
+}
+
+// Cierra el polígono actual sin depender del doble clic (botón "Cerrar polígono",
+// más confiable en pantallas táctiles donde el doble clic/doble toque es incómodo).
+function pvClosePolygon(){
+  if(pvMap._drawState!=='polygon'){
+    alert('Primero activa la herramienta "✏️ Polígono" y marca los vértices del área.');
+    return;
+  }
+  pvFinishPolygon();
+}
+
+function pvFinishPolygon(){
+  var pts = pvMap._drawPts;
+  if(pts.length<3){
+    pvMap._drawPts=[];
+    pvClearVertexMarkers();
+    if(pvMap._tempLine){ pvMap.removeLayer(pvMap._tempLine); pvMap._tempLine=null; }
+    pvMap._drawState=null;
+    pvMap.getContainer().style.cursor='';
+    pvMapTool_reset();
+    pvShowLineasInfo('warn','⚠️ Se necesitan al menos 3 vértices para cerrar el polígono. Intenta de nuevo con "✏️ Polígono".');
+    return;
+  }
   if(pvMap._tempLine){ pvMap.removeLayer(pvMap._tempLine); pvMap._tempLine=null; }
+  pvClearVertexMarkers();
   var poly = L.polygon(pts,{color:'#2e7d1a',fillColor:'#78c454',fillOpacity:.15,weight:2.5})
     .bindPopup('🔷 Área de vuelo<br>Vértices: '+pts.length)
     .addTo(pvDrawLayer);
@@ -14337,10 +14554,12 @@ function pvClearAll(){
   pvDrawLayer.clearLayers();
   pvShapes=[];
   pvMap._drawPts=[];
+  pvMap._drawVertexMarkers=[];
   if(pvMap._tempLine){pvMap.removeLayer(pvMap._tempLine);pvMap._tempLine=null;}
   pvMap._drawState=null;
   pvMap.getContainer().style.cursor='';
   pvMapTool_reset();
+  pvClearLineas();
   document.getElementById('pv-area').textContent='—';
   document.getElementById('pv-perim').textContent='—';
   document.getElementById('pv-centro').textContent='—';
@@ -14447,7 +14666,7 @@ function pvEval(){
   document.getElementById('pv-resumen').innerHTML=html;
 }
 
-function pvUpdateAltLine(){ pvEval(); }
+function pvUpdateAltLine(){ pvEval(); pvCalcGSD(); }
 
 // ─── EXPORTAR KML ───
 function pvBuildKMLCoords(shape){
@@ -14589,55 +14808,132 @@ function pvExportGeoJSON(){
 }
 
 function pvExportPlan(){
-  var nombre=document.getElementById('pv-nombre').value||'Planificación de Vuelo';
-  var piloto=document.getElementById('pv-piloto').value||'—';
-  var fecha=document.getElementById('pv-fecha').value||'—';
-  var altura=document.getElementById('pv-altura').value||80;
-  var obs=document.getElementById('pv-obs').value||'—';
-  var tipo=document.getElementById('pv-tipo-dron').options[document.getElementById('pv-tipo-dron').selectedIndex].text;
-  var visual=document.getElementById('pv-visual').options[document.getElementById('pv-visual').selectedIndex].text;
-  var operacion=document.getElementById('pv-operacion').options[document.getElementById('pv-operacion').selectedIndex].text;
-  var horario=document.getElementById('pv-horario').value;
-  var comercial=document.getElementById('pv-comercial').value;
-  var autonomia=document.getElementById('pv-autonomia').value;
-  var tiempo=document.getElementById('pv-tiempo').value;
-  var cat=(comercial==='si'||visual==='bvlos')?'ESPECÍFICA':'ABIERTA';
-  var area=document.getElementById('pv-area').textContent;
-  var centro=document.getElementById('pv-centro').textContent;
-  var now=new Date().toLocaleString('es-CO');
+  var nombre    = pvEscXML(document.getElementById('pv-nombre').value) || 'Planificación de vuelo';
+  var piloto    = pvEscXML(document.getElementById('pv-piloto').value) || '—';
+  var fecha     = document.getElementById('pv-fecha').value || '—';
+  var altura    = parseFloat(document.getElementById('pv-altura').value) || 80;
+  var obs       = pvEscXML(document.getElementById('pv-obs').value) || 'Ninguna';
+  var droneKey  = document.getElementById('pv-dron-modelo').value;
+  var drone     = PV_DRONES[droneKey] || {};
+  var catAuto   = document.getElementById('pv-tipo-dron').options[document.getElementById('pv-tipo-dron').selectedIndex].text;
+  var visual    = document.getElementById('pv-visual').options[document.getElementById('pv-visual').selectedIndex].text;
+  var operacion = document.getElementById('pv-operacion').options[document.getElementById('pv-operacion').selectedIndex].text;
+  var horario   = document.getElementById('pv-horario').value;
+  var comercial = document.getElementById('pv-comercial').value;
+  var autonomia = parseFloat(document.getElementById('pv-autonomia').value) || 30;
+  var peso      = parseFloat(document.getElementById('pv-peso').value) || 0;
+  var tiempo    = parseFloat(document.getElementById('pv-tiempo').value) || 0;
+  var pctAuton  = Math.round(tiempo/autonomia*100);
+  var cat       = (comercial==='si'||visual.indexOf('BVLOS')===0||peso>25) ? 'ESPECÍFICA' : 'ABIERTA';
+  var area      = document.getElementById('pv-area').textContent;
+  var perim     = document.getElementById('pv-perim').textContent;
+  var centro    = document.getElementById('pv-centro').textContent;
+  var gsd       = window._pvGsdReal ? window._pvGsdReal.toFixed(2)+' cm/px' : '—';
+  var fp        = window._pvSensor ? pvGetFootprint(altura) : null;
+  var footprint = fp ? fp.w.toFixed(1)+' × '+fp.h.toFixed(1)+' m' : 'No aplica (sin cámara de mapeo)';
+  var solapF    = document.getElementById('pv-solap-f').value;
+  var solapL    = document.getElementById('pv-solap-l').value;
+  var ms        = pvMap && pvMap._missionStats;
+  var now       = new Date().toLocaleString('es-CO');
+  var LOGO_URL  = 'https://www.dgeomaping.com/img/logo-dgeomap.png';
 
-  var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Plan de Vuelo — '+nombre+'</title>';
-  html+='<style>body{font-family:Arial,sans-serif;margin:32px;color:#162212;font-size:13px}';
-  html+='h1{color:#2e7d1a;font-size:21px;border-bottom:3px solid #2e7d1a;padding-bottom:8px}';
-  html+='.logo{color:#2e7d1a;font-weight:700;font-size:17px} table{width:100%;border-collapse:collapse;margin:12px 0}';
-  html+='td,th{border:1px solid #c8ddc4;padding:7px 10px;text-align:left} th{background:#eaf2e6;color:#2e7d1a;font-size:12px;text-transform:uppercase}';
-  html+='.ok{background:#eaf2e6;color:#2e7d1a;padding:8px;border-radius:4px;border-left:4px solid #2e7d1a}';
-  html+='.warn{background:#fff8e8;color:#a86000;padding:8px;border-radius:4px;border-left:4px solid #d4860a;margin-top:6px}';
-  html+='.footer{color:#546850;font-size:11px;margin-top:24px;border-top:1px solid #c8ddc4;padding-top:8px}';
-  html+='@media print{body{margin:16px}}</style></head><body>';
-  html+='<div class="logo">🛩️ DGeoMap Ingeniería S.A.S. — Plan de Vuelo UAS</div>';
-  html+='<h1>'+nombre+'</h1>';
-  html+='<table><tr><th colspan="4">📋 DATOS GENERALES</th></tr>';
-  html+='<tr><td><b>Piloto UAS</b></td><td>'+piloto+'</td><td><b>Fecha vuelo</b></td><td>'+fecha+'</td></tr>';
-  html+='<tr><td><b>Tipo de dron</b></td><td>'+tipo+'</td><td><b>Categoría RAC 100</b></td><td>'+cat+'</td></tr>';
-  html+='<tr><td><b>Tipo de operación</b></td><td>'+operacion+'</td><td><b>Horario</b></td><td>'+horario.toUpperCase()+'</td></tr>';
-  html+='<tr><td><b>Altura de vuelo</b></td><td>'+altura+' m AGL</td><td><b>Contacto visual</b></td><td>'+visual+'</td></tr>';
-  html+='<tr><td><b>Autonomía dron</b></td><td>'+autonomia+' min</td><td><b>Tiempo planificado</b></td><td>'+tiempo+' min ('+Math.round(parseInt(tiempo)/parseInt(autonomia)*100)+'% autonomía)</td></tr>';
-  html+='<tr><td><b>Área de operación</b></td><td>'+area+'</td><td><b>Centro geográfico</b></td><td>'+centro+'</td></tr>';
-  html+='<tr><td><b>Observaciones</b></td><td colspan="3">'+obs+'</td></tr></table>';
-  html+='<table><tr><th colspan="2">⚖️ NORMATIVA RAC 100 APLICABLE</th></tr>';
-  html+='<tr><td>Categoría</td><td>'+(cat==='ABIERTA'?'Abierta — sin ánimo de lucro, UA hasta 25 kg':'Específica — requiere certificado piloto UAS + explotador + autorización vuelo UAEAC')+'</td></tr>';
-  html+='<tr><td>Altura máxima</td><td>'+(parseInt(altura)>122?'⚠️ SUPERA el límite de 122 m — requiere autorización especial UAEAC':'✅ Dentro del límite de 122 m (400 pies) AGL')+'</td></tr>';
-  html+='<tr><td>Uso de energía</td><td>'+(parseInt(tiempo)>parseInt(autonomia)*0.8?'⚠️ Supera el 80% de la autonomía — ajustar tiempo de vuelo':'✅ Dentro del 80% de autonomía permitida (§100.210(k))')+'</td></tr>';
-  html+='<tr><td>Verificación zonas</td><td>Consultar visor GIS UAEAC + NOTAMs antes del vuelo</td></tr>';
-  if(cat==='ESPECÍFICA'){html+='<tr><td colspan="2"><div class="warn">⚠️ Categoría específica requiere: Certificado de idoneidad piloto UAS + Certificado de explotador UAS + Autorización de vuelo UAEAC + Póliza RCE vigente</div></td></tr>';}
+  var okAltura  = altura <= 122;
+  var okEnergia = tiempo <= autonomia*0.8;
+  var okVLOS    = !(visual.indexOf('BVLOS')===0 && cat==='ABIERTA');
+
+  function fila(label, val, sino){
+    var mark = sino===true ? '<span class="ok-m">Cumple</span>' : sino===false ? '<span class="bad-m">No cumple</span>' : '<span class="na-m">—</span>';
+    return '<tr><td>'+label+'</td><td>'+val+'</td><td style="text-align:center">'+mark+'</td></tr>';
+  }
+
+  var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Plan de Vuelo UAS — '+nombre+'</title>';
+  html+='<style>';
+  html+='@page{size:A4;margin:18mm 16mm}';
+  html+='body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#1a2a17;font-size:12.5px;line-height:1.45}';
+  html+='.hdr{display:flex;align-items:center;gap:14px;border-bottom:3px solid #2e7d1a;padding-bottom:10px;margin-bottom:14px}';
+  html+='.hdr img{height:52px;width:auto}';
+  html+='.hdr .razon{font-size:16px;font-weight:700;color:#1e3318}';
+  html+='.hdr .sub{font-size:11px;color:#546850;margin-top:2px}';
+  html+='h1{color:#1e3318;font-size:18px;margin:0 0 4px}';
+  html+='.doc-sub{font-size:11px;color:#546850;margin-bottom:14px}';
+  html+='h2{color:#2e7d1a;font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1.5px solid #c8ddc4;padding-bottom:4px;margin:18px 0 8px}';
+  html+='table{width:100%;border-collapse:collapse;margin-bottom:4px}';
+  html+='td,th{border:1px solid #c8ddc4;padding:6px 9px;text-align:left;vertical-align:top}';
+  html+='th{background:#eaf2e6;color:#2e7d1a;font-size:10.5px;text-transform:uppercase;letter-spacing:.3px}';
+  html+='td b{color:#264a1e}';
+  html+='.ok-m{color:#2e7d1a;font-weight:700}.bad-m{color:#a83232;font-weight:700}.na-m{color:#8a9e86}';
+  html+='.note{background:#fff8e8;border-left:4px solid #d4860a;color:#7a5200;padding:8px 10px;font-size:11.5px;margin:8px 0}';
+  html+='.legal{background:#f4f8f2;border:1px solid #c8ddc4;border-radius:4px;padding:10px 12px;font-size:10.5px;color:#546850;margin-top:16px}';
+  html+='.sign{display:flex;gap:40px;margin-top:36px}';
+  html+='.sign div{flex:1;border-top:1px solid #1a2a17;padding-top:6px;font-size:11px;text-align:center;color:#333}';
+  html+='.ftr{color:#8a9e86;font-size:10px;margin-top:22px;border-top:1px solid #c8ddc4;padding-top:8px;display:flex;justify-content:space-between}';
+  html+='@media print{.no-print{display:none}}';
+  html+='</style></head><body>';
+
+  html+='<div class="hdr"><img src="'+LOGO_URL+'" alt="DGeoMap Ingeniería S.A.S."/><div><div class="razon">DGeoMap Ingeniería S.A.S.</div><div class="sub">NIT 902.108.012-6 · Bogotá D.C., Colombia · www.dgeomaping.com</div></div></div>';
+  html+='<h1>Plan de Vuelo UAS — '+nombre+'</h1>';
+  html+='<div class="doc-sub">Documento técnico de planificación de operación con Sistema de Aeronave No Tripulada (UAS) · Generado el '+now+'</div>';
+
+  html+='<h2>1. Datos generales</h2><table>';
+  html+='<tr><td style="width:25%"><b>Proyecto</b></td><td style="width:25%">'+nombre+'</td><td style="width:25%"><b>Piloto UAS</b></td><td style="width:25%">'+piloto+'</td></tr>';
+  html+='<tr><td><b>Fecha de vuelo</b></td><td>'+fecha+'</td><td><b>Horario</b></td><td>'+(horario==='nocturno'?'Nocturno':'Diurno')+'</td></tr>';
+  html+='<tr><td><b>Tipo de operación</b></td><td>'+operacion+'</td><td><b>Operación comercial</b></td><td>'+(comercial==='si'?'Sí':'No')+'</td></tr>';
+  html+='<tr><td><b>Categoría RAC 100</b></td><td>'+cat+'</td><td><b>Contacto visual</b></td><td>'+visual+'</td></tr>';
   html+='</table>';
-  html+='<div class="ok">✅ Documento generado por DGeoMap Ingeniería S.A.S. — '+now+'<br>Este documento es de carácter informativo. Verificar siempre la normativa vigente RAC 100 (Res. 01983/2023, Enmienda 1 — Abr/2024) y consultar al aerocivil.gov.co antes de cada operación.</div>';
-  html+='<div class="footer">DGeoMap Ingeniería S.A.S. · dgeomaping.com · RAC 100 UAEAC Colombia · Generado: '+now+'</div>';
+
+  html+='<h2>2. Dron y equipo</h2><table>';
+  html+='<tr><td style="width:25%"><b>Modelo</b></td><td style="width:25%">'+(drone.nom||catAuto)+'</td><td style="width:25%"><b>Fabricante</b></td><td style="width:25%">'+(drone.fabricante||'—')+'</td></tr>';
+  html+='<tr><td><b>Categoría por peso</b></td><td>'+catAuto+'</td><td><b>Peso bruto al despegue</b></td><td>'+peso+' kg</td></tr>';
+  html+='<tr><td><b>Posicionamiento</b></td><td>'+(drone.rtk?'RTK/PPK integrado':'GNSS estándar')+'</td><td><b>Sensor / cámara</b></td><td>'+(drone.sensor?drone.sensor.nom:'Sin cámara de mapeo')+'</td></tr>';
+  html+='<tr><td><b>Autonomía de fábrica</b></td><td>'+autonomia+' min</td><td><b>Tiempo de vuelo planificado</b></td><td>'+tiempo+' min ('+pctAuton+'% de autonomía)</td></tr>';
+  html+='</table>';
+
+  html+='<h2>3. Parámetros de vuelo y fotogrametría</h2><table>';
+  html+='<tr><td style="width:25%"><b>Altura de vuelo (AGL)</b></td><td style="width:25%">'+altura+' m</td><td style="width:25%"><b>GSD real calculado</b></td><td style="width:25%">'+gsd+'</td></tr>';
+  html+='<tr><td><b>Huella de imagen (footprint)</b></td><td>'+footprint+'</td><td><b>Solapamiento front. / lateral</b></td><td>'+solapF+'% / '+solapL+'%</td></tr>';
+  if(ms){
+    html+='<tr><td><b>Franjas de vuelo</b></td><td>'+ms.lineas+'</td><td><b>Fotografías estimadas</b></td><td>'+ms.fotos+'</td></tr>';
+    html+='<tr><td><b>Distancia total de vuelo</b></td><td>'+(ms.dist/1000).toFixed(2)+' km</td><td><b>Tiempo estimado de misión</b></td><td>'+Math.ceil(ms.dist/8/60)+' min</td></tr>';
+  } else {
+    html+='<tr><td colspan="4">Líneas de vuelo fotogramétricas no generadas para esta planificación.</td></tr>';
+  }
+  html+='</table>';
+
+  html+='<h2>4. Área de operación</h2><table>';
+  html+='<tr><td style="width:25%"><b>Área</b></td><td style="width:25%">'+area+'</td><td style="width:25%"><b>Perímetro</b></td><td style="width:25%">'+perim+'</td></tr>';
+  html+='<tr><td><b>Centro geográfico</b></td><td colspan="3">'+centro+'</td></tr>';
+  html+='</table>';
+
+  html+='<h2>5. Cumplimiento normativo — RAC 100 (Res. UAEAC 01983/2023, Enmienda 1, Abr. 2024)</h2>';
+  html+='<table><tr><th>Requisito</th><th>Valor de la misión</th><th style="text-align:center">Estado</th></tr>';
+  html+=fila('Altura máxima 122 m (400 pies) AGL', altura+' m AGL', okAltura);
+  html+=fila('Uso de energía ≤ 80% de la autonomía (§100.210(k))', pctAuton+'% de autonomía', okEnergia);
+  html+=fila('Operación BVLOS solo en categoría específica', visual, okVLOS);
+  html+=fila('Verificación de zonas restringidas (ZNVD) y NOTAM', 'Consultado en aerocivil.gov.co antes del vuelo', null);
+  html+='</table>';
+  if(cat==='ESPECÍFICA'){
+    html+='<div class="note">Esta operación corresponde a <b>categoría específica</b>: requiere certificado de idoneidad de piloto UAS, certificado de explotador UAS, autorización de vuelo UAEAC y póliza de responsabilidad civil extracontractual (RCE) vigente.</div>';
+  }
+  if(!okAltura || !okEnergia || !okVLOS){
+    html+='<div class="note"><b>Atención:</b> uno o más parámetros de esta misión superan los límites permitidos por el RAC 100. Ajustar la planificación antes de operar.</div>';
+  }
+
+  html+='<h2>6. Observaciones</h2><table><tr><td>'+obs+'</td></tr></table>';
+
+  html+='<div class="sign"><div>Piloto UAS responsable<br>'+piloto+'</div><div>Representante DGeoMap Ingeniería S.A.S.</div></div>';
+
+  html+='<div class="legal">Este documento es de carácter técnico e informativo, elaborado como apoyo a la planificación operacional. La responsabilidad de verificar el cumplimiento vigente del RAC 100 (Resolución UAEAC No. 01983 del 27 de septiembre de 2023, Enmienda 1 — abril de 2024), las zonas de restricción aérea y las condiciones meteorológicas del día de la operación, es del piloto y del explotador UAS antes de cada vuelo. Consulte siempre <b>aerocivil.gov.co</b>.</div>';
+
+  html+='<div class="ftr"><span>DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · www.dgeomaping.com · topografia@dgeomaping.com</span><span>Generado: '+now+'</span></div>';
   html+='</body></html>';
 
   var win=window.open('','_blank');
-  if(win){ win.document.write(html); win.document.close(); win.print(); }
+  if(win){
+    win.document.write(html);
+    win.document.close();
+    win.onload = function(){ win.print(); };
+    setTimeout(function(){ win.print(); }, 400);
+  }
 }
 
 function pvEscXML(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -14660,6 +14956,7 @@ document.addEventListener('DOMContentLoaded', function(){
       }, 100);
     });
   }
+  pvLoadDrone();
   pvEval();
 });
 // ════════════════════════════════════════════════
