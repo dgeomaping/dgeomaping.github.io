@@ -1607,6 +1607,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <button class="gnss-stab on" id="gst-cal" onclick="switchGNSSTab('cal',this)">📅 Calendario</button>
         <button class="gnss-stab" id="gst-gnss-calc" onclick="switchGNSSTab('gnss-calc',this)">📡 Calculadora</button>
         <button class="gnss-stab" id="gst-rinex" onclick="switchGNSSTab('rinex',this)">🔄 Conversor RINEX</button>
+        <button class="gnss-stab" id="gst-epoca" onclick="switchGNSSTab('epoca',this)">📅 Cambio de Época VEMOS</button>
       </div>
 <div class="gnss-subpanel on" id="hw-cal">
       <div style="max-width:700px;margin:0 auto">
@@ -1917,9 +1918,124 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         </div>
 
         <!-- ══ GNS HI-TARGET ══ -->
-        
+
     </div>
-    </div><!-- /hw-gnss -->
+    </div><!-- /hw-rinex -->
+
+    <!-- ══ CAMBIO DE ÉPOCA VEMOS ══ -->
+    <div class="gnss-subpanel" id="hw-epoca" style="display:none">
+      <div style="max-width:1100px;margin:0 auto">
+
+        <!-- Encabezado -->
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#2e7d1a,#55aa36);display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;flex-shrink:0">📅</div>
+            <div>
+              <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+                <span style="font-size:18px;font-weight:800;color:var(--dk1)">Cambio de Época VEMOS</span>
+                <span style="background:#111;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:1px;padding:3px 9px;border-radius:6px">VERSIÓN BETA</span>
+              </div>
+              <div style="font-size:11.5px;color:var(--tx3);margin-top:2px">Modelo de velocidades MAGNA-SIRGAS — propaga coordenadas GNSS entre épocas</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mvc" style="padding:14px;margin-bottom:14px;border-top-color:#d4860a">
+          <div style="font-size:13px;color:var(--tx2);line-height:1.7">
+            <strong>¿Por qué cambiar de época?</strong> Colombia hace parte del bloque tectónico Norandino, que se desplaza de forma continua respecto al marco de referencia. Dos observaciones GNSS tomadas en fechas distintas sobre el mismo punto físico arrojan coordenadas ligeramente distintas si no se llevan a una época común — por eso proyectos que combinan levantamientos de distintos años (o que deben entregarse en la época oficial de campo, ej. Res. IGAC 643/2018 = época 2018.0) requieren este ajuste.
+          </div>
+          <div style="font-size:11.5px;color:#a86000;margin-top:8px;background:#fff8e8;border-left:3px solid #d4860a;padding:8px 10px;border-radius:4px">⚠️ El campo de velocidades usado aquí es una <strong>aproximación regional propia</strong> (4 zonas de referencia interpoladas), no la cuadrícula oficial VEMOS2017 del IGAC/SIRGAS. Para trámites legales o catastrales, solicite el cambio de época certificado ante el IGAC / SIRGAS-CON.</div>
+        </div>
+
+        <!-- Controles -->
+        <div class="mvc" style="padding:16px;margin-bottom:14px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Sistema de entrada</label>
+              <select id="pe-sistema" onchange="peSetSistema()" style="width:100%;padding:9px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)">
+                <option value="geograficas">Geográficas (Lat, Lon, h)</option>
+                <option value="gk">Gauss-Krüger</option>
+                <option value="nacional">Origen Nacional (CTM12)</option>
+                <option value="utm">UTM</option>
+                <option value="geocentricas">Geocéntricas (X,Y,Z)</option>
+                <option value="local">Local Cartesiano</option>
+              </select>
+            </div>
+            <div id="pe-gk-wrap" style="display:none">
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Origen Gauss-Krüger</label>
+              <select id="pe-gk-origen" onchange="peSetOrigen()" style="width:100%;padding:9px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)">
+                <option value="central">Central (Nacional · EPSG:9377)</option>
+                <option value="bogota">Bogotá (EPSG:3116)</option>
+                <option value="oeste">Oeste (EPSG:3114)</option>
+                <option value="centro_w">Centro (EPSG:3115)</option>
+                <option value="este">Este (EPSG:3117)</option>
+                <option value="este_llanos">Este Llanos (EPSG:3118)</option>
+              </select>
+            </div>
+            <div id="pe-utm-wrap" style="display:none">
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Zona UTM</label>
+              <select id="pe-utm-zona" onchange="peSetOrigen()" style="width:100%;padding:9px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)">
+                <option value="17">17 N</option>
+                <option value="18" selected>18 N</option>
+                <option value="19">19 N</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Modelo VEMOS</label>
+              <select id="pe-modelo-vemos" style="width:100%;padding:9px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)">
+                <option value="vemos2017">VEMOS2017 (aproximado)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Modelo geoidal</label>
+              <select id="pe-modelo-geo" style="width:100%;padding:9px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)">
+                <option value="geocol2004">GEOCOL 2004</option>
+                <option value="qgeoidcol2023" selected>QGeoidCOL2023</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Época origen</label>
+              <input id="pe-epoca-origen" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)"/>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Época destino</label>
+              <input id="pe-epoca-destino" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de puntos -->
+        <div class="mvc" style="padding:16px;margin-bottom:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+            <div style="font-size:15px;font-weight:700;color:var(--dk1)">📍 Puntos a procesar</div>
+            <div style="display:flex;gap:8px">
+              <button onclick="peAddPunto()" style="background:transparent;border:1.5px solid var(--ac1);color:var(--ac1);padding:7px 14px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">➕ Agregar punto</button>
+              <input type="file" id="pe-file-excel" accept=".xlsx,.xls" style="display:none" onchange="peSubirExcel(this)"/>
+              <button onclick="document.getElementById('pe-file-excel').click()" style="background:var(--dk1);color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">📤 Subir Excel</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--tx4);margin-bottom:10px">El Excel debe tener columnas en este orden: <strong>Nombre, Valor 1, Valor 2, Valor 3</strong> (según el sistema de entrada seleccionado), sin encabezado o con una fila de encabezado (se ignora la primera fila si no es numérica).</div>
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:13px" id="pe-tabla">
+            </table>
+          </div>
+          <button onclick="peProcesar()" style="width:100%;margin-top:14px;background:var(--ac1);color:#fff;border:none;padding:13px;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">🧮 Procesar Transformación</button>
+        </div>
+
+        <!-- Resultados -->
+        <div class="mvc" style="padding:16px;display:none" id="pe-resultados-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+            <div style="font-size:15px;font-weight:700;color:var(--dk1)">✅ Resultados del cambio de época</div>
+            <button onclick="peGenerarInforme()" style="background:#1e3318;color:#fff;border:none;padding:9px 16px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">📄 Generar Informe</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:12.5px" id="pe-tabla-resultados">
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
 
 
@@ -7579,6 +7695,7 @@ function switchGNSSTab(id, btn) {
   // Init callbacks
   if(id==='cal') { setTimeout(function(){ if(typeof usarHoy==='function') usarHoy(); }, 80); }
   if(id==='gnss-calc') { setTimeout(function(){ if(typeof initMapa==='function') initMapa(); }, 100); }
+  if(id==='epoca') { setTimeout(function(){ if(typeof peInit==='function') peInit(); }, 60); }
 }
 
 function switchST(id, btn) {
@@ -12253,6 +12370,324 @@ function magnaCopyExample(){
 }
 // ════════════════════════════════════════════════════════════
 // FIN MAGNA-SIRGAS PRO
+// ════════════════════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════
+// CAMBIO DE ÉPOCA VEMOS — Herramientas GNSS
+// Propaga coordenadas MAGNA-SIRGAS entre épocas usando un campo de
+// velocidades regional aproximado (4 zonas de referencia interpoladas
+// por distancia inversa) y calcula la ondulación geoidal (2 modelos
+// disponibles, reutilizando los mismos de Transformación PRO).
+// ════════════════════════════════════════════════════════════
+var PE = {sistema:'geograficas', gkOrigen:'central', utmZona:'18', puntos:[], resultados:null};
+var PE_ID_SEQ = 1;
+
+// Velocidades de referencia por región (m/año) — mismas cifras ya usadas en
+// el módulo "Cambio de Época" de MAGNA Pro (fuente: NNR-NUVEL-1A / ITRF),
+// interpoladas aquí espacialmente para cualquier punto de Colombia.
+var PE_VEL_PUNTOS = [
+  {lat:4.6,  lon:-74.1, nom:'Colombia central', vn:-0.0022, ve:-0.0095, vh:0.0012},
+  {lat:4.0,  lon:-77.3, nom:'Costa Pacífica',    vn:-0.0018, ve:-0.0112, vh:0.0015},
+  {lat:4.4,  lon:-71.5, nom:'Llanos Orientales', vn:-0.0025, ve:-0.0088, vh:0.0008},
+  {lat:10.5, lon:-74.8, nom:'Costa Caribe',      vn:-0.0020, ve:-0.0098, vh:0.0014}
+];
+
+function peVelocidad(lat, lon){
+  var wsum=0, vn=0, ve=0, vh=0, exact=null;
+  PE_VEL_PUNTOS.forEach(function(p){
+    var d = Math.sqrt(Math.pow(lat-p.lat,2)+Math.pow(lon-p.lon,2));
+    if(d < 1e-6){ exact=p; return; }
+    var w = 1/(d*d);
+    wsum+=w; vn+=w*p.vn; ve+=w*p.ve; vh+=w*p.vh;
+  });
+  if(exact) return {vn:exact.vn, ve:exact.ve, vh:exact.vh};
+  return {vn:vn/wsum, ve:ve/wsum, vh:vh/wsum};
+}
+
+function peDecimalYear(dateStr){
+  if(!dateStr) return null;
+  var d = new Date(dateStr+'T00:00:00');
+  if(isNaN(d.getTime())) return null;
+  var year = d.getFullYear();
+  var start = new Date(year,0,1), end = new Date(year+1,0,1);
+  return year + (d-start)/(end-start);
+}
+
+function peColumnas(){
+  switch(PE.sistema){
+    case 'geograficas':  return [{lbl:'Latitud (°)'},{lbl:'Longitud (°)'},{lbl:'h elipsoidal (m)'}];
+    case 'gk':           return [{lbl:'Norte (m)'},{lbl:'Este (m)'},{lbl:'h elipsoidal (m)'}];
+    case 'nacional':     return [{lbl:'Norte CTM12 (m)'},{lbl:'Este CTM12 (m)'},{lbl:'h elipsoidal (m)'}];
+    case 'utm':          return [{lbl:'Norte UTM (m)'},{lbl:'Este UTM (m)'},{lbl:'h elipsoidal (m)'}];
+    case 'geocentricas': return [{lbl:'X (m)'},{lbl:'Y (m)'},{lbl:'Z (m)'}];
+    case 'local':        return [{lbl:'X local (m)'},{lbl:'Y local (m)'},{lbl:'Z local (m)'}];
+  }
+}
+
+function peInit(){
+  if(PE.puntos.length===0){
+    peAddPunto();
+    var hoy = new Date();
+    var d18 = '2018-01-01';
+    document.getElementById('pe-epoca-origen').value = d18;
+    document.getElementById('pe-epoca-destino').value = hoy.toISOString().split('T')[0];
+  }
+  document.getElementById('pe-sistema').value = PE.sistema;
+  peRenderTabla();
+}
+
+function peSetSistema(){
+  PE.sistema = document.getElementById('pe-sistema').value;
+  document.getElementById('pe-gk-wrap').style.display = PE.sistema==='gk' ? 'block' : 'none';
+  document.getElementById('pe-utm-wrap').style.display = PE.sistema==='utm' ? 'block' : 'none';
+  peRenderTabla();
+}
+function peSetOrigen(){
+  PE.gkOrigen = document.getElementById('pe-gk-origen').value;
+  PE.utmZona = document.getElementById('pe-utm-zona').value;
+}
+
+function peAddPunto(v1,v2,v3,nombre){
+  PE.puntos.push({id:PE_ID_SEQ++, nombre: nombre || ('PTO-'+PE.puntos.length), v1: v1!=null?v1:'', v2: v2!=null?v2:'', v3: v3!=null?v3:0});
+  peRenderTabla();
+}
+function peEliminarPunto(id){
+  PE.puntos = PE.puntos.filter(function(p){ return p.id!==id; });
+  peRenderTabla();
+}
+function peActualizarPunto(id, campo, val){
+  var p = PE.puntos.find(function(p){ return p.id===id; });
+  if(p) p[campo] = campo==='nombre' ? val : parseFloat(val);
+}
+
+function peRenderTabla(){
+  var cols = peColumnas();
+  var tbl = document.getElementById('pe-tabla');
+  var html = '<thead><tr style="background:var(--dk1);color:#fff">'+
+    '<th style="padding:6px 8px;text-align:left;font-size:11px">NOMBRE</th>'+
+    cols.map(function(c){return '<th style="padding:6px 8px;text-align:left;font-size:11px">'+c.lbl.toUpperCase()+'</th>';}).join('')+
+    '<th style="padding:6px 8px;width:36px"></th></tr></thead><tbody>';
+  PE.puntos.forEach(function(p, i){
+    html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'">'+
+      '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input value="'+p.nombre+'" oninput="peActualizarPunto('+p.id+',\'nombre\',this.value)" style="width:90px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
+      '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="number" step="any" value="'+p.v1+'" oninput="peActualizarPunto('+p.id+',\'v1\',this.value)" style="width:130px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
+      '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="number" step="any" value="'+p.v2+'" oninput="peActualizarPunto('+p.id+',\'v2\',this.value)" style="width:130px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
+      '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="number" step="any" value="'+p.v3+'" oninput="peActualizarPunto('+p.id+',\'v3\',this.value)" style="width:110px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
+      '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3);text-align:center"><span onclick="peEliminarPunto('+p.id+')" style="cursor:pointer;color:#c0392b;font-size:16px">🗑️</span></td>'+
+      '</tr>';
+  });
+  html += '</tbody>';
+  tbl.innerHTML = html;
+}
+
+function peSubirExcel(input){
+  var file = input.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    _loadExcelJS(function(){
+      var wb = new ExcelJS.Workbook();
+      wb.xlsx.load(e.target.result).then(function(){
+        var ws = wb.worksheets[0];
+        var nuevos = [];
+        ws.eachRow(function(row){
+          var vals = row.values; // 1-indexed; vals[0] es undefined
+          var nombre = vals[1], v1 = parseFloat(vals[2]), v2 = parseFloat(vals[3]), v3 = parseFloat(vals[4]);
+          if(isNaN(v1) || isNaN(v2)) return; // fila de encabezado u otra no numérica
+          nuevos.push({nombre: nombre || ('PTO-'+(PE.puntos.length+nuevos.length)), v1:v1, v2:v2, v3: isNaN(v3)?0:v3});
+        });
+        nuevos.forEach(function(n){ peAddPunto(n.v1, n.v2, n.v3, n.nombre); });
+        alert('Se importaron '+nuevos.length+' puntos desde el Excel.');
+      }).catch(function(err){ alert('No se pudo leer el archivo: '+err.message); });
+    });
+  };
+  reader.readAsArrayBuffer(file);
+  input.value = '';
+}
+
+function peEntradaAGeo(v1, v2, v3){
+  var sis = PE.sistema;
+  if(sis==='geograficas') return {lat:v1, lon:v2, h:v3};
+  if(sis==='geocentricas'){ var r=ecefToGeo(v1,v2,v3); return {lat:r.lat, lon:r.lon, h:r.h}; }
+  if(sis==='utm'){ var z=parseInt(PE.utmZona,10); var r=tmToGeo(v1,v2,cpUtmParams(z)); return {lat:r.lat, lon:r.lon, h:v3}; }
+  if(sis==='local') return null;
+  var key = sis==='nacional' ? 'central' : PE.gkOrigen;
+  var p = CP_ORIGENES[key];
+  var r = tmToGeo(v1,v2,p);
+  return {lat:r.lat, lon:r.lon, h:v3};
+}
+
+function peGeoASalida(lat, lon, h){
+  var sis = PE.sistema;
+  if(sis==='geograficas') return {v1:lat, v2:lon, v3:h};
+  if(sis==='geocentricas'){ var e=geoToECEF(lat,lon,h); return {v1:e.X, v2:e.Y, v3:e.Z}; }
+  if(sis==='utm'){ var z=parseInt(PE.utmZona,10); var r=geoToTM(lat,lon,cpUtmParams(z)); return {v1:r.N, v2:r.E, v3:h}; }
+  var key = sis==='nacional' ? 'central' : PE.gkOrigen;
+  var p = CP_ORIGENES[key];
+  var r = geoToTM(lat,lon,p);
+  return {v1:r.N, v2:r.E, v3:h};
+}
+
+function peGeoidN(lat, lon){
+  var modelo = document.getElementById('pe-modelo-geo').value;
+  return modelo==='geocol2004' ? cpGeoidGEOCOL2004(lat,lon) : cpGeoidQGeoidCOL2023(lat,lon);
+}
+
+function pePuntoProcesar(pto, t1, t2){
+  var geo = peEntradaAGeo(pto.v1, pto.v2, pto.v3);
+  if(!geo) return {nombre:pto.nombre, error:'Sistema Local Cartesiano no soportado para cambio de época — seleccione un sistema geodésico.'};
+  if(isNaN(geo.lat)||isNaN(geo.lon)) return {nombre:pto.nombre, error:'Coordenadas incompletas o inválidas.'};
+
+  var dt = t2 - t1;
+  var vel = peVelocidad(geo.lat, geo.lon);
+  var R = 6371000;
+  var dLat = (vel.vn*dt) / R * (180/Math.PI);
+  var dLon = (vel.ve*dt) / (R*Math.cos(geo.lat*Math.PI/180)) * (180/Math.PI);
+  var dh = vel.vh*dt;
+
+  var latD = geo.lat + dLat, lonD = geo.lon + dLon, hD = geo.h + dh;
+
+  var salidaO = peGeoASalida(geo.lat, geo.lon, geo.h);
+  var salidaD = peGeoASalida(latD, lonD, hD);
+
+  var N = peGeoidN(geo.lat, geo.lon);
+  var Ho = geo.h - N;
+  var Hd = hD - N;
+
+  return {
+    nombre: pto.nombre, dt: dt,
+    latO: geo.lat, lonO: geo.lon,
+    salidaO: salidaO, salidaD: salidaD,
+    vel: vel, dN_m: vel.vn*dt, dE_m: vel.ve*dt, dh_m: dh,
+    N: N, Ho: Ho, Hd: Hd
+  };
+}
+
+function peProcesar(){
+  var t1 = peDecimalYear(document.getElementById('pe-epoca-origen').value);
+  var t2 = peDecimalYear(document.getElementById('pe-epoca-destino').value);
+  if(t1==null || t2==null){ alert('Define correctamente la época de origen y la época de destino.'); return; }
+  if(PE.puntos.length===0){ alert('Agrega al menos un punto para procesar.'); return; }
+
+  var resultados = PE.puntos.map(function(p){ return pePuntoProcesar(p, t1, t2); });
+  PE.resultados = {items: resultados, t1:t1, t2:t2, modeloGeo: document.getElementById('pe-modelo-geo').value};
+
+  var cols = peColumnas();
+  var tbl = document.getElementById('pe-tabla-resultados');
+  var html = '<thead><tr style="background:var(--dk1);color:#fff">'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">NOMBRE</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[0].lbl.toUpperCase()+' (ÉPOCA ORIGEN)</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[1].lbl.toUpperCase()+' (ÉPOCA ORIGEN)</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[0].lbl.toUpperCase()+' (ÉPOCA DESTINO)</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[1].lbl.toUpperCase()+' (ÉPOCA DESTINO)</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">N GEOIDAL (m)</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">H ORTO. ORIGEN (m)</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">H ORTO. DESTINO (m)</th>'+
+    '</tr></thead><tbody>';
+  resultados.forEach(function(r, i){
+    if(r.error){
+      html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'"><td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.nombre+'</td><td colspan="7" style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:#c0392b">'+r.error+'</td></tr>';
+      return;
+    }
+    var dec = PE.sistema==='geograficas' ? 8 : 4;
+    html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'">'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);font-weight:700">'+r.nombre+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.salidaO.v1.toFixed(dec)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.salidaO.v2.toFixed(dec)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.salidaD.v1.toFixed(dec)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.salidaD.v2.toFixed(dec)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.N.toFixed(3)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.Ho.toFixed(4)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.Hd.toFixed(4)+'</td>'+
+      '</tr>';
+  });
+  html += '</tbody>';
+  tbl.innerHTML = html;
+  document.getElementById('pe-resultados-card').style.display = 'block';
+  document.getElementById('pe-resultados-card').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function peEscXML(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function peGenerarInforme(){
+  if(!PE.resultados || !PE.resultados.items.length){ alert('Procesa la transformación primero.'); return; }
+  var res = PE.resultados;
+  var cols = peColumnas();
+  var dec = PE.sistema==='geograficas' ? 8 : 4;
+  var fechaOrigen = document.getElementById('pe-epoca-origen').value;
+  var fechaDestino = document.getElementById('pe-epoca-destino').value;
+  var modeloGeoLbl = res.modeloGeo==='geocol2004' ? 'GEOCOL 2004' : 'QGeoidCOL2023';
+  var now = new Date().toLocaleString('es-CO');
+  var LOGO_URL = 'https://www.dgeomaping.com/img/logo-dgeomap.png';
+  var sisLbl = {geograficas:'Geográficas (Lat, Lon, h)', gk:'Gauss-Krüger', nacional:'Origen Nacional (CTM12)', utm:'UTM', geocentricas:'Geocéntricas (X,Y,Z)', local:'Local Cartesiano'}[PE.sistema];
+
+  var html = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Cambio de Época VEMOS — Informe</title>';
+  html += '<style>';
+  html += '@page{size:A4;margin:18mm 16mm}';
+  html += 'html,body{background:#fff}';
+  html += 'body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#1a2a17;font-size:12px;line-height:1.45}';
+  html += '.watermark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:0;pointer-events:none}';
+  html += '.watermark img{width:60%;max-width:500px;opacity:.14}';
+  html += '.content{position:relative;z-index:1}';
+  html += '.hdr{border-bottom:3px solid #2e7d1a;padding-bottom:10px;margin-bottom:14px}';
+  html += '.hdr .razon{font-size:16px;font-weight:700;color:#1e3318}';
+  html += '.hdr .sub{font-size:11px;color:#546850;margin-top:2px}';
+  html += 'h1{color:#1e3318;font-size:17px;margin:0 0 4px}';
+  html += '.doc-sub{font-size:11px;color:#546850;margin-bottom:12px}';
+  html += 'h2{color:#2e7d1a;font-size:12px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1.5px solid #c8ddc4;padding-bottom:4px;margin:14px 0 7px}';
+  html += 'table{width:100%;border-collapse:collapse;margin-bottom:4px}';
+  html += 'td,th{border:1px solid #c8ddc4;padding:5px 7px;text-align:left;vertical-align:top;font-size:10.5px}';
+  html += 'th{background:#eaf2e6;color:#2e7d1a;font-size:9.5px;text-transform:uppercase;letter-spacing:.2px}';
+  html += 'td b{color:#264a1e}';
+  html += '.note{background:#fff8e8;border-left:4px solid #d4860a;color:#7a5200;padding:8px 10px;font-size:10.5px;margin:8px 0}';
+  html += '.legal{background:#f4f8f2;border:1px solid #c8ddc4;border-radius:4px;padding:9px 11px;font-size:9.5px;color:#546850;margin-top:12px}';
+  html += '.ftr{color:#8a9e86;font-size:9.5px;margin-top:16px;border-top:1px solid #c8ddc4;padding-top:7px;display:flex;justify-content:space-between}';
+  html += '</style></head><body>';
+
+  html += '<div class="watermark"><img src="'+LOGO_URL+'" alt=""/></div>';
+  html += '<div class="content">';
+  html += '<div class="hdr"><div class="razon">DGeoMap Ingeniería S.A.S.</div><div class="sub">NIT 902.108.012-6 · Bogotá D.C., Colombia · www.dgeomaping.com</div></div>';
+  html += '<h1>Informe de Cambio de Época — Modelo VEMOS</h1>';
+  html += '<div class="doc-sub">Propagación de coordenadas MAGNA-SIRGAS entre épocas de referencia · Generado el '+now+'</div>';
+
+  html += '<h2>1. ¿Qué es y para qué sirve el cambio de época?</h2>';
+  html += '<table><tr><td>Colombia se ubica sobre el bloque tectónico Norandino, el cual se desplaza de forma continua y medible respecto al marco de referencia geodésico. Esto significa que las coordenadas de un mismo punto físico, obtenidas por GNSS en dos fechas distintas, no son idénticas: existe una pequeña diferencia (del orden de milímetros a centímetros por año) causada por el movimiento de la corteza terrestre. El <b>cambio de época</b> es el procedimiento geodésico que traslada matemáticamente una coordenada observada en una fecha (“época de origen”) hacia otra fecha de referencia (“época de destino”), usando un modelo de velocidades. Es indispensable cuando se combinan levantamientos GNSS realizados en años distintos, o cuando un proyecto exige entregar resultados en una época oficial específica (por ejemplo, la Resolución IGAC 643 de 2018 establece la época de campo 2018.0).</td></tr></table>';
+
+  html += '<h2>2. Parámetros del cálculo</h2><table>';
+  html += '<tr><td style="width:25%"><b>Sistema de coordenadas</b></td><td style="width:25%">'+sisLbl+'</td><td style="width:25%"><b>Modelo de velocidades</b></td><td style="width:25%">VEMOS2017 (aproximado)</td></tr>';
+  html += '<tr><td><b>Época de origen</b></td><td>'+fechaOrigen+' (t1 = '+res.t1.toFixed(4)+')</td><td><b>Época de destino</b></td><td>'+fechaDestino+' (t2 = '+res.t2.toFixed(4)+')</td></tr>';
+  html += '<tr><td><b>Intervalo (Δt)</b></td><td>'+(res.t2-res.t1).toFixed(4)+' años</td><td><b>Modelo geoidal</b></td><td>'+modeloGeoLbl+'</td></tr>';
+  html += '</table>';
+
+  html += '<h2>3. Resultados por punto</h2>';
+  html += '<table><thead><tr><th>Nombre</th><th>'+cols[0].lbl+'<br>Época origen</th><th>'+cols[1].lbl+'<br>Época origen</th><th>'+cols[0].lbl+'<br>Época destino</th><th>'+cols[1].lbl+'<br>Época destino</th><th>ΔN (m)</th><th>ΔE (m)</th><th>Δh (m)</th></tr></thead><tbody>';
+  res.items.forEach(function(r){
+    if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="7">'+peEscXML(r.error)+'</td></tr>'; return; }
+    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.salidaO.v1.toFixed(dec)+'</td><td>'+r.salidaO.v2.toFixed(dec)+'</td><td>'+r.salidaD.v1.toFixed(dec)+'</td><td>'+r.salidaD.v2.toFixed(dec)+'</td><td>'+r.dN_m.toFixed(4)+'</td><td>'+r.dE_m.toFixed(4)+'</td><td>'+r.dh_m.toFixed(4)+'</td></tr>';
+  });
+  html += '</tbody></table>';
+
+  html += '<h2>4. Ondulación geoidal y altura ortométrica</h2>';
+  html += '<div class="doc-sub" style="margin-bottom:6px">La ondulación geoidal N no cambia con la época (el geoide es prácticamente invariante en el tiempo); lo que cambia es la altura elipsoidal h, y por tanto la altura ortométrica estimada H = h − N en cada época.</div>';
+  html += '<table><thead><tr><th>Nombre</th><th>N geoidal (m)</th><th>H ortométrica<br>Época origen (m)</th><th>H ortométrica<br>Época destino (m)</th><th>ΔH (m)</th></tr></thead><tbody>';
+  res.items.forEach(function(r){
+    if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="4">—</td></tr>'; return; }
+    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.N.toFixed(3)+'</td><td>'+r.Ho.toFixed(4)+'</td><td>'+r.Hd.toFixed(4)+'</td><td>'+(r.Hd-r.Ho).toFixed(4)+'</td></tr>';
+  });
+  html += '</tbody></table>';
+
+  html += '<div class="note">El campo de velocidades usado en este cálculo es una <b>aproximación regional propia</b> de DGeoMap Ingeniería (4 zonas de referencia de Colombia interpoladas), y el modelo geoidal ('+modeloGeoLbl+') es igualmente una aproximación ajustada con puntos de control. Ninguno de los dos corresponde a la cuadrícula oficial VEMOS2017 ni al modelo geoidal oficial del IGAC/SIRGAS. Para trámites legales, catastrales o entregas oficiales, solicite el cambio de época certificado ante el IGAC / red SIRGAS-CON.</div>';
+
+  html += '<div class="legal">Este documento es de carácter técnico e informativo, elaborado como apoyo a la interpretación de resultados geodésicos. DGeoMap Ingeniería S.A.S. recomienda verificar siempre los valores oficiales ante el Instituto Geográfico Agustín Codazzi (IGAC) antes de su uso en trámites legales o catastrales.</div>';
+  html += '<div class="ftr"><span>DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · www.dgeomaping.com · topografia@dgeomaping.com</span><span>Generado: '+now+'</span></div>';
+  html += '</div>'; // /content
+  html += '</body></html>';
+
+  var win = window.open('', '_blank');
+  if(win){ win.document.write(html); win.document.close(); setTimeout(function(){ win.print(); }, 400); }
+}
+// ════════════════════════════════════════════════════════════
+// FIN CAMBIO DE ÉPOCA VEMOS
 // ════════════════════════════════════════════════════════════
 
 
