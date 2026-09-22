@@ -15039,9 +15039,12 @@ function pvExportPlan(){
   var html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Plan de Vuelo UAS — '+nombre+'</title>';
   html+='<style>';
   html+='@page{size:A4;margin:18mm 16mm}';
+  html+='html,body{background:#fff}';
   html+='body{font-family:Arial,Helvetica,sans-serif;margin:0;color:#1a2a17;font-size:12.5px;line-height:1.45}';
-  html+='.hdr{display:flex;align-items:center;gap:14px;border-bottom:3px solid #2e7d1a;padding-bottom:10px;margin-bottom:14px}';
-  html+='.hdr img{height:52px;width:auto}';
+  html+='.watermark{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:0;pointer-events:none}';
+  html+='.watermark img{width:60%;max-width:500px;opacity:.14}';
+  html+='.content{position:relative;z-index:1}';
+  html+='.hdr{border-bottom:3px solid #2e7d1a;padding-bottom:10px;margin-bottom:14px}';
   html+='.hdr .razon{font-size:16px;font-weight:700;color:#1e3318}';
   html+='.hdr .sub{font-size:11px;color:#546850;margin-top:2px}';
   html+='h1{color:#1e3318;font-size:18px;margin:0 0 4px}';
@@ -15064,7 +15067,10 @@ function pvExportPlan(){
   html+='@media print{.no-print{display:none}}';
   html+='</style></head><body>';
 
-  html+='<div class="hdr"><img src="'+LOGO_URL+'" alt="DGeoMap Ingeniería S.A.S."/><div><div class="razon">DGeoMap Ingeniería S.A.S.</div><div class="sub">NIT 902.108.012-6 · Bogotá D.C., Colombia · www.dgeomaping.com</div></div></div>';
+  html+='<div class="watermark"><img src="'+LOGO_URL+'" alt=""/></div>';
+  html+='<div class="content">';
+
+  html+='<div class="hdr"><div class="razon">DGeoMap Ingeniería S.A.S.</div><div class="sub">NIT 902.108.012-6 · Bogotá D.C., Colombia · www.dgeomaping.com</div></div>';
   html+='<h1>Plan de Vuelo UAS — '+nombre+'</h1>';
   html+='<div class="doc-sub">Documento técnico de planificación de operación con Sistema de Aeronave No Tripulada (UAS) · Generado el '+now+'</div>';
 
@@ -15134,6 +15140,7 @@ function pvExportPlan(){
   html+='<div class="legal">Este documento es de carácter técnico e informativo, elaborado como apoyo a la planificación operacional. La responsabilidad de verificar el cumplimiento vigente del RAC 100 (Resolución UAEAC No. 01983 del 27 de septiembre de 2023, Enmienda 1 — abril de 2024), las zonas de restricción aérea y las condiciones meteorológicas del día de la operación, es del piloto y del explotador UAS antes de cada vuelo. Consulte siempre <b>aerocivil.gov.co</b>.</div>';
 
   html+='<div class="ftr"><span>DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · www.dgeomaping.com · topografia@dgeomaping.com</span><span>Generado: '+now+'</span></div>';
+  html+='</div>'; // /content
   html+='</body></html>';
 
   var win=window.open('','_blank');
