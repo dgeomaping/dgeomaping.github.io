@@ -1944,7 +1944,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           <div style="font-size:13px;color:var(--tx2);line-height:1.7">
             <strong>¿Por qué cambiar de época?</strong> Colombia hace parte del bloque tectónico Norandino, que se desplaza de forma continua respecto al marco de referencia. Dos observaciones GNSS tomadas en fechas distintas sobre el mismo punto físico arrojan coordenadas ligeramente distintas si no se llevan a una época común — por eso proyectos que combinan levantamientos de distintos años (o que deben entregarse en la época oficial de campo, ej. Res. IGAC 643/2018 = época 2018.0) requieren este ajuste.
           </div>
-          <div style="font-size:11.5px;color:#a86000;margin-top:8px;background:#fff8e8;border-left:3px solid #d4860a;padding:8px 10px;border-radius:4px">⚠️ El campo de velocidades usado aquí es una <strong>aproximación regional propia</strong> (4 zonas de referencia interpoladas), no la cuadrícula oficial VEMOS2017 del IGAC/SIRGAS. Para trámites legales o catastrales, solicite el cambio de época certificado ante el IGAC / SIRGAS-CON.</div>
+          <div style="font-size:11.5px;color:#1e5c1e;margin-top:8px;background:#eaf5ea;border-left:3px solid #2e7d1a;padding:8px 10px;border-radius:4px">✅ Esta herramienta usa la cuadrícula oficial <strong>VEMOS2017</strong> (IGAC/SIRGAS, resolución 1°) para las velocidades, y la cuadrícula oficial <strong>GEOCOL2004</strong> del IGAC para la ondulación geoidal — las mismas que usa el aplicativo Magna Sirgas Pro. VEMOS2017 solo publica componentes horizontales (Norte/Este); la altura elipsoidal no cambia entre épocas. Si selecciona el modelo geoidal QGeoidCOL2023, tenga presente que es una aproximación propia, no la cuadrícula oficial. Para trámites legales o catastrales, solicite siempre la certificación ante el IGAC / SIRGAS-CON.</div>
         </div>
 
         <!-- Controles -->
@@ -3278,7 +3278,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       </div>
     </div>
 
-    <div class="mst warn" style="margin-bottom:14px"><span>⚠️</span><span>El modelo de ondulación geoidal usado aquí es una <strong>aproximación propia</strong> ajustada con puntos de control de referencia de Colombia, no la cuadrícula oficial del IGAC. Para trámites legales, verifica siempre con la fuente oficial.</span></div>
+    <div class="mst ok" id="cp-geo-disclaimer" style="margin-bottom:14px"><span>✅</span><span>El modelo <strong>GEOCOL2004</strong> usa la cuadrícula oficial del IGAC (la misma que el aplicativo Magna Sirgas Pro) mediante interpolación bilineal.</span></div>
 
     <div class="m2" style="align-items:start;gap:18px">
       <!-- ORIGEN -->
@@ -11793,26 +11793,105 @@ function decToGMS(dd, isLon){
   return (neg?'-':'')+ g +'° '+ m +"' "+ s.toFixed(5) +'" '+ hemi;
 }
 
-// ── Ondulación geoidal GEOCOL17 (modelo polinomial aproximado) ──
+// ════════════════════════════════════════════════════════════
+// CUADRÍCULAS OFICIALES IGAC/SIRGAS — GEOCOL2004 y VEMOS2017
+// Cargadas de forma diferida (fetch) desde /data. Mientras cargan (~1 vez
+// por sesión, <1s), las funciones usan el modelo polinomial aproximado
+// como respaldo; una vez cargada la cuadrícula, los cálculos usan los
+// valores reales interpolados bilinealmente sobre la grilla oficial.
+// ════════════════════════════════════════════════════════════
+var GEOCOL_GRID = null;
+var VEMOS_GRID = null;
+var _geocolLoading = null, _vemosLoading = null;
+
+function loadGeocolGrid(){
+  if(GEOCOL_GRID) return Promise.resolve(GEOCOL_GRID);
+  if(_geocolLoading) return _geocolLoading;
+  _geocolLoading = Promise.all([
+    fetch('data/geocol2004.meta.json').then(function(r){ return r.json(); }),
+    fetch('data/geocol2004.bin').then(function(r){ return r.arrayBuffer(); })
+  ]).then(function(res){
+    GEOCOL_GRID = {meta: res[0], view: new Int16Array(res[1])};
+    return GEOCOL_GRID;
+  }).catch(function(err){ console.warn('No se pudo cargar la cuadrícula GEOCOL2004, se usará el modelo aproximado:', err); return null; });
+  return _geocolLoading;
+}
+
+function loadVemosGrid(){
+  if(VEMOS_GRID) return Promise.resolve(VEMOS_GRID);
+  if(_vemosLoading) return _vemosLoading;
+  _vemosLoading = fetch('data/vemos2017.json').then(function(r){ return r.json(); }).then(function(pts){
+    var map = {};
+    pts.forEach(function(p){ map[p[0]+'_'+p[1]] = {vlat:p[2], vlon:p[3]}; });
+    VEMOS_GRID = map;
+    return VEMOS_GRID;
+  }).catch(function(err){ console.warn('No se pudo cargar la cuadrícula VEMOS2017, se usará el modelo aproximado:', err); return null; });
+  return _vemosLoading;
+}
+
+// Interpolación bilineal sobre la cuadrícula GEOCOL2004 real (IGAC).
+// Retorna null si el punto está fuera de la cobertura de la cuadrícula.
+function geocolInterpola(lat, lon){
+  if(!GEOCOL_GRID) return null;
+  var m = GEOCOL_GRID.meta, v = GEOCOL_GRID.view;
+  if(lat < m.minLat || lat > m.maxLat || lon < m.minLon || lon > m.maxLon) return null;
+  var rf = (m.maxLat - lat) / m.dLat;   // fila 0 = norte (maxLat)
+  var cf = (lon - m.minLon) / m.dLon;   // col 0 = oeste (minLon)
+  var r0 = Math.min(Math.floor(rf), m.nRows-2);
+  var c0 = Math.min(Math.floor(cf), m.nCols-2);
+  var tr = rf-r0, tc = cf-c0;
+  function val(r,c){ return v[r*m.nCols+c] / m.scale; }
+  var v00=val(r0,c0), v01=val(r0,c0+1), v10=val(r0+1,c0), v11=val(r0+1,c0+1);
+  var v0 = v00*(1-tc)+v01*tc, v1 = v10*(1-tc)+v11*tc;
+  return v0*(1-tr)+v1*tr;
+}
+
+// Interpolación bilineal sobre la cuadrícula VEMOS2017 real (SIRGAS/IGAC),
+// tolerante a huecos (mar/fuera de cobertura) usando los vértices disponibles.
+// Retorna {vlat, vlon} en m/año, o null si no hay ningún vértice cercano.
+function vemosInterpola(lat, lon){
+  if(!VEMOS_GRID) return null;
+  var latF = Math.floor(lat), lonF = Math.floor(lon);
+  function get(la,lo){ return VEMOS_GRID[la+'_'+lo]; }
+  var p00=get(latF,lonF), p01=get(latF,lonF+1), p10=get(latF+1,lonF), p11=get(latF+1,lonF+1);
+  if(p00&&p01&&p10&&p11){
+    var tr = lat-latF, tc = lon-lonF;
+    var vlat0 = p00.vlat*(1-tc)+p01.vlat*tc, vlat1 = p10.vlat*(1-tc)+p11.vlat*tc;
+    var vlon0 = p00.vlon*(1-tc)+p01.vlon*tc, vlon1 = p10.vlon*(1-tc)+p11.vlon*tc;
+    return {vlat: vlat0*(1-tr)+vlat1*tr, vlon: vlon0*(1-tr)+vlon1*tr};
+  }
+  var pts = [p00,p01,p10,p11].filter(Boolean);
+  if(pts.length===0) return null;
+  var vlat=0, vlon=0;
+  pts.forEach(function(p){ vlat+=p.vlat; vlon+=p.vlon; });
+  return {vlat: vlat/pts.length, vlon: vlon/pts.length};
+}
+
+// Precarga en segundo plano al abrir la página (no bloquea nada; los cálculos
+// esperan explícitamente a que termine solo cuando el usuario pulsa Calcular).
+document.addEventListener('DOMContentLoaded', function(){ loadGeocolGrid(); loadVemosGrid(); });
+
+// ── Ondulación geoidal GEOCOL2004 ──
+// Usa la cuadrícula oficial del IGAC (interpolación bilineal) cuando ya cargó;
+// si aún no ha cargado, usa un modelo polinomial aproximado como respaldo
+// temporal (se corrige solo en el siguiente cálculo, ya con la grilla lista).
 function calcGeoidalN(lat, lon){
-  // Modelo bilineal ajustado a GEOCOL17 para Colombia
-  // Basado en valores de control del IGAC
+  var real = geocolInterpola(lat, lon);
+  if(real !== null) return real;
+  // ── Respaldo: modelo polinomial aproximado (solo mientras carga la cuadrícula
+  //    real, o para puntos fuera de su cobertura, ej. San Andrés y Providencia) ──
   var latRef=4.0, lonRef=-74.0;
-  var N0=26.1; // valor en Bogotá (referencia central)
-  // Gradientes aproximados del modelo GEOCOL17
-  var dN_dLat = 1.8;   // N aumenta ~1.8m por grado hacia el norte (costa)
-  var dN_dLon =-0.4;   // N varía con longitud
-  // Corrección por latitud (efecto mayor)
+  var N0=26.1;
+  var dN_dLat = 1.8;
+  var dN_dLon =-0.4;
   var dLat = lat - latRef;
   var dLon = lon - lonRef;
-  // Modelo simplificado basado en puntos de control Colombia
   var N = N0
         + dN_dLat * dLat
         + dN_dLon * Math.abs(dLon)
-        - 0.15 * dLat * dLat  // curvatura
-        + 0.8  * Math.max(0, lat - 8)  // rebaja en costa norte
-        - 0.3  * Math.max(0, 1 - lat); // rebaja en sur
-  // Efecto altitudinal aproximado (montañas tienen N mayor)
+        - 0.15 * dLat * dLat
+        + 0.8  * Math.max(0, lat - 8)
+        - 0.3  * Math.max(0, 1 - lat);
   N += 0.5 * Math.sin((lat-1)*Math.PI/12);
   return Math.min(32, Math.max(14, N));
 }
@@ -12004,7 +12083,8 @@ function magnaEpoca(){
 }
 
 // ── Ondulación geoidal ────────────────────────────────────
-function magnaGeoidal(){
+async function magnaGeoidal(){
+  await loadGeocolGrid();
   var lat=parseFloat(document.getElementById('mg-lat').value);
   var lon=parseFloat(document.getElementById('mg-lon').value);
   var h_elip=parseFloat(document.getElementById('mg-h-elip').value);
@@ -12112,6 +12192,16 @@ function cpSetModelo(m){
   document.getElementById('cp-btn-geo2004').classList.toggle('on', m==='geocol2004');
   document.getElementById('cp-btn-geo2023').classList.toggle('on', m==='qgeoidcol2023');
   document.getElementById('cp-modelo-activo-txt').textContent = cpModeloLabel();
+  var disc = document.getElementById('cp-geo-disclaimer');
+  if(disc){
+    if(m==='geocol2004'){
+      disc.className = 'mst ok';
+      disc.innerHTML = '<span>✅</span><span>El modelo <strong>GEOCOL2004</strong> usa la cuadrícula oficial del IGAC (la misma que el aplicativo Magna Sirgas Pro) mediante interpolación bilineal.</span>';
+    } else {
+      disc.className = 'mst warn';
+      disc.innerHTML = '<span>⚠️</span><span>El modelo <strong>QGeoidCOL2023</strong> es una aproximación propia ajustada con puntos de control de referencia de Colombia, no la cuadrícula oficial del IGAC. Para trámites legales, use GEOCOL2004 o verifique con la fuente oficial.</span>';
+    }
+  }
   cpCalcular();
 }
 
@@ -12204,7 +12294,8 @@ function cpGeoASalida(lat, lon){
 }
 
 // ── Cálculo principal ──
-function cpCalcular(){
+async function cpCalcular(){
+  await loadGeocolGrid();
   var out = document.getElementById('cp-resultado');
   var entrada = cpEntradaAGeoMagna();
   if(!entrada){ out.innerHTML='<div class="mst info"><span>💡</span><span>Ingresa las coordenadas de origen y presiona Calcular Coordenadas</span></div>'; cpLastResult=null; return; }
@@ -12286,7 +12377,9 @@ function cpGenerarInforme(){
   extra += '<div style="text-align:center;font-size:11px;color:#555;margin-top:10px">Modelo de geoide utilizado: <b>'+r.modelo+'</b></div>';
   extra += '</div>';
 
-  extra += '<div style="background:#fff8e1;border:1px solid #ffca28;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#7a5c00;margin-bottom:6px">⚠️ El valor de ondulación geoidal se calculó con un <b>modelo aproximado propio</b> ajustado a puntos de control de referencia en Colombia, y no corresponde a la cuadrícula oficial del IGAC. Para trámites legales o catastrales, verifique el valor oficial ante la entidad competente.</div>';
+  extra += r.modelo==='GEOCOL 2004'
+    ? '<div style="background:#eaf5ea;border:1px solid #2e7d1a;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#1e5c1e;margin-bottom:6px">✅ El valor de ondulación geoidal se calculó con la <b>cuadrícula oficial GEOCOL2004 del IGAC</b> (interpolación bilineal), la misma que usa el aplicativo Magna Sirgas Pro.</div>'
+    : '<div style="background:#fff8e1;border:1px solid #ffca28;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#7a5c00;margin-bottom:6px">⚠️ El valor de ondulación geoidal se calculó con el modelo <b>QGeoidCOL2023</b>, una aproximación propia ajustada a puntos de control de referencia en Colombia, y no corresponde a la cuadrícula oficial del IGAC. Para trámites legales o catastrales, use el modelo GEOCOL2004 o verifique el valor oficial ante la entidad competente.</div>';
 
   var html = _buildReporteHTML(
     'Informe de Transformación de Coordenadas',
@@ -12382,26 +12475,32 @@ function magnaCopyExample(){
 var PE = {sistema:'geograficas', gkOrigen:'central', utmZona:'18', puntos:[], resultados:null};
 var PE_ID_SEQ = 1;
 
-// Velocidades de referencia por región (m/año) — mismas cifras ya usadas en
-// el módulo "Cambio de Época" de MAGNA Pro (fuente: NNR-NUVEL-1A / ITRF),
-// interpoladas aquí espacialmente para cualquier punto de Colombia.
+// Velocidades de referencia por región (m/año) — SOLO respaldo temporal
+// mientras carga la cuadrícula real VEMOS2017 (ver loadVemosGrid/vemosInterpola
+// más abajo, en el módulo de cuadrículas oficiales). Cifras de referencia
+// NNR-NUVEL-1A / ITRF, interpoladas espacialmente.
 var PE_VEL_PUNTOS = [
-  {lat:4.6,  lon:-74.1, nom:'Colombia central', vn:-0.0022, ve:-0.0095, vh:0.0012},
-  {lat:4.0,  lon:-77.3, nom:'Costa Pacífica',    vn:-0.0018, ve:-0.0112, vh:0.0015},
-  {lat:4.4,  lon:-71.5, nom:'Llanos Orientales', vn:-0.0025, ve:-0.0088, vh:0.0008},
-  {lat:10.5, lon:-74.8, nom:'Costa Caribe',      vn:-0.0020, ve:-0.0098, vh:0.0014}
+  {lat:4.6,  lon:-74.1, nom:'Colombia central', vn:-0.0022, ve:-0.0095},
+  {lat:4.0,  lon:-77.3, nom:'Costa Pacífica',    vn:-0.0018, ve:-0.0112},
+  {lat:4.4,  lon:-71.5, nom:'Llanos Orientales', vn:-0.0025, ve:-0.0088},
+  {lat:10.5, lon:-74.8, nom:'Costa Caribe',      vn:-0.0020, ve:-0.0098}
 ];
 
+// Velocidad del punto (m/año): usa la cuadrícula oficial VEMOS2017 (IGAC/SIRGAS)
+// cuando ya cargó; si no, usa el modelo regional aproximado como respaldo temporal.
 function peVelocidad(lat, lon){
-  var wsum=0, vn=0, ve=0, vh=0, exact=null;
+  var real = vemosInterpola(lat, lon);
+  if(real !== null) return {vn: real.vlat, ve: real.vlon, real:true};
+
+  var wsum=0, vn=0, ve=0, exact=null;
   PE_VEL_PUNTOS.forEach(function(p){
     var d = Math.sqrt(Math.pow(lat-p.lat,2)+Math.pow(lon-p.lon,2));
     if(d < 1e-6){ exact=p; return; }
     var w = 1/(d*d);
-    wsum+=w; vn+=w*p.vn; ve+=w*p.ve; vh+=w*p.vh;
+    wsum+=w; vn+=w*p.vn; ve+=w*p.ve;
   });
-  if(exact) return {vn:exact.vn, ve:exact.ve, vh:exact.vh};
-  return {vn:vn/wsum, ve:ve/wsum, vh:vh/wsum};
+  if(exact) return {vn:exact.vn, ve:exact.ve, real:false};
+  return {vn:vn/wsum, ve:ve/wsum, real:false};
 }
 
 function peDecimalYear(dateStr){
@@ -12543,9 +12642,9 @@ function pePuntoProcesar(pto, t1, t2){
   var R = 6371000;
   var dLat = (vel.vn*dt) / R * (180/Math.PI);
   var dLon = (vel.ve*dt) / (R*Math.cos(geo.lat*Math.PI/180)) * (180/Math.PI);
-  var dh = vel.vh*dt;
-
-  var latD = geo.lat + dLat, lonD = geo.lon + dLon, hD = geo.h + dh;
+  // VEMOS2017 (grilla oficial IGAC/SIRGAS) solo publica componentes horizontales
+  // (VN, VE); no se aplica corrección a la altura elipsoidal entre épocas.
+  var latD = geo.lat + dLat, lonD = geo.lon + dLon, hD = geo.h;
 
   var salidaO = peGeoASalida(geo.lat, geo.lon, geo.h);
   var salidaD = peGeoASalida(latD, lonD, hD);
@@ -12558,19 +12657,23 @@ function pePuntoProcesar(pto, t1, t2){
     nombre: pto.nombre, dt: dt,
     latO: geo.lat, lonO: geo.lon,
     salidaO: salidaO, salidaD: salidaD,
-    vel: vel, dN_m: vel.vn*dt, dE_m: vel.ve*dt, dh_m: dh,
-    N: N, Ho: Ho, Hd: Hd
+    vel: vel, dN_m: vel.vn*dt, dE_m: vel.ve*dt,
+    N: N, Ho: Ho, Hd: Hd, geoidReal: GEOCOL_GRID!==null
   };
 }
 
-function peProcesar(){
+async function peProcesar(){
   var t1 = peDecimalYear(document.getElementById('pe-epoca-origen').value);
   var t2 = peDecimalYear(document.getElementById('pe-epoca-destino').value);
   if(t1==null || t2==null){ alert('Define correctamente la época de origen y la época de destino.'); return; }
   if(PE.puntos.length===0){ alert('Agrega al menos un punto para procesar.'); return; }
 
+  // Espera a que las cuadrículas oficiales terminen de cargar (normalmente ya
+  // están listas; solo demora la primera vez que se abre la herramienta).
+  await Promise.all([loadGeocolGrid(), loadVemosGrid()]);
+
   var resultados = PE.puntos.map(function(p){ return pePuntoProcesar(p, t1, t2); });
-  PE.resultados = {items: resultados, t1:t1, t2:t2, modeloGeo: document.getElementById('pe-modelo-geo').value};
+  PE.resultados = {items: resultados, t1:t1, t2:t2, modeloGeo: document.getElementById('pe-modelo-geo').value, velReal: VEMOS_GRID!==null, geoidReal: GEOCOL_GRID!==null};
 
   var cols = peColumnas();
   var tbl = document.getElementById('pe-tabla-resultados');
@@ -12653,21 +12756,27 @@ function peGenerarInforme(){
   html += '<h2>1. ¿Qué es y para qué sirve el cambio de época?</h2>';
   html += '<table><tr><td>Colombia se ubica sobre el bloque tectónico Norandino, el cual se desplaza de forma continua y medible respecto al marco de referencia geodésico. Esto significa que las coordenadas de un mismo punto físico, obtenidas por GNSS en dos fechas distintas, no son idénticas: existe una pequeña diferencia (del orden de milímetros a centímetros por año) causada por el movimiento de la corteza terrestre. El <b>cambio de época</b> es el procedimiento geodésico que traslada matemáticamente una coordenada observada en una fecha (“época de origen”) hacia otra fecha de referencia (“época de destino”), usando un modelo de velocidades. Es indispensable cuando se combinan levantamientos GNSS realizados en años distintos, o cuando un proyecto exige entregar resultados en una época oficial específica (por ejemplo, la Resolución IGAC 643 de 2018 establece la época de campo 2018.0).</td></tr></table>';
 
+  var velLbl = res.velReal ? 'VEMOS2017 (cuadrícula oficial IGAC/SIRGAS)' : 'VEMOS2017 (aproximado — cuadrícula no disponible en este cálculo)';
+  var geoLbl = res.geoidReal ? modeloGeoLbl+(res.modeloGeo==='geocol2004' ? ' (cuadrícula oficial IGAC)' : ' (modelo propio ajustado)') : modeloGeoLbl+' (aproximado — cuadrícula no disponible en este cálculo)';
+
   html += '<h2>2. Parámetros del cálculo</h2><table>';
-  html += '<tr><td style="width:25%"><b>Sistema de coordenadas</b></td><td style="width:25%">'+sisLbl+'</td><td style="width:25%"><b>Modelo de velocidades</b></td><td style="width:25%">VEMOS2017 (aproximado)</td></tr>';
+  html += '<tr><td style="width:25%"><b>Sistema de coordenadas</b></td><td style="width:25%">'+sisLbl+'</td><td style="width:25%"><b>Modelo de velocidades</b></td><td style="width:25%">'+velLbl+'</td></tr>';
   html += '<tr><td><b>Época de origen</b></td><td>'+fechaOrigen+' (t1 = '+res.t1.toFixed(4)+')</td><td><b>Época de destino</b></td><td>'+fechaDestino+' (t2 = '+res.t2.toFixed(4)+')</td></tr>';
-  html += '<tr><td><b>Intervalo (Δt)</b></td><td>'+(res.t2-res.t1).toFixed(4)+' años</td><td><b>Modelo geoidal</b></td><td>'+modeloGeoLbl+'</td></tr>';
+  html += '<tr><td><b>Intervalo (Δt)</b></td><td>'+(res.t2-res.t1).toFixed(4)+' años</td><td><b>Modelo geoidal</b></td><td>'+geoLbl+'</td></tr>';
   html += '</table>';
 
   html += '<h2>3. Resultados por punto</h2>';
-  html += '<table><thead><tr><th>Nombre</th><th>'+cols[0].lbl+'<br>Época origen</th><th>'+cols[1].lbl+'<br>Época origen</th><th>'+cols[0].lbl+'<br>Época destino</th><th>'+cols[1].lbl+'<br>Época destino</th><th>ΔN (m)</th><th>ΔE (m)</th><th>Δh (m)</th></tr></thead><tbody>';
+  html += '<table><thead><tr><th>Nombre</th><th>'+cols[0].lbl+'<br>Época origen</th><th>'+cols[1].lbl+'<br>Época origen</th><th>'+cols[0].lbl+'<br>Época destino</th><th>'+cols[1].lbl+'<br>Época destino</th><th>ΔN (m)</th><th>ΔE (m)</th></tr></thead><tbody>';
   res.items.forEach(function(r){
-    if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="7">'+peEscXML(r.error)+'</td></tr>'; return; }
-    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.salidaO.v1.toFixed(dec)+'</td><td>'+r.salidaO.v2.toFixed(dec)+'</td><td>'+r.salidaD.v1.toFixed(dec)+'</td><td>'+r.salidaD.v2.toFixed(dec)+'</td><td>'+r.dN_m.toFixed(4)+'</td><td>'+r.dE_m.toFixed(4)+'</td><td>'+r.dh_m.toFixed(4)+'</td></tr>';
+    if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="6">'+peEscXML(r.error)+'</td></tr>'; return; }
+    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.salidaO.v1.toFixed(dec)+'</td><td>'+r.salidaO.v2.toFixed(dec)+'</td><td>'+r.salidaD.v1.toFixed(dec)+'</td><td>'+r.salidaD.v2.toFixed(dec)+'</td><td>'+r.dN_m.toFixed(4)+'</td><td>'+r.dE_m.toFixed(4)+'</td></tr>';
   });
   html += '</tbody></table>';
 
-  html += '<h2>4. Ondulación geoidal y altura ortométrica</h2>';
+  html += '<h2>4. ¿Para qué se calcula la ondulación geoidal?</h2>';
+  html += '<table><tr><td>Los receptores GNSS miden la altura <b>elipsoidal (h)</b>, referida a la superficie matemática del elipsoide de referencia (GRS80/WGS84). Sin embargo, la ingeniería civil, la topografía, el diseño hidráulico y los proyectos de construcción usan la altura <b>ortométrica (H)</b>, referida al geoide — la superficie equipotencial que representa aproximadamente el nivel medio del mar, y que es la misma referencia de los BM (bancos de marca) del IGAC y de los planos de un proyecto. La <b>ondulación geoidal (N)</b> es la separación vertical entre esas dos superficies en cada punto (H = h − N), y no es constante: varía de un lugar a otro del territorio colombiano. Por eso se debe calcular con un modelo geoidal específico para cada coordenada, en vez de asumir un valor fijo, y por eso se incluye aquí junto con el cambio de época — para entregar, además de las coordenadas planas/geográficas en la nueva época, la altura de trabajo (H) correcta en cada una.</td></tr></table>';
+
+  html += '<h2>5. Ondulación geoidal y altura ortométrica</h2>';
   html += '<div class="doc-sub" style="margin-bottom:6px">La ondulación geoidal N no cambia con la época (el geoide es prácticamente invariante en el tiempo); lo que cambia es la altura elipsoidal h, y por tanto la altura ortométrica estimada H = h − N en cada época.</div>';
   html += '<table><thead><tr><th>Nombre</th><th>N geoidal (m)</th><th>H ortométrica<br>Época origen (m)</th><th>H ortométrica<br>Época destino (m)</th><th>ΔH (m)</th></tr></thead><tbody>';
   res.items.forEach(function(r){
@@ -12676,7 +12785,11 @@ function peGenerarInforme(){
   });
   html += '</tbody></table>';
 
-  html += '<div class="note">El campo de velocidades usado en este cálculo es una <b>aproximación regional propia</b> de DGeoMap Ingeniería (4 zonas de referencia de Colombia interpoladas), y el modelo geoidal ('+modeloGeoLbl+') es igualmente una aproximación ajustada con puntos de control. Ninguno de los dos corresponde a la cuadrícula oficial VEMOS2017 ni al modelo geoidal oficial del IGAC/SIRGAS. Para trámites legales, catastrales o entregas oficiales, solicite el cambio de época certificado ante el IGAC / red SIRGAS-CON.</div>';
+  if(res.velReal && res.geoidReal){
+    html += '<div class="note">Este cálculo usó la cuadrícula oficial <b>VEMOS2017</b> (IGAC/SIRGAS) para las velocidades'+(res.modeloGeo==='geocol2004' ? ' y la cuadrícula oficial <b>GEOCOL2004</b> del IGAC para la ondulación geoidal (la misma que usa el aplicativo Magna Sirgas Pro).' : ', y el modelo geoidal QGeoidCOL2023, que es una aproximación propia ajustada con puntos de control (no la cuadrícula oficial). Para trámites legales o catastrales, use el modelo geoidal GEOCOL2004.')+' La cuadrícula VEMOS2017 solo publica componentes horizontales (Norte/Este); no incluye velocidad vertical, por lo que la altura elipsoidal h se mantiene constante entre épocas. VEMOS2017 tiene resolución de 1° (~111 km); para máxima precisión puntual, verifique contra una estación SIRGAS-CON cercana.</div>';
+  } else {
+    html += '<div class="note">Las cuadrículas oficiales VEMOS2017 y/o GEOCOL2004 no se pudieron cargar en este cálculo (revise su conexión a internet) y se usó un <b>modelo aproximado de respaldo</b>. Recargue la página e intente de nuevo antes de usar estos resultados para trámites legales o catastrales.</div>';
+  }
 
   html += '<div class="legal">Este documento es de carácter técnico e informativo, elaborado como apoyo a la interpretación de resultados geodésicos. DGeoMap Ingeniería S.A.S. recomienda verificar siempre los valores oficiales ante el Instituto Geográfico Agustín Codazzi (IGAC) antes de su uso en trámites legales o catastrales.</div>';
   html += '<div class="ftr"><span>DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · www.dgeomaping.com · topografia@dgeomaping.com</span><span>Generado: '+now+'</span></div>';
