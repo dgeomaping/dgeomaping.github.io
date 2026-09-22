@@ -4399,17 +4399,34 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           <div class="dfgrp" style="margin-bottom:10px">
             <label>Modelo de dron</label>
             <select class="dsel" id="pv-dron-modelo" onchange="pvLoadDrone()">
-              <optgroup label="Multirrotor">
+              <optgroup label="DJI Mini / Flip">
                 <option value="dji_mini4pro">DJI Mini 4 Pro</option>
+                <option value="dji_flip">DJI Flip</option>
+              </optgroup>
+              <optgroup label="DJI Air">
+                <option value="dji_air2s">DJI Air 2S</option>
                 <option value="dji_air3">DJI Air 3</option>
+                <option value="dji_air3s">DJI Air 3S</option>
+              </optgroup>
+              <optgroup label="DJI Mavic (consumidor / prosumer)">
+                <option value="dji_mavic_air">DJI Mavic Air</option>
+                <option value="dji_mavic2pro">DJI Mavic 2 Pro</option>
+                <option value="dji_mavic2zoom">DJI Mavic 2 Zoom</option>
+                <option value="dji_mavic3classic">DJI Mavic 3 Classic</option>
+                <option value="dji_mavic3pro">DJI Mavic 3 Pro</option>
+                <option value="dji_mavic4pro">DJI Mavic 4 Pro</option>
+              </optgroup>
+              <optgroup label="DJI Enterprise / Topografía">
                 <option value="dji_mavic3e" selected>DJI Mavic 3 Enterprise (RTK)</option>
                 <option value="dji_mavic3m">DJI Mavic 3 Multispectral</option>
                 <option value="dji_p4rtk">DJI Phantom 4 RTK</option>
-                <option value="autel_evo2_rtk">Autel EVO II Pro RTK</option>
                 <option value="dji_m300_p1">DJI Matrice 300 RTK + Zenmuse P1</option>
                 <option value="dji_m300_l1">DJI Matrice 300 RTK + Zenmuse L1 (LiDAR)</option>
                 <option value="dji_m350_p1">DJI Matrice 350 RTK + Zenmuse P1</option>
                 <option value="dji_m30t">DJI Matrice 30T</option>
+              </optgroup>
+              <optgroup label="DJI Cinema">
+                <option value="dji_inspire3">DJI Inspire 3</option>
               </optgroup>
               <optgroup label="Ala fija / VTOL">
                 <option value="wingtra_one">WingtraOne GEN II (VTOL)</option>
@@ -4418,6 +4435,11 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <optgroup label="Agrícola">
                 <option value="dji_agras_t30">DJI Agras T30</option>
                 <option value="dji_agras_t40">DJI Agras T40</option>
+              </optgroup>
+              <optgroup label="Autel">
+                <option value="autel_evo2_rtk">Autel EVO II Pro RTK</option>
+                <option value="autel_evo_max4t">Autel EVO Max 4T</option>
+                <option value="autel_evo_nano">Autel EVO Nano+</option>
               </optgroup>
               <optgroup label="Otro">
                 <option value="custom">Personalizado / otro modelo</option>
@@ -4581,9 +4603,18 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <input class="dinp" id="pv-solap-l" type="number" min="50" max="95" value="70" oninput="pvEval()">
             </div>
           </div>
-          <div class="dfgrp" style="margin-bottom:10px">
-            <label>Ángulo de las franjas de vuelo (°)</label>
-            <input class="dinp" id="pv-angulo" type="number" min="0" max="179" value="0" placeholder="0 = Este-Oeste, 90 = Norte-Sur">
+          <div class="dg2" style="margin-bottom:10px">
+            <div class="dfgrp">
+              <label>Ángulo de las franjas de vuelo (°)</label>
+              <input class="dinp" id="pv-angulo" type="number" min="0" max="179" value="0" placeholder="0 = Este-Oeste, 90 = Norte-Sur">
+            </div>
+            <div class="dfgrp">
+              <label>Patrón de vuelo</label>
+              <select class="dsel" id="pv-patron">
+                <option value="simple">Líneas simples — un solo sentido</option>
+                <option value="cruzada">Cuadrícula cruzada (doble malla / "3D")</option>
+              </select>
+            </div>
           </div>
           <div class="dbtn-grp">
             <button class="dbtn prim" style="flex:1" onclick="pvGenerarLineas()">✈️ GENERAR LÍNEAS DE VUELO</button>
@@ -13921,38 +13952,75 @@ function pvGenerarLineas(){
     return;
   }
 
-  var altm    = parseFloat(document.getElementById('pv-altura').value) || 80;
-  var solapF  = parseFloat(document.getElementById('pv-solap-f').value) / 100 || 0.80;
-  var solapL  = parseFloat(document.getElementById('pv-solap-l').value) / 100 || 0.70;
-  var angDeg  = parseFloat(document.getElementById('pv-angulo').value)  || 0;
-
-  var fp      = pvGetFootprint(altm);
-  var ancho   = fp.w;           // ancho del footprint (perpendicular a franja)
-  var sep     = ancho * (1 - solapL); // separación entre franjas (m)
-  var avance  = fp.h * (1 - solapF);  // avance entre fotos (m)
+  var angDeg = parseFloat(document.getElementById('pv-angulo').value) || 0;
+  var patron = document.getElementById('pv-patron').value;
 
   if(pvLineasLayer){ pvMap.removeLayer(pvLineasLayer); }
   pvLineasLayer = L.featureGroup().addTo(pvMap);
 
-  var ang = angDeg * Math.PI / 180;
+  var pass1 = pvGenerarPasada(angDeg, '#2e7d1a', 1);
+  var pass2 = (patron==='cruzada') ? pvGenerarPasada(angDeg+90, '#1a6fc4', 2) : null;
 
-  // Obtener bounding box del área
-  var bbox = pvGetBbox();
-  if(!bbox){ pvShowLineasInfo('err','❌ No se pudo calcular el área.'); return; }
+  if(!pass1 && !pass2){
+    pvShowLineasInfo('warn','⚠️ El área es demasiado pequeña para las franjas calculadas. Reduce el solapamiento o aumenta el área.');
+    return;
+  }
+
+  var totalLineas = (pass1?pass1.lineas:0) + (pass2?pass2.lineas:0);
+  var totalFotos  = (pass1?pass1.fotos:0)  + (pass2?pass2.fotos:0);
+  var totalDist   = (pass1?pass1.dist:0)   + (pass2?pass2.dist:0);
+  var allWaypoints = (pass1?pass1.waypoints:[]).concat(pass2?pass2.waypoints:[]);
+  var allFranjas    = (pass1?pass1.franjas:[]).concat(pass2?pass2.franjas:[]);
+
+  var altm = parseFloat(document.getElementById('pv-altura').value) || 80;
+  var solapF = parseFloat(document.getElementById('pv-solap-f').value) / 100 || 0.80;
+  var solapL = parseFloat(document.getElementById('pv-solap-l').value) / 100 || 0.70;
+  var fpNow  = pvGetFootprint(altm);
+  var sep    = fpNow.w * (1 - solapL);
+  var avance = fpNow.h * (1 - solapF);
+
+  // Guardar datos de la misión para exportar (KML/KMZ/GeoJSON) y para el mapa del reporte PDF
+  pvMap._missionWaypoints = allWaypoints;
+  pvMap._missionFranjas   = allFranjas; // [{pts:[LatLng,LatLng], pass:1|2}]
+  pvMap._missionStats = {lineas: totalLineas, fotos: totalFotos, dist: totalDist, altm: altm, sep: sep, avance: avance, fp: fpNow, gsd: window._pvGsdReal, patron: patron};
+
+  var distKm = (totalDist/1000).toFixed(2);
+  var tiempoMin = Math.ceil(totalDist / 8 / 60); // 8 m/s velocidad media
+  var batPct = Math.ceil(tiempoMin / (parseFloat(document.getElementById('pv-autonomia').value)||30) * 100);
+
+  pvShowLineasInfo('ok',
+    '✅ <strong>'+totalLineas+' franjas</strong> '+(patron==='cruzada'?'(cuadrícula cruzada, 2 pasadas)':'')+' · <strong>'+totalFotos+' fotos</strong> · '+distKm+' km recorrido<br>'+
+    '⏱️ Tiempo estimado: ~'+tiempoMin+' min · 🔋 Batería: ~'+batPct+'%'+
+    (batPct > 80 ? ' <span style="color:#c41e3a">(⚠️ supera 80% — considera dividir la misión, o dividir por pasada)</span>':'')+'<br>'+
+    '📐 Footprint: '+fpNow.w.toFixed(1)+'m × '+fpNow.h.toFixed(1)+'m · GSD: '+(window._pvGsdReal?window._pvGsdReal.toFixed(2):'—')+' cm/px · '+
+    'Sep. franjas: '+sep.toFixed(1)+'m · Avance: '+avance.toFixed(1)+'m'
+  );
+}
+
+// Genera una pasada completa de franjas (una sola dirección/ángulo) sobre todas las
+// formas dibujadas, las dibuja en pvLineasLayer y retorna sus estadísticas + geometría.
+// Se llama una vez para patrón "simple" y dos veces (ángulo y ángulo+90°) para "cruzada".
+function pvGenerarPasada(angDeg, color, passNum){
+  var altm    = parseFloat(document.getElementById('pv-altura').value) || 80;
+  var solapF  = parseFloat(document.getElementById('pv-solap-f').value) / 100 || 0.80;
+  var solapL  = parseFloat(document.getElementById('pv-solap-l').value) / 100 || 0.70;
+
+  var fp      = pvGetFootprint(altm);
+  var ancho   = fp.w;
+  var sep     = ancho * (1 - solapL);
+  var avance  = fp.h * (1 - solapF);
+  var ang     = angDeg * Math.PI / 180;
 
   var totalLineas = 0, totalFotos = 0, totalDist = 0;
-  var allWaypoints = [];
+  var allWaypoints = [], allFranjas = [];
 
-  // Para cada shape generar sus líneas
-  pvShapes.forEach(function(sh, si){
+  pvShapes.forEach(function(sh){
     var poly_pts = pvGetPolyPts(sh);
     if(!poly_pts || poly_pts.length < 3) return;
 
-    // Centro del polígono
     var cx = poly_pts.reduce(function(s,p){return s+p.lat},0)/poly_pts.length;
     var cy = poly_pts.reduce(function(s,p){return s+p.lng},0)/poly_pts.length;
 
-    // BBox rotado del polígono
     var local = poly_pts.map(function(p){
       return pvRotatePoint(p.lat, p.lng, cx, cy, -ang);
     });
@@ -13961,38 +14029,27 @@ function pvGenerarLineas(){
     var minY = Math.min.apply(null, local.map(function(p){return p.y;}));
     var maxY = Math.max.apply(null, local.map(function(p){return p.y;}));
 
-    // Convertir sep a grados de lat/lng
     var R = 6371000;
     var sepLat = sep / R * (180/Math.PI);
 
-    // Generar franjas
     var franjas = [], nFranja = 0;
     var y = minY;
     while(y <= maxY + sepLat){
-      // Extremos de la franja en coordenadas locales
-      var p1 = pvRotatePoint(cx + pvMetrosALat(minX-sep, R), cy, cx, cy, ang);
-      var p2 = pvRotatePoint(cx + pvMetrosALat(maxX+sep, R), cy, cx, cy, ang);
-
-      // Calcular la franja en lat/lng rotado
       var yGeo = y;
       var x1geo = minX - sepLat;
       var x2geo = maxX + sepLat;
 
-      // Línea de franja en coordenadas locales → rotar de vuelta a geo
       var pt1 = pvLocalToGeo(x1geo, yGeo, cx, cy, ang);
       var pt2 = pvLocalToGeo(x2geo, yGeo, cx, cy, ang);
 
-      // Recortar al polígono
       var seg = pvClipLineToPolygon(pt1, pt2, poly_pts);
       if(seg && seg.length > 0){
         seg.forEach(function(s){
-          // Alternar dirección según franja
           var pts_franja = (nFranja % 2 === 0) ? [s.p1, s.p2] : [s.p2, s.p1];
           franjas.push(pts_franja);
           totalLineas++;
           totalDist += s.p1.distanceTo(s.p2);
 
-          // Generar fotos en la franja
           var segLen = s.p1.distanceTo(s.p2);
           var nFotos = Math.ceil(segLen / avance) + 1;
           totalFotos += nFotos;
@@ -14008,64 +14065,42 @@ function pvGenerarLineas(){
       y += sepLat;
     }
 
-    if(franjas.length === 0){
-      pvShowLineasInfo('warn','⚠️ El área es demasiado pequeña para las franjas calculadas. Reduce el solapamiento o aumenta el área.');
-      return;
-    }
+    if(franjas.length === 0) return;
 
-    // Dibujar franjas
-    franjas.forEach(function(f, fi){
-      L.polyline(f, {color:'#2e7d1a', weight:2, opacity:.85}).addTo(pvLineasLayer);
+    franjas.forEach(function(f){
+      L.polyline(f, {color:color, weight:2, opacity:.85}).addTo(pvLineasLayer);
+      allFranjas.push({pts:f, pass:passNum});
     });
 
-    // Dibujar waypoints
-    allWaypoints.forEach(function(wp, wi){
-      L.circleMarker([wp.lat, wp.lng], {
-        radius: 3, color:'#162212', fillColor:'#78c454',
-        fillOpacity:1, weight:1.5
-      }).bindPopup('📸 WP '+(wi+1)+'<br>'+wp.lat.toFixed(6)+', '+wp.lng.toFixed(6)+'<br>Alt: '+altm+'m AGL')
-        .addTo(pvLineasLayer);
-    });
-
-    // Dibujar línea de conexión entre franjas (línea de tránsito)
     if(franjas.length > 1){
       var transit = [];
       for(var fi=0; fi<franjas.length-1; fi++){
         transit.push(franjas[fi][franjas[fi].length-1]);
         transit.push(franjas[fi+1][0]);
       }
-      L.polyline(transit, {color:'#d4860a', weight:1.5, dashArray:'4,4', opacity:.6}).addTo(pvLineasLayer);
+      L.polyline(transit, {color:color, weight:1.5, dashArray:'4,4', opacity:.5}).addTo(pvLineasLayer);
     }
 
-    // Punto de inicio y fin
-    if(franjas.length > 0){
-      L.marker(franjas[0][0], {
-        icon: L.divIcon({className:'', html:'<div style="background:#2e7d1a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.3)">▶</div>', iconSize:[22,22]})
-      }).bindPopup('🛫 INICIO de misión<br>Alt: '+altm+'m AGL').addTo(pvLineasLayer);
+    L.marker(franjas[0][0], {
+      icon: L.divIcon({className:'', html:'<div style="background:'+color+';color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.3)">▶</div>', iconSize:[22,22]})
+    }).bindPopup('🛫 INICIO'+(passNum>1?' pasada '+passNum:'')+'<br>Alt: '+altm+'m AGL').addTo(pvLineasLayer);
 
-      var last = franjas[franjas.length-1];
-      L.marker(last[last.length-1], {
-        icon: L.divIcon({className:'', html:'<div style="background:#c41e3a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.3)">■</div>', iconSize:[22,22]})
-      }).bindPopup('🛬 FIN de misión').addTo(pvLineasLayer);
-    }
+    var last = franjas[franjas.length-1];
+    L.marker(last[last.length-1], {
+      icon: L.divIcon({className:'', html:'<div style="background:#c41e3a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.3)">■</div>', iconSize:[22,22]})
+    }).bindPopup('🛬 FIN'+(passNum>1?' pasada '+passNum:'')).addTo(pvLineasLayer);
   });
 
-  // Guardar waypoints para exportar
-  pvMap._missionWaypoints = allWaypoints;
-  pvMap._missionStats = {lineas: totalLineas, fotos: totalFotos, dist: totalDist, altm: altm, sep: sep, avance: avance, fp: pvGetFootprint(altm), gsd: window._pvGsdReal};
+  allWaypoints.forEach(function(wp, wi){
+    L.circleMarker([wp.lat, wp.lng], {
+      radius: 3, color:'#162212', fillColor:color,
+      fillOpacity:1, weight:1.5
+    }).bindPopup('📸 WP '+(wi+1)+' (pasada '+passNum+')<br>'+wp.lat.toFixed(6)+', '+wp.lng.toFixed(6)+'<br>Alt: '+altm+'m AGL')
+      .addTo(pvLineasLayer);
+  });
 
-  var distKm = (totalDist/1000).toFixed(2);
-  var tiempoMin = Math.ceil(totalDist / 8 / 60); // 8 m/s velocidad media
-  var batPct = Math.ceil(tiempoMin / (parseFloat(document.getElementById('pv-autonomia').value)||30) * 100);
-  var fpNow = pvGetFootprint(altm);
-
-  pvShowLineasInfo('ok',
-    '✅ <strong>'+totalLineas+' franjas</strong> · <strong>'+totalFotos+' fotos</strong> · '+distKm+' km recorrido<br>'+
-    '⏱️ Tiempo estimado: ~'+tiempoMin+' min · 🔋 Batería: ~'+batPct+'%'+
-    (batPct > 80 ? ' <span style="color:#c41e3a">(⚠️ supera 80% — considera dividir la misión)</span>':'')+'<br>'+
-    '📐 Footprint: '+fpNow.w.toFixed(1)+'m × '+fpNow.h.toFixed(1)+'m · GSD: '+(window._pvGsdReal?window._pvGsdReal.toFixed(2):'—')+' cm/px · '+
-    'Sep. franjas: '+sep.toFixed(1)+'m · Avance: '+avance.toFixed(1)+'m'
-  );
+  if(totalLineas===0) return null;
+  return {lineas: totalLineas, fotos: totalFotos, dist: totalDist, waypoints: allWaypoints, franjas: allFranjas};
 }
 
 // ── Utilidades geométricas ──────────────────────
@@ -14194,20 +14229,69 @@ var pvLayerActive = {znvd: false, aero: false, sat: false};
 // Parámetros de fábrica (fuente: especificaciones públicas del fabricante) — referencia;
 // verificar siempre el manual oficial del equipo antes de operar.
 var PV_DRONES = {
+  // ── DJI Mini / Flip ──
   dji_mini4pro: {
     nom:'DJI Mini 4 Pro', tipo:'multirotor_sm', fabricante:'DJI',
     peso:0.249, autonomia:34, velmax:16, viento:10.7,
     sensor:{sw:9.53, sh:7.15, rw:8064, rh:6048, f:12.29, nom:'1/1.3" CMOS 48 MP (24 mm eq.)'}
+  },
+  dji_flip: {
+    nom:'DJI Flip', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.249, autonomia:31, velmax:15, viento:10.7,
+    sensor:{sw:9.53, sh:7.15, rw:8064, rh:6048, f:12.29, nom:'1/1.3" CMOS 48 MP (24 mm eq.)'}
+  },
+  // ── DJI Air ──
+  dji_air2s: {
+    nom:'DJI Air 2S', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.595, autonomia:31, velmax:19, viento:10.7,
+    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:8.06, nom:'1" CMOS 20 MP (22 mm eq.)'}
   },
   dji_air3: {
     nom:'DJI Air 3', tipo:'multirotor_sm', fabricante:'DJI',
     peso:0.720, autonomia:46, velmax:21, viento:12,
     sensor:{sw:9.7, sh:7.3, rw:8064, rh:6048, f:6.72, nom:'1/1.3" CMOS 48 MP gran angular (24 mm eq.)'}
   },
+  dji_air3s: {
+    nom:'DJI Air 3S', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.724, autonomia:45, velmax:21, viento:12,
+    sensor:{sw:13.2, sh:8.8, rw:8192, rh:6144, f:8.79, nom:'1" CMOS 50 MP gran angular (24 mm eq.)'}
+  },
+  // ── DJI Mavic (consumer / prosumer) ──
+  dji_mavic_air: {
+    nom:'DJI Mavic Air', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.430, autonomia:21, velmax:19, viento:8.5,
+    sensor:{sw:6.3, sh:4.7, rw:4056, rh:3040, f:4.3, nom:'1/2.3" CMOS 12 MP (24 mm eq.)'}
+  },
+  dji_mavic2pro: {
+    nom:'DJI Mavic 2 Pro', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.907, autonomia:31, velmax:20, viento:10.5,
+    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:10.26, nom:'1" CMOS Hasselblad 20 MP (28 mm eq.)'}
+  },
+  dji_mavic2zoom: {
+    nom:'DJI Mavic 2 Zoom', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.905, autonomia:31, velmax:20, viento:10.5,
+    sensor:{sw:6.3, sh:4.7, rw:4000, rh:3000, f:4.3, nom:'1/2.3" CMOS 12 MP, zoom óptico 2× (24-48 mm eq.)'}
+  },
+  dji_mavic3classic: {
+    nom:'DJI Mavic 3 Classic', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.895, autonomia:46, velmax:21, viento:12,
+    sensor:{sw:17.3, sh:13.0, rw:5280, rh:3956, f:12.29, nom:'4/3" CMOS Hasselblad 20 MP (24 mm eq.)'}
+  },
+  dji_mavic3pro: {
+    nom:'DJI Mavic 3 Pro (cámara principal)', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.958, autonomia:43, velmax:21, viento:12,
+    sensor:{sw:17.3, sh:13.0, rw:5280, rh:3956, f:12.29, nom:'4/3" CMOS Hasselblad 20 MP, principal (24 mm eq.)'}
+  },
+  dji_mavic4pro: {
+    nom:'DJI Mavic 4 Pro (cámara principal)', tipo:'multirotor_sm', fabricante:'DJI',
+    peso:0.950, autonomia:51, velmax:21, viento:12,
+    sensor:{sw:17.3, sh:13.0, rw:5280, rh:3956, f:12.29, nom:'4/3" CMOS Hasselblad, principal (24 mm eq.) — spec preliminar'}
+  },
+  // ── DJI Enterprise / Topografía ──
   dji_mavic3e: {
     nom:'DJI Mavic 3 Enterprise (RTK)', tipo:'multirotor_sm', fabricante:'DJI', rtk:true,
     peso:0.915, autonomia:45, velmax:21, viento:12,
-    sensor:{sw:17.3, sh:13.0, rw:8064, rh:6048, f:12.29, nom:'4/3" CMOS 20 MP (24 mm eq.)'}
+    sensor:{sw:17.3, sh:13.0, rw:5280, rh:3956, f:12.29, nom:'4/3" CMOS Hasselblad 20 MP (24 mm eq.)'}
   },
   dji_mavic3m: {
     nom:'DJI Mavic 3 Multispectral', tipo:'multirotor_sm', fabricante:'DJI', rtk:true,
@@ -14218,11 +14302,6 @@ var PV_DRONES = {
     nom:'DJI Phantom 4 RTK', tipo:'multirotor_sm', fabricante:'DJI', rtk:true,
     peso:1.391, autonomia:30, velmax:16, viento:10,
     sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:8.8, nom:'1" CMOS 20 MP + módulo RTK'}
-  },
-  autel_evo2_rtk: {
-    nom:'Autel EVO II Pro RTK', tipo:'multirotor_sm', fabricante:'Autel Robotics', rtk:true,
-    peso:1.19, autonomia:40, velmax:20, viento:11.5,
-    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:10.68, nom:'1" CMOS 20 MP + módulo RTK'}
   },
   dji_m300_p1: {
     nom:'DJI Matrice 300 RTK + Zenmuse P1', tipo:'multirotor_md', fabricante:'DJI', rtk:true,
@@ -14244,6 +14323,13 @@ var PV_DRONES = {
     peso:3.77, autonomia:41, velmax:23, viento:12,
     sensor:{sw:9.53, sh:7.15, rw:8064, rh:6048, f:5.1, nom:'RGB 48 MP + térmico + zoom'}
   },
+  // ── DJI Cinema ──
+  dji_inspire3: {
+    nom:'DJI Inspire 3', tipo:'multirotor_md', fabricante:'DJI',
+    peso:3.995, autonomia:28, velmax:27, viento:12,
+    sensor:{sw:35.9, sh:24.0, rw:8192, rh:4320, f:24.0, nom:'Zenmuse X9-8K, full-frame — lente intercambiable (aprox. 24 mm)'}
+  },
+  // ── Ala fija / VTOL ──
   wingtra_one: {
     nom:'WingtraOne GEN II (VTOL)', tipo:'vtol', fabricante:'Wingtra', rtk:true,
     peso:4.5, autonomia:59, velmax:16, viento:12,
@@ -14254,6 +14340,7 @@ var PV_DRONES = {
     peso:1.6, autonomia:59, velmax:20, viento:12,
     sensor:{sw:23.5, sh:15.6, rw:7264, rh:4802, f:15.0, nom:'Sensor S.O.D.A. 20 MP APS-C'}
   },
+  // ── Agrícola ──
   dji_agras_t30: {
     nom:'DJI Agras T30 (agrícola)', tipo:'asp', fabricante:'DJI',
     peso:68.6, autonomia:16, velmax:10, viento:8,
@@ -14263,6 +14350,22 @@ var PV_DRONES = {
     nom:'DJI Agras T40 (agrícola)', tipo:'asp', fabricante:'DJI',
     peso:63.8, autonomia:18, velmax:10, viento:8,
     sensor:null
+  },
+  // ── Autel ──
+  autel_evo2_rtk: {
+    nom:'Autel EVO II Pro RTK', tipo:'multirotor_sm', fabricante:'Autel Robotics', rtk:true,
+    peso:1.19, autonomia:40, velmax:20, viento:11.5,
+    sensor:{sw:13.2, sh:8.8, rw:5472, rh:3648, f:10.68, nom:'1" CMOS 20 MP + módulo RTK'}
+  },
+  autel_evo_max4t: {
+    nom:'Autel EVO Max 4T', tipo:'multirotor_sm', fabricante:'Autel Robotics', rtk:true,
+    peso:1.6, autonomia:42, velmax:20, viento:12,
+    sensor:{sw:6.3, sh:4.7, rw:4000, rh:3000, f:4.3, nom:'1/2" CMOS gran angular + zoom + térmico'}
+  },
+  autel_evo_nano: {
+    nom:'Autel EVO Nano+', tipo:'multirotor_sm', fabricante:'Autel Robotics',
+    peso:0.249, autonomia:28, velmax:12, viento:8.7,
+    sensor:{sw:9.3, sh:6.96, rw:8000, rh:6000, f:6.76, nom:'1/1.28" CMOS 50 MP (23 mm eq.)'}
   },
   custom: {
     nom:'Personalizado / otro modelo', tipo:'multirotor_sm', fabricante:'—',
@@ -14807,6 +14910,93 @@ function pvExportGeoJSON(){
   pvDownload(gj,'application/json',pvEscFilename(nombre)+'.geojson');
 }
 
+// Redondea a un valor "bonito" (1, 2 o 5 × 10^n) para la barra de escala
+function pvNiceScale(approx){
+  if(!isFinite(approx) || approx<=0) return 100;
+  var pow10 = Math.pow(10, Math.floor(Math.log(approx)/Math.LN10));
+  var n = approx/pow10;
+  var nice = n<1.5 ? 1 : n<3.5 ? 2 : n<7.5 ? 5 : 10;
+  return nice*pow10;
+}
+
+// Construye un diagrama vectorial (SVG) del área de vuelo y las franjas generadas,
+// con norte y barra de escala — para incrustar en la última hoja del reporte PDF.
+// Es un dibujo geométrico propio (no una captura del mapa), así que se ve nítido al
+// imprimir y no depende de la disponibilidad de los tiles del mapa en ese momento.
+function pvBuildPlanSVG(){
+  if(pvShapes.length===0) return null;
+
+  var franjas = pvMap._missionFranjas || [];
+  var allPts = [];
+  pvShapes.forEach(function(sh){
+    var pts = pvGetPolyPts(sh);
+    if(pts) pts.forEach(function(p){ allPts.push(p); });
+  });
+  franjas.forEach(function(fr){ fr.pts.forEach(function(p){ allPts.push(p); }); });
+  if(allPts.length===0) return null;
+
+  var lat0 = allPts.reduce(function(s,p){return s+p.lat;},0)/allPts.length;
+  var mPerDegLat = 110540;
+  var mPerDegLng = 111320*Math.cos(lat0*Math.PI/180);
+  function toXY(p){ return {x: p.lng*mPerDegLng, y: -p.lat*mPerDegLat}; } // Y invertido: norte arriba
+
+  var xy = allPts.map(toXY);
+  var minX = Math.min.apply(null, xy.map(function(p){return p.x;}));
+  var maxX = Math.max.apply(null, xy.map(function(p){return p.x;}));
+  var minY = Math.min.apply(null, xy.map(function(p){return p.y;}));
+  var maxY = Math.max.apply(null, xy.map(function(p){return p.y;}));
+  var wM = Math.max(maxX-minX, 1), hM = Math.max(maxY-minY, 1);
+
+  var canvasW=760, canvasH=520, padPx=48, northW=50;
+  var drawW = canvasW - padPx*2 - northW, drawH = canvasH - padPx*2;
+  var scale = Math.min(drawW/wM, drawH/hM);
+  var offX = padPx + (drawW - wM*scale)/2;
+  var offY = padPx + (drawH - hM*scale)/2;
+
+  function px(p){
+    var c = toXY(p);
+    return {x: offX + (c.x-minX)*scale, y: offY + (c.y-minY)*scale};
+  }
+
+  var svg = '<svg viewBox="0 0 '+canvasW+' '+canvasH+'" width="100%" height="'+canvasH+'" style="max-width:'+canvasW+'px;border:1px solid #c8ddc4;border-radius:6px;background:#f7faf5">';
+
+  pvShapes.forEach(function(sh){
+    var pts = pvGetPolyPts(sh);
+    if(!pts) return;
+    var d = pts.map(function(p){ var c=px(p); return c.x.toFixed(1)+','+c.y.toFixed(1); }).join(' ');
+    svg += '<polygon points="'+d+'" fill="rgba(120,196,84,.20)" stroke="#2e7d1a" stroke-width="2"/>';
+  });
+
+  var colors = {1:'#2e7d1a', 2:'#1a6fc4'};
+  franjas.forEach(function(fr){
+    var p1=px(fr.pts[0]), p2=px(fr.pts[1]);
+    svg += '<line x1="'+p1.x.toFixed(1)+'" y1="'+p1.y.toFixed(1)+'" x2="'+p2.x.toFixed(1)+'" y2="'+p2.y.toFixed(1)+'" stroke="'+(colors[fr.pass]||'#2e7d1a')+'" stroke-width="1.5" opacity="0.9"/>';
+  });
+
+  if(franjas.length){
+    var s = px(franjas[0].pts[0]);
+    svg += '<circle cx="'+s.x.toFixed(1)+'" cy="'+s.y.toFixed(1)+'" r="6" fill="#2e7d1a" stroke="#fff" stroke-width="1.5"/>';
+    var e = px(franjas[franjas.length-1].pts[1]);
+    svg += '<rect x="'+(e.x-5).toFixed(1)+'" y="'+(e.y-5).toFixed(1)+'" width="10" height="10" fill="#c41e3a" stroke="#fff" stroke-width="1.5"/>';
+  }
+
+  var nx = canvasW-30, ny=52;
+  svg += '<line x1="'+nx+'" y1="'+(ny+24)+'" x2="'+nx+'" y2="'+(ny-16)+'" stroke="#1a2a17" stroke-width="2"/>'+
+    '<polygon points="'+nx+','+(ny-24)+' '+(nx-7)+','+(ny-12)+' '+(nx+7)+','+(ny-12)+'" fill="#1a2a17"/>'+
+    '<text x="'+nx+'" y="'+(ny+38)+'" font-size="13" font-weight="700" text-anchor="middle" fill="#1a2a17">N</text>';
+
+  var niceMeters = pvNiceScale(wM/4);
+  var scalePx = niceMeters*scale;
+  var sbX = padPx, sbY = canvasH-24;
+  svg += '<line x1="'+sbX+'" y1="'+sbY+'" x2="'+(sbX+scalePx)+'" y2="'+sbY+'" stroke="#1a2a17" stroke-width="2"/>'+
+    '<line x1="'+sbX+'" y1="'+(sbY-5)+'" x2="'+sbX+'" y2="'+(sbY+5)+'" stroke="#1a2a17" stroke-width="2"/>'+
+    '<line x1="'+(sbX+scalePx)+'" y1="'+(sbY-5)+'" x2="'+(sbX+scalePx)+'" y2="'+(sbY+5)+'" stroke="#1a2a17" stroke-width="2"/>'+
+    '<text x="'+(sbX+scalePx/2)+'" y="'+(sbY-8)+'" font-size="11" text-anchor="middle" fill="#1a2a17">'+niceMeters.toLocaleString('es-CO')+' m</text>';
+
+  svg += '</svg>';
+  return svg;
+}
+
 function pvExportPlan(){
   var nombre    = pvEscXML(document.getElementById('pv-nombre').value) || 'Planificación de vuelo';
   var piloto    = pvEscXML(document.getElementById('pv-piloto').value) || '—';
@@ -14867,6 +15057,10 @@ function pvExportPlan(){
   html+='.sign{display:flex;gap:40px;margin-top:36px}';
   html+='.sign div{flex:1;border-top:1px solid #1a2a17;padding-top:6px;font-size:11px;text-align:center;color:#333}';
   html+='.ftr{color:#8a9e86;font-size:10px;margin-top:22px;border-top:1px solid #c8ddc4;padding-top:8px;display:flex;justify-content:space-between}';
+  html+='.pagebreak{page-break-before:always}';
+  html+='.map-legend{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0 4px;font-size:11px;color:#333}';
+  html+='.map-legend span{display:inline-flex;align-items:center;gap:6px}';
+  html+='.sw{display:inline-block;width:16px;height:3px;border-radius:2px}';
   html+='@media print{.no-print{display:none}}';
   html+='</style></head><body>';
 
@@ -14919,6 +15113,21 @@ function pvExportPlan(){
   }
 
   html+='<h2>6. Observaciones</h2><table><tr><td>'+obs+'</td></tr></table>';
+
+  var planSVG = pvBuildPlanSVG();
+  if(planSVG){
+    html+='<div class="pagebreak">';
+    html+='<h2>7. Mapa de la planificación de vuelo</h2>';
+    html+='<div class="doc-sub" style="margin-bottom:8px">Área de operación y franjas de vuelo generadas'+(ms&&ms.patron==='cruzada'?' — patrón de cuadrícula cruzada (doble malla, recomendado para modelos 3D)':' — patrón de líneas simples')+'.</div>';
+    if(ms && ms.patron==='cruzada'){
+      html+='<div class="map-legend"><span><span class="sw" style="background:#2e7d1a"></span>Pasada 1 ('+(document.getElementById('pv-angulo').value||0)+'°)</span><span><span class="sw" style="background:#1a6fc4"></span>Pasada 2 (+90°, cruzada)</span><span><span class="sw" style="background:#2e7d1a;border-radius:50%;width:10px;height:10px"></span>Inicio</span><span><span class="sw" style="background:#c41e3a;width:10px;height:10px"></span>Fin</span></span>';
+    } else {
+      html+='<div class="map-legend"><span><span class="sw" style="background:#2e7d1a"></span>Franja de vuelo</span><span><span class="sw" style="background:#2e7d1a;border-radius:50%;width:10px;height:10px"></span>Inicio</span><span><span class="sw" style="background:#c41e3a;width:10px;height:10px"></span>Fin</span></span>';
+    }
+    html+='<div style="display:flex;justify-content:center">'+planSVG+'</div>';
+    html+='<div class="doc-sub" style="margin-top:6px">Diagrama esquemático georreferenciado (norte arriba, escala aproximada) — no reemplaza la ortoimagen ni la cartografía base del proyecto.</div>';
+    html+='</div>';
+  }
 
   html+='<div class="sign"><div>Piloto UAS responsable<br>'+piloto+'</div><div>Representante DGeoMap Ingeniería S.A.S.</div></div>';
 
