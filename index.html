@@ -4196,17 +4196,14 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <input class="dinp" id="pv-autonomia" type="number" min="1" max="180" value="45" oninput="pvEval()">
             </div>
           </div>
-          <div class="dfgrp">
-            <label>Tiempo de vuelo planificado (min)</label>
-            <input class="dinp" id="pv-tiempo" type="number" min="1" max="180" value="20" oninput="pvEval()">
-          </div>
+          <div id="pv-tiempo-info" style="font-size:11px;color:var(--dtx3)">⏱️ El tiempo de vuelo se calcula solo, a partir del recorrido generado al dibujar el área.</div>
         </div>
 
         <div class="dcard">
           <div class="dcard-title"><span class="ico">⚙️</span> Parámetros de Vuelo</div>
           <div class="dfgrp" style="margin-bottom:10px">
             <label>Altura de vuelo (m AGL)</label>
-            <input class="dinp" id="pv-altura" type="number" min="1" max="500" value="80" oninput="pvEval();pvUpdateAltLine()">
+            <input class="dinp" id="pv-altura" type="number" min="1" max="500" value="80" oninput="pvUpdateAltLine()">
           </div>
           <div class="dfgrp" style="margin-bottom:10px">
             <label>Tipo de contacto visual</label>
@@ -14423,10 +14420,34 @@ function pvLoadDrone(){
 
 // Recalcula automáticamente las líneas de vuelo cuando ya existe un área dibujada,
 // para que cambiar el dron, la altura o los parámetros de misión actualice todo en vivo
-// sin necesidad de volver a presionar el botón manualmente.
+// sin necesidad de volver a presionar el botón manualmente. Se retrasa un poco (debounce)
+// para no recalcular una malla de franjas completa en cada tecla mientras se escribe la
+// altura — con áreas grandes y alturas bajas eso podía congelar la página.
+var _pvRecalcTimer = null;
 function pvAutoRecalc(){
-  if(pvShapes && pvShapes.length>0){ pvGenerarLineas(); }
-  pvGCPCalc();
+  clearTimeout(_pvRecalcTimer);
+  _pvRecalcTimer = setTimeout(function(){
+    if(pvShapes && pvShapes.length>0){ pvGenerarLineas(); }
+    pvGCPCalc();
+  }, 450);
+}
+
+// Estima cuántas franjas se generarían (sin construir la geometría completa) para poder
+// abortar antes de un cálculo pesado si el área es muy grande para la altura/solapamiento
+// elegidos — evita que el navegador se bloquee mientras se ajustan los parámetros.
+function pvEstimarFranjas(){
+  var bbox = pvGetBbox();
+  if(!bbox || !window._pvSensor) return 0;
+  var altm   = parseFloat(document.getElementById('pv-altura').value) || 80;
+  var solapL = parseFloat(document.getElementById('pv-solap-l').value) / 100 || 0.70;
+  var fp     = pvGetFootprint(altm);
+  var sep    = fp.w * (1 - solapL);
+  if(!(sep > 0)) return Infinity;
+  var R = 6371000;
+  var hM = (bbox.maxLat - bbox.minLat) * Math.PI/180 * R;
+  var wM = (bbox.maxLng - bbox.minLng) * Math.PI/180 * R * Math.cos(bbox.minLat*Math.PI/180);
+  var diag = Math.sqrt(hM*hM + wM*wM);
+  return Math.ceil(diag / sep);
 }
 
 function pvGenerarLineas(){
@@ -14441,6 +14462,12 @@ function pvGenerarLineas(){
 
   var angDeg = parseFloat(document.getElementById('pv-angulo').value) || 0;
   var patron = document.getElementById('pv-patron').value;
+
+  var estFranjas = pvEstimarFranjas() * (patron==='cruzada' ? 2 : 1);
+  if(estFranjas > 400){
+    pvShowLineasInfo('err', '⚠️ Con esta altura y solapamiento, el área generaría miles de franjas (cálculo demasiado pesado para el navegador). Aumenta la altura de vuelo o reduce el área/solapamiento.');
+    return;
+  }
 
   if(pvLineasLayer){ pvMap.removeLayer(pvLineasLayer); }
   pvLineasLayer = L.featureGroup().addTo(pvMap);
@@ -14488,6 +14515,7 @@ function pvGenerarLineas(){
     'Sep. franjas: '+sep.toFixed(1)+'m · Avance: '+avance.toFixed(1)+'m'
   );
   pvGCPCalc();
+  pvEval();
 }
 
 // GCPs de control recomendados: área tomada automáticamente del polígono dibujado y
@@ -15283,7 +15311,8 @@ function pvEval(){
   var horario=document.getElementById('pv-horario').value;
   var peso=parseFloat(document.getElementById('pv-peso').value)||1.5;
   var autonomia=parseInt(document.getElementById('pv-autonomia').value)||30;
-  var tiempo=parseInt(document.getElementById('pv-tiempo').value)||20;
+  var ms = pvMap && pvMap._missionStats;
+  var tiempo = ms ? ms.tiempoMin : null;
 
   var alertas=[], oks=[];
   var cat=(comercial==='si'||operacion==='cargo'||operacion==='enjambre'||operacion==='bvlos'||visual==='bvlos')?'especifica':'abierta';
@@ -15292,8 +15321,9 @@ function pvEval(){
   if(altura>122) alertas.push({t:'err',m:'🚫 Altura '+altura+'m supera el máximo de 122 m (400 pies) AGL — requiere autorización especial UAEAC'});
   else oks.push('✅ Altura '+altura+'m dentro del límite de 122 m (400 pies) AGL');
 
-  if(tiempo>(autonomia*0.8)) alertas.push({t:'warn',m:'⚠️ Tiempo planificado ('+tiempo+'min) supera el 80% de la autonomía ('+(autonomia*0.8).toFixed(0)+'min) — RAC 100 §100.210(k)'});
-  else oks.push('✅ Tiempo de vuelo OK ('+(Math.round(tiempo/autonomia*100))+'% de autonomía, máx. 80%)');
+  if(tiempo===null) oks.push('ℹ️ Dibuja el área de vuelo para calcular el tiempo de misión y verificar el uso de batería');
+  else if(tiempo>(autonomia*0.8)) alertas.push({t:'warn',m:'⚠️ Tiempo de misión estimado ('+tiempo+'min) supera el 80% de la autonomía ('+(autonomia*0.8).toFixed(0)+'min) — RAC 100 §100.210(k)'});
+  else oks.push('✅ Tiempo de misión estimado OK ('+(Math.round(tiempo/autonomia*100))+'% de autonomía, máx. 80%)');
 
   if(visual==='bvlos' && cat==='abierta') alertas.push({t:'err',m:'🚫 BVLOS en categoría abierta: PROHIBIDO'});
   if(horario==='nocturno') alertas.push({t:'warn',m:'🌙 Vuelo nocturno: luces de fábrica + observador UA obligatorio'});
@@ -15613,8 +15643,9 @@ function pvExportPlan(){
   var comercial = document.getElementById('pv-comercial').value;
   var autonomia = parseFloat(document.getElementById('pv-autonomia').value) || 30;
   var peso      = parseFloat(document.getElementById('pv-peso').value) || 0;
-  var tiempo    = parseFloat(document.getElementById('pv-tiempo').value) || 0;
-  var pctAuton  = Math.round(tiempo/autonomia*100);
+  var ms        = pvMap && pvMap._missionStats;
+  var tiempo    = ms ? ms.tiempoMin : null;
+  var pctAuton  = tiempo!==null ? Math.round(tiempo/autonomia*100) : null;
   var cat       = (comercial==='si'||visual.indexOf('BVLOS')===0||peso>25) ? 'ESPECÍFICA' : 'ABIERTA';
   var area      = document.getElementById('pv-area').textContent;
   var perim     = document.getElementById('pv-perim').textContent;
@@ -15624,7 +15655,6 @@ function pvExportPlan(){
   var footprint = fp ? fp.w.toFixed(1)+' × '+fp.h.toFixed(1)+' m' : 'No aplica (sin cámara de mapeo)';
   var solapF    = document.getElementById('pv-solap-f').value;
   var solapL    = document.getElementById('pv-solap-l').value;
-  var ms        = pvMap && pvMap._missionStats;
   var gcp       = window._pvGCP || null;
   var escalaRow = window._pvGsdReal ? (PV_ESCALA_TABLA.find(function(r){return window._pvGsdReal<=r.max;}) || PV_ESCALA_TABLA[PV_ESCALA_TABLA.length-1]) : null;
   var precEsp   = (window._pvGsdReal && gcp) ? pvPrecisionEsperada(window._pvGsdReal, gcp.prec) : null;
@@ -15632,7 +15662,7 @@ function pvExportPlan(){
   var LOGO_URL  = 'https://www.dgeomaping.com/img/logo-dgeomap.png';
 
   var okAltura  = altura <= 122;
-  var okEnergia = tiempo <= autonomia*0.8;
+  var okEnergia = tiempo===null ? null : (tiempo <= autonomia*0.8);
   var okVLOS    = !(visual.indexOf('BVLOS')===0 && cat==='ABIERTA');
 
   function fila(label, val, sino){
@@ -15686,7 +15716,7 @@ function pvExportPlan(){
   html+='<tr><td style="width:25%"><b>Modelo</b></td><td style="width:25%">'+(drone.nom||catAuto)+'</td><td style="width:25%"><b>Fabricante</b></td><td style="width:25%">'+(drone.fabricante||'—')+'</td></tr>';
   html+='<tr><td><b>Categoría por peso</b></td><td>'+catAuto+'</td><td><b>Peso bruto al despegue</b></td><td>'+peso+' kg</td></tr>';
   html+='<tr><td><b>Posicionamiento</b></td><td>'+(drone.rtk?'RTK/PPK integrado':'GNSS estándar')+'</td><td><b>Sensor / cámara</b></td><td>'+(drone.sensor?drone.sensor.nom:'Sin cámara de mapeo')+'</td></tr>';
-  html+='<tr><td><b>Autonomía de fábrica</b></td><td>'+autonomia+' min</td><td><b>Tiempo de vuelo planificado</b></td><td>'+tiempo+' min ('+pctAuton+'% de autonomía)</td></tr>';
+  html+='<tr><td><b>Autonomía de fábrica</b></td><td>'+autonomia+' min</td><td><b>Tiempo de misión estimado</b></td><td>'+(tiempo!==null?tiempo+' min ('+pctAuton+'% de autonomía)':'Dibuja el área de vuelo para calcularlo')+'</td></tr>';
   html+='</table>';
 
   html+='<h2>3. Parámetros de vuelo y fotogrametría</h2><table>';
@@ -15721,14 +15751,14 @@ function pvExportPlan(){
   html+='<h2>6. Cumplimiento normativo — RAC 100 (Res. UAEAC 01983/2023, Enmienda 1, Abr. 2024)</h2>';
   html+='<table><tr><th>Requisito</th><th>Valor de la misión</th><th style="text-align:center">Estado</th></tr>';
   html+=fila('Altura máxima 122 m (400 pies) AGL', altura+' m AGL', okAltura);
-  html+=fila('Uso de energía ≤ 80% de la autonomía (§100.210(k))', pctAuton+'% de autonomía', okEnergia);
+  html+=fila('Uso de energía ≤ 80% de la autonomía (§100.210(k))', tiempo!==null?pctAuton+'% de autonomía':'Sin líneas de vuelo generadas', okEnergia);
   html+=fila('Operación BVLOS solo en categoría específica', visual, okVLOS);
   html+=fila('Verificación de zonas restringidas (ZNVD) y NOTAM', 'Consultado en aerocivil.gov.co antes del vuelo', null);
   html+='</table>';
   if(cat==='ESPECÍFICA'){
     html+='<div class="note">Esta operación corresponde a <b>categoría específica</b>: requiere certificado de idoneidad de piloto UAS, certificado de explotador UAS, autorización de vuelo UAEAC y póliza de responsabilidad civil extracontractual (RCE) vigente.</div>';
   }
-  if(!okAltura || !okEnergia || !okVLOS){
+  if(!okAltura || okEnergia===false || !okVLOS){
     html+='<div class="note"><b>Atención:</b> uno o más parámetros de esta misión superan los límites permitidos por el RAC 100. Ajustar la planificación antes de operar.</div>';
   }
 
