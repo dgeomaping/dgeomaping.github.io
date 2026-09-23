@@ -1994,11 +1994,11 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               </select>
             </div>
             <div>
-              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Época origen</label>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px" title="Se usa para rellenar la época de cada punto nuevo; cada punto puede tener su propia época de origen en la tabla de abajo">Época origen (por defecto)</label>
               <input id="pe-epoca-origen" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)"/>
             </div>
             <div>
-              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Época destino</label>
+              <label style="font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px">Época destino (común a todos)</label>
               <input id="pe-epoca-destino" type="date" style="width:100%;padding:8px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)"/>
             </div>
           </div>
@@ -2014,7 +2014,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <button onclick="document.getElementById('pe-file-excel').click()" style="background:var(--dk1);color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">📤 Subir Excel</button>
             </div>
           </div>
-          <div style="font-size:11px;color:var(--tx4);margin-bottom:10px">El Excel debe tener columnas en este orden: <strong>Nombre, Valor 1, Valor 2, Valor 3</strong> (según el sistema de entrada seleccionado), sin encabezado o con una fila de encabezado (se ignora la primera fila si no es numérica).</div>
+          <div style="font-size:11px;color:var(--tx4);margin-bottom:10px">El Excel debe tener columnas en este orden: <strong>Nombre, Valor 1, Valor 2, Valor 3, Época origen (opcional, AAAA-MM-DD)</strong> (según el sistema de entrada seleccionado), sin encabezado o con una fila de encabezado (se ignora la primera fila si no es numérica). Cada punto puede tener su propia época de origen — útil cuando mezclas puntos observados en fechas distintas.</div>
           <div style="overflow-x:auto">
             <table style="width:100%;border-collapse:collapse;font-size:13px" id="pe-tabla">
             </table>
@@ -12525,11 +12525,10 @@ function peColumnas(){
 
 function peInit(){
   if(PE.puntos.length===0){
-    peAddPunto();
     var hoy = new Date();
-    var d18 = '2018-01-01';
-    document.getElementById('pe-epoca-origen').value = d18;
+    document.getElementById('pe-epoca-origen').value = '2018-01-01';
     document.getElementById('pe-epoca-destino').value = hoy.toISOString().split('T')[0];
+    peAddPunto();
   }
   document.getElementById('pe-sistema').value = PE.sistema;
   peRenderTabla();
@@ -12546,8 +12545,9 @@ function peSetOrigen(){
   PE.utmZona = document.getElementById('pe-utm-zona').value;
 }
 
-function peAddPunto(v1,v2,v3,nombre){
-  PE.puntos.push({id:PE_ID_SEQ++, nombre: nombre || ('PTO-'+PE.puntos.length), v1: v1!=null?v1:'', v2: v2!=null?v2:'', v3: v3!=null?v3:0});
+function peAddPunto(v1,v2,v3,nombre,epocaOrigen){
+  var def = document.getElementById('pe-epoca-origen').value || '';
+  PE.puntos.push({id:PE_ID_SEQ++, nombre: nombre || ('PTO-'+PE.puntos.length), v1: v1!=null?v1:'', v2: v2!=null?v2:'', v3: v3!=null?v3:0, epocaOrigen: epocaOrigen || def});
   peRenderTabla();
 }
 function peEliminarPunto(id){
@@ -12556,7 +12556,7 @@ function peEliminarPunto(id){
 }
 function peActualizarPunto(id, campo, val){
   var p = PE.puntos.find(function(p){ return p.id===id; });
-  if(p) p[campo] = campo==='nombre' ? val : parseFloat(val);
+  if(p) p[campo] = (campo==='nombre' || campo==='epocaOrigen') ? val : parseFloat(val);
 }
 
 function peRenderTabla(){
@@ -12565,6 +12565,7 @@ function peRenderTabla(){
   var html = '<thead><tr style="background:var(--dk1);color:#fff">'+
     '<th style="padding:6px 8px;text-align:left;font-size:11px">NOMBRE</th>'+
     cols.map(function(c){return '<th style="padding:6px 8px;text-align:left;font-size:11px">'+c.lbl.toUpperCase()+'</th>';}).join('')+
+    '<th style="padding:6px 8px;text-align:left;font-size:11px">ÉPOCA ORIGEN</th>'+
     '<th style="padding:6px 8px;width:36px"></th></tr></thead><tbody>';
   PE.puntos.forEach(function(p, i){
     html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'">'+
@@ -12572,6 +12573,7 @@ function peRenderTabla(){
       '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="number" step="any" value="'+p.v1+'" oninput="peActualizarPunto('+p.id+',\'v1\',this.value)" style="width:130px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
       '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="number" step="any" value="'+p.v2+'" oninput="peActualizarPunto('+p.id+',\'v2\',this.value)" style="width:130px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
       '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="number" step="any" value="'+p.v3+'" oninput="peActualizarPunto('+p.id+',\'v3\',this.value)" style="width:110px;padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
+      '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3)"><input type="date" value="'+(p.epocaOrigen||'')+'" oninput="peActualizarPunto('+p.id+',\'epocaOrigen\',this.value)" style="padding:6px 7px;border:1px solid var(--bg3);border-radius:5px;font-size:12.5px;font-family:inherit"/></td>'+
       '<td style="padding:5px 6px;border-bottom:1px solid var(--bg3);text-align:center"><span onclick="peEliminarPunto('+p.id+')" style="cursor:pointer;color:#c0392b;font-size:16px">🗑️</span></td>'+
       '</tr>';
   });
@@ -12593,9 +12595,13 @@ function peSubirExcel(input){
           var vals = row.values; // 1-indexed; vals[0] es undefined
           var nombre = vals[1], v1 = parseFloat(vals[2]), v2 = parseFloat(vals[3]), v3 = parseFloat(vals[4]);
           if(isNaN(v1) || isNaN(v2)) return; // fila de encabezado u otra no numérica
-          nuevos.push({nombre: nombre || ('PTO-'+(PE.puntos.length+nuevos.length)), v1:v1, v2:v2, v3: isNaN(v3)?0:v3});
+          var epocaRaw = vals[5];
+          var epoca = '';
+          if(epocaRaw instanceof Date){ epoca = epocaRaw.toISOString().split('T')[0]; }
+          else if(typeof epocaRaw === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(epocaRaw.trim())){ epoca = epocaRaw.trim(); }
+          nuevos.push({nombre: nombre || ('PTO-'+(PE.puntos.length+nuevos.length)), v1:v1, v2:v2, v3: isNaN(v3)?0:v3, epoca: epoca});
         });
-        nuevos.forEach(function(n){ peAddPunto(n.v1, n.v2, n.v3, n.nombre); });
+        nuevos.forEach(function(n){ peAddPunto(n.v1, n.v2, n.v3, n.nombre, n.epoca); });
         alert('Se importaron '+nuevos.length+' puntos desde el Excel.');
       }).catch(function(err){ alert('No se pudo leer el archivo: '+err.message); });
     });
@@ -12632,7 +12638,10 @@ function peGeoidN(lat, lon){
   return modelo==='geocol2004' ? cpGeoidGEOCOL2004(lat,lon) : cpGeoidQGeoidCOL2023(lat,lon);
 }
 
-function pePuntoProcesar(pto, t1, t2){
+function pePuntoProcesar(pto, t2){
+  var t1 = peDecimalYear(pto.epocaOrigen);
+  if(t1==null) return {nombre:pto.nombre, error:'Falta la época de origen de este punto.'};
+
   var geo = peEntradaAGeo(pto.v1, pto.v2, pto.v3);
   if(!geo) return {nombre:pto.nombre, error:'Sistema Local Cartesiano no soportado para cambio de época — seleccione un sistema geodésico.'};
   if(isNaN(geo.lat)||isNaN(geo.lon)) return {nombre:pto.nombre, error:'Coordenadas incompletas o inválidas.'};
@@ -12654,7 +12663,7 @@ function pePuntoProcesar(pto, t1, t2){
   var Hd = hD - N;
 
   return {
-    nombre: pto.nombre, dt: dt,
+    nombre: pto.nombre, dt: dt, t1: t1, epocaOrigen: pto.epocaOrigen,
     latO: geo.lat, lonO: geo.lon,
     salidaO: salidaO, salidaD: salidaD,
     vel: vel, dN_m: vel.vn*dt, dE_m: vel.ve*dt,
@@ -12663,22 +12672,24 @@ function pePuntoProcesar(pto, t1, t2){
 }
 
 async function peProcesar(){
-  var t1 = peDecimalYear(document.getElementById('pe-epoca-origen').value);
   var t2 = peDecimalYear(document.getElementById('pe-epoca-destino').value);
-  if(t1==null || t2==null){ alert('Define correctamente la época de origen y la época de destino.'); return; }
+  if(t2==null){ alert('Define correctamente la época de destino.'); return; }
   if(PE.puntos.length===0){ alert('Agrega al menos un punto para procesar.'); return; }
+  var sinEpoca = PE.puntos.filter(function(p){ return !p.epocaOrigen; });
+  if(sinEpoca.length){ alert('Falta la época de origen de '+sinEpoca.length+' punto(s): '+sinEpoca.map(function(p){return p.nombre;}).join(', ')); return; }
 
   // Espera a que las cuadrículas oficiales terminen de cargar (normalmente ya
   // están listas; solo demora la primera vez que se abre la herramienta).
   await Promise.all([loadGeocolGrid(), loadVemosGrid()]);
 
-  var resultados = PE.puntos.map(function(p){ return pePuntoProcesar(p, t1, t2); });
-  PE.resultados = {items: resultados, t1:t1, t2:t2, modeloGeo: document.getElementById('pe-modelo-geo').value, velReal: VEMOS_GRID!==null, geoidReal: GEOCOL_GRID!==null};
+  var resultados = PE.puntos.map(function(p){ return pePuntoProcesar(p, t2); });
+  PE.resultados = {items: resultados, t2:t2, modeloGeo: document.getElementById('pe-modelo-geo').value, velReal: VEMOS_GRID!==null, geoidReal: GEOCOL_GRID!==null};
 
   var cols = peColumnas();
   var tbl = document.getElementById('pe-tabla-resultados');
   var html = '<thead><tr style="background:var(--dk1);color:#fff">'+
     '<th style="padding:6px 8px;text-align:left;font-size:10.5px">NOMBRE</th>'+
+    '<th style="padding:6px 8px;text-align:left;font-size:10.5px">ÉPOCA ORIGEN</th>'+
     '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[0].lbl.toUpperCase()+' (ÉPOCA ORIGEN)</th>'+
     '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[1].lbl.toUpperCase()+' (ÉPOCA ORIGEN)</th>'+
     '<th style="padding:6px 8px;text-align:left;font-size:10.5px">'+cols[2].lbl.toUpperCase()+' (ÉPOCA ORIGEN)</th>'+
@@ -12692,7 +12703,7 @@ async function peProcesar(){
     '</tr></thead><tbody>';
   resultados.forEach(function(r, i){
     if(r.error){
-      html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'"><td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.nombre+'</td><td colspan="10" style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:#c0392b">'+r.error+'</td></tr>';
+      html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'"><td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.nombre+'</td><td colspan="11" style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:#c0392b">'+r.error+'</td></tr>';
       return;
     }
     var dec = PE.sistema==='geograficas' ? 8 : 4;
@@ -12700,6 +12711,7 @@ async function peProcesar(){
     var cambioTxt = Math.abs(dV3) < Math.pow(10,-dec) ? 'No cambia' : ((dV3>=0?'+':'')+dV3.toFixed(dec)+' m');
     html += '<tr style="background:'+(i%2?'#fff':'var(--bg1)')+'">'+
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);font-weight:700">'+r.nombre+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.epocaOrigen+'</td>'+
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.salidaO.v1.toFixed(dec)+'</td>'+
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.salidaO.v2.toFixed(dec)+'</td>'+
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.salidaO.v3.toFixed(dec)+'</td>'+
@@ -12725,7 +12737,6 @@ function peGenerarInforme(){
   var res = PE.resultados;
   var cols = peColumnas();
   var dec = PE.sistema==='geograficas' ? 8 : 4;
-  var fechaOrigen = document.getElementById('pe-epoca-origen').value;
   var fechaDestino = document.getElementById('pe-epoca-destino').value;
   var modeloGeoLbl = res.modeloGeo==='geocol2004' ? 'GEOCOL 2004' : 'QGeoidCOL2023';
   var now = new Date().toLocaleString('es-CO');
@@ -12769,17 +12780,17 @@ function peGenerarInforme(){
 
   html += '<h2>2. Parámetros del cálculo</h2><table>';
   html += '<tr><td style="width:25%"><b>Sistema de coordenadas</b></td><td style="width:25%">'+sisLbl+'</td><td style="width:25%"><b>Modelo de velocidades</b></td><td style="width:25%">'+velLbl+'</td></tr>';
-  html += '<tr><td><b>Época de origen</b></td><td>'+fechaOrigen+' (t1 = '+res.t1.toFixed(4)+')</td><td><b>Época de destino</b></td><td>'+fechaDestino+' (t2 = '+res.t2.toFixed(4)+')</td></tr>';
-  html += '<tr><td><b>Intervalo (Δt)</b></td><td>'+(res.t2-res.t1).toFixed(4)+' años</td><td><b>Modelo geoidal</b></td><td>'+geoLbl+'</td></tr>';
+  html += '<tr><td><b>Época de destino (común)</b></td><td>'+fechaDestino+' (t2 = '+res.t2.toFixed(4)+')</td><td><b>Modelo geoidal</b></td><td>'+geoLbl+'</td></tr>';
   html += '</table>';
+  html += '<div class="doc-sub" style="margin-bottom:6px">Cada punto conserva su propia <b>época de origen</b> (ver tabla de resultados) — útil cuando se combinan puntos observados en fechas distintas, como los de la Red Permanente frente a los resultados de un procesamiento.</div>';
 
   html += '<h2>3. Resultados por punto</h2>';
-  html += '<table><thead><tr><th>Nombre</th><th>'+cols[0].lbl+'<br>Época origen</th><th>'+cols[1].lbl+'<br>Época origen</th><th>'+cols[2].lbl+'<br>Época origen</th><th>'+cols[0].lbl+'<br>Época destino</th><th>'+cols[1].lbl+'<br>Época destino</th><th>'+cols[2].lbl+'<br>Época destino</th><th>ΔN (m)</th><th>ΔE (m)</th><th>¿'+cols[2].lbl+'<br>cambió?</th></tr></thead><tbody>';
+  html += '<table><thead><tr><th>Nombre</th><th>Época<br>origen</th><th>Δt<br>(años)</th><th>'+cols[0].lbl+'<br>Época origen</th><th>'+cols[1].lbl+'<br>Época origen</th><th>'+cols[2].lbl+'<br>Época origen</th><th>'+cols[0].lbl+'<br>Época destino</th><th>'+cols[1].lbl+'<br>Época destino</th><th>'+cols[2].lbl+'<br>Época destino</th><th>ΔN (m)</th><th>ΔE (m)</th><th>¿'+cols[2].lbl+'<br>cambió?</th></tr></thead><tbody>';
   res.items.forEach(function(r){
-    if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="9">'+peEscXML(r.error)+'</td></tr>'; return; }
+    if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="11">'+peEscXML(r.error)+'</td></tr>'; return; }
     var dV3 = r.salidaD.v3 - r.salidaO.v3;
     var cambioTxt = Math.abs(dV3) < Math.pow(10,-dec) ? 'No cambia' : ((dV3>=0?'+':'')+dV3.toFixed(dec)+' m');
-    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.salidaO.v1.toFixed(dec)+'</td><td>'+r.salidaO.v2.toFixed(dec)+'</td><td>'+r.salidaO.v3.toFixed(dec)+'</td><td>'+r.salidaD.v1.toFixed(dec)+'</td><td>'+r.salidaD.v2.toFixed(dec)+'</td><td>'+r.salidaD.v3.toFixed(dec)+'</td><td>'+r.dN_m.toFixed(4)+'</td><td>'+r.dE_m.toFixed(4)+'</td><td>'+cambioTxt+'</td></tr>';
+    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.epocaOrigen+'</td><td>'+r.dt.toFixed(4)+'</td><td>'+r.salidaO.v1.toFixed(dec)+'</td><td>'+r.salidaO.v2.toFixed(dec)+'</td><td>'+r.salidaO.v3.toFixed(dec)+'</td><td>'+r.salidaD.v1.toFixed(dec)+'</td><td>'+r.salidaD.v2.toFixed(dec)+'</td><td>'+r.salidaD.v3.toFixed(dec)+'</td><td>'+r.dN_m.toFixed(4)+'</td><td>'+r.dE_m.toFixed(4)+'</td><td>'+cambioTxt+'</td></tr>';
   });
   html += '</tbody></table>';
 
