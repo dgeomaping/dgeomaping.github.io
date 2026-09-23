@@ -849,62 +849,6 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 #topo-gate .gate-shake{animation:gShake .4s ease}
 @keyframes gShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
-/* ── MÓDULO FOTOGRAMETRÍA CON DRONES ── */
-#hw-foto{--fbg:#f4f8f2;--fbg2:#eaf2e6;--fbg3:#fff;--fbg4:#d8e8d4;
-  --fbrd:#c8ddc4;--fbrd2:#a8c8a4;--fac:#2e7d1a;--fac2:#3d9424;--fac3:#55aa36;--fac4:#78c454;
-  --ferr:#c41e3a;--fwarn:#d4860a;--fwarn2:#a86000;--ftx:#162212;--ftx2:#2c3e28;--ftx3:#546850;--ftx4:#8a9e86;
-  background:var(--fbg);color:var(--ftx);padding:20px;border-radius:12px;min-height:400px}
-#hw-foto *{box-sizing:border-box}
-#hw-foto .fh{background:linear-gradient(135deg,#0c1a08,#1a3a18 40%,#2e7d1a);border-radius:14px;padding:22px 28px;margin-bottom:18px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
-#hw-foto .fh::after{content:'📷';position:absolute;right:24px;top:50%;transform:translateY(-50%);font-size:81px;opacity:.09}
-#hw-foto .fh-t{font-family:'Bebas Neue',sans-serif;font-size:29px;letter-spacing:2px;color:#fff}
-#hw-foto .fh-s{font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.5px;margin-top:3px}
-#hw-foto .fh-caps{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-#hw-foto .fh-cap{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
-#hw-foto .ftabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:18px;background:var(--fbg2);padding:7px;border-radius:10px;border:1px solid var(--fbrd)}
-#hw-foto .ftab{background:none;border:none;color:var(--ftx3);font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:8px 13px;cursor:pointer;border-radius:7px;transition:all .15s;white-space:nowrap}
-#hw-foto .ftab:hover{background:var(--fbg3);color:var(--fac2)}
-#hw-foto .ftab.on{background:var(--fac);color:#fff}
-#hw-foto .fpanel{display:none}
-#hw-foto .fpanel.on{display:block}
-#hw-foto .fc{background:var(--fbg3);border:1px solid var(--fbrd);border-radius:12px;padding:18px;margin-bottom:14px}
-#hw-foto .fc-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.5px;color:var(--fac2);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-#hw-foto .fg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-#hw-foto .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-#hw-foto .fg4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-#hw-foto .ffg{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
-#hw-foto .ffg label{font-size:11px;font-weight:700;color:var(--ftx3);text-transform:uppercase;letter-spacing:.6px}
-#hw-foto .finp,#hw-foto .fsel{width:100%;background:var(--fbg2);border:1.5px solid var(--fbrd);border-radius:7px;padding:8px 11px;color:var(--ftx);font-family:'IBM Plex Mono',monospace;font-size:13px;transition:border-color .15s}
-#hw-foto .finp:focus,#hw-foto .fsel:focus{outline:none;border-color:var(--fac2)}
-#hw-foto .fbtn{background:var(--fbg2);border:1.5px solid var(--fbrd2);color:var(--ftx);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;padding:9px 16px;border-radius:7px;cursor:pointer;transition:all .15s}
-#hw-foto .fbtn:hover{background:var(--fbg4)}
-#hw-foto .fbtn.p{background:var(--fac);border-color:var(--fac);color:#fff}
-#hw-foto .fbtn.p:hover{background:var(--fac2)}
-#hw-foto .fbtn-g{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-#hw-foto .fres{background:linear-gradient(135deg,#0c1a08,#1e3318);border:1.5px solid var(--fac3);border-radius:12px;padding:16px;margin-top:10px;font-family:'IBM Plex Mono',monospace}
-#hw-foto .fres-t{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;color:var(--fac3);margin-bottom:10px}
-#hw-foto .fres-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(85,170,54,.15);font-size:13px}
-#hw-foto .fres-row:last-child{border:none}
-#hw-foto .fres-lbl{color:#4a7a3a;text-transform:uppercase;font-size:11px;letter-spacing:.5px}
-#hw-foto .fres-val{color:#d0e8d8;font-weight:600}
-#hw-foto .fres-val.hi{color:#78c454;font-size:15px}
-#hw-foto .fst{border-radius:8px;padding:10px 14px;margin-bottom:6px;font-size:12px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
-#hw-foto .fst.ok{background:#eaf2e6;border:1px solid var(--fac3);color:var(--fac)}
-#hw-foto .fst.warn{background:#fff8e8;border:1px solid var(--fwarn);color:var(--fwarn2)}
-#hw-foto .fst.info{background:var(--fbg2);border:1px solid var(--fbrd2);color:var(--ftx2)}
-#hw-foto .fst.err{background:#fdf0f0;border:1px solid var(--ferr);color:var(--ferr)}
-#hw-foto .fmet{background:var(--fbg2);border:1px solid var(--fbrd);border-radius:10px;padding:14px;text-align:center}
-#hw-foto .fmet-val{font-family:'Bebas Neue',sans-serif;font-size:27px;color:var(--fac2);line-height:1}
-#hw-foto .fmet-u{font-size:11px;color:var(--ftx3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
-#hw-foto .fmet-lbl{font-size:12px;color:var(--ftx2);margin-top:4px}
-#hw-foto canvas{border-radius:8px;max-width:100%}
-#hw-foto table{width:100%;border-collapse:collapse;font-size:12px}
-#hw-foto th{background:var(--fbg2);color:var(--fac2);font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:8px 10px;text-align:left;border:1px solid var(--fbrd);font-weight:700}
-#hw-foto td{padding:7px 10px;border:1px solid var(--fbrd);font-family:'IBM Plex Mono',monospace;color:var(--ftx)}
-#hw-foto tr:nth-child(even) td{background:rgba(0,0,0,.02)}
-#hw-foto .fprog{background:var(--fbg2);border-radius:20px;height:8px;overflow:hidden;margin-top:4px}
-#hw-foto .fprog-bar{height:100%;background:linear-gradient(90deg,var(--fac),var(--fac3));border-radius:20px;transition:width .3s}
-@media(max-width:650px){#hw-foto .fg2,#hw-foto .fg3,#hw-foto .fg4{grid-template-columns:1fr}}
 
 #page-digital .page .wrap > div > div:not(:first-child):hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,0.15)!important}
 </style>
@@ -1593,7 +1537,6 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <button class="topo-st" id="st-dron" onclick="switchST('dron',this)">🚁 Dron Colombia</button>
       <button class="topo-st" id="st-gnsspro" onclick="switchST('gnsspro',this)">📡 GNSS Procesador</button>
       <button class="topo-st" id="st-magnasirgas" onclick="switchST('magnasirgas',this)">🇨🇴 MAGNA Pro</button>
-      <button class="topo-st" id="st-foto" onclick="switchST('foto',this)">📷 Fotogrametría</button>
       <button class="topo-st" onclick="switchST('coming',this)" style="opacity:.5">📐 Próximamente...</button>
     </div>
 
@@ -2811,421 +2754,6 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 <!-- ══════════════════════════════════════════════════════════ -->
 
 
-<!-- ══════════════════════════════════════════════════════════ -->
-<!-- MÓDULO FOTOGRAMETRÍA CON DRONES — DGeoMap Ing. S.A.S.    -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="topo-hw" id="hw-foto">
-
-  <div class="fh">
-    <div style="font-size:55px;flex-shrink:0">📷</div>
-    <div>
-      <div class="fh-t">FOTOGRAMETRÍA CON DRONES</div>
-      <div class="fh-s">GSD · Plan de vuelo · GCPs · Precisión · Cámara · Batería · RAC 100 Colombia</div>
-      <div class="fh-caps">
-        <span class="fh-cap">GSD cm/px</span><span class="fh-cap">Solapamiento</span>
-        <span class="fh-cap">GCPs Colombia</span><span class="fh-cap">Batería</span>
-        <span class="fh-cap">Fotos estimadas</span><span class="fh-cap">MDT/MDS</span>
-        <span class="fh-cap">Ortomosaico</span><span class="fh-cap">RAC 100 UAEAC</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="ftabs">
-    <button class="ftab on" onclick="fotoGoTab('gsd',this)">📐 GSD y Parámetros</button>
-    <button class="ftab" onclick="fotoGoTab('vuelo',this)">🗺️ Plan de Vuelo</button>
-    <button class="ftab" onclick="fotoGoTab('gcps',this)">📍 GCPs Control</button>
-    <button class="ftab" onclick="fotoGoTab('precision',this)">🎯 Precisión y Escala</button>
-    <button class="ftab" onclick="fotoGoTab('camara',this)">📷 Base de Datos Cámaras</button>
-    <button class="ftab" onclick="fotoGoTab('informe',this)">📄 Informe de Misión</button>
-  </div>
-
-  <!-- ══ GSD Y PARÁMETROS ══ -->
-  <div class="fpanel on" id="fp-gsd">
-    <div class="fg2" style="align-items:start">
-      <div>
-        <div class="fc">
-          <div class="fc-t">📷 Cámara y sensor</div>
-          <div class="ffg"><label>Seleccionar cámara / dron</label>
-            <select class="fsel" id="fg-camara" onchange="fotoLoadCam()">
-              <option value="custom">Personalizado</option>
-              <option value="dji_mini4pro">DJI Mini 4 Pro (48MP)</option>
-              <option value="dji_mavic3m">DJI Mavic 3 Multispectral</option>
-              <option value="dji_mavic3e">DJI Mavic 3 Enterprise</option>
-              <option value="dji_p4rtk">DJI Phantom 4 RTK</option>
-              <option value="dji_m300_p1">DJI M300 + Zenmuse P1</option>
-              <option value="dji_m300_l1">DJI M300 + Zenmuse L1 (LiDAR)</option>
-              <option value="dji_m30t">DJI M30T (Térmico + RGB)</option>
-              <option value="mica_rededge">MicaSense RedEdge-MX</option>
-              <option value="parrot_sequoia">Parrot Sequoia+</option>
-              <option value="senseFly_eBee">senseFly eBee X</option>
-            </select>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Ancho sensor (mm)</label>
-              <input class="finp" id="fg-sw" type="number" step="0.01" value="9.53" oninput="fotoCalc()"></div>
-            <div class="ffg"><label>Alto sensor (mm)</label>
-              <input class="finp" id="fg-sh" type="number" step="0.01" value="7.15" oninput="fotoCalc()"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Resolución ancho (px)</label>
-              <input class="finp" id="fg-rw" type="number" step="1" value="8064" oninput="fotoCalc()"></div>
-            <div class="ffg"><label>Resolución alto (px)</label>
-              <input class="finp" id="fg-rh" type="number" step="1" value="6048" oninput="fotoCalc()"></div>
-          </div>
-          <div class="ffg"><label>Distancia focal (mm)</label>
-            <input class="finp" id="fg-f" type="number" step="0.1" value="12.29" oninput="fotoCalc()"></div>
-        </div>
-
-        <div class="fc">
-          <div class="fc-t">🚁 Parámetros de vuelo</div>
-          <div class="ffg"><label>Altura de vuelo AGL (m)</label>
-            <input class="finp" id="fg-alt" type="number" step="1" value="100" oninput="fotoCalc()"></div>
-          <div class="fg2">
-            <div class="ffg"><label>Solapamiento frontal (%)</label>
-              <input class="finp" id="fg-sf" type="number" step="1" value="80" oninput="fotoCalc()"></div>
-            <div class="ffg"><label>Solapamiento lateral (%)</label>
-              <input class="finp" id="fg-sl" type="number" step="1" value="70" oninput="fotoCalc()"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Área a cubrir (ha)</label>
-              <input class="finp" id="fg-area" type="number" step="0.1" value="10" oninput="fotoCalc()"></div>
-            <div class="ffg"><label>Velocidad de vuelo (m/s)</label>
-              <input class="finp" id="fg-vel" type="number" step="0.5" value="8" oninput="fotoCalc()"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Autonomía batería (min)</label>
-              <input class="finp" id="fg-bat" type="number" step="1" value="30" oninput="fotoCalc()"></div>
-            <div class="ffg"><label>Ángulo nadir / oblicuo (°)</label>
-              <select class="fsel" id="fg-angulo" onchange="fotoCalc()">
-                <option value="0">0° — Nadir (ortofoto)</option>
-                <option value="15">15° — Ligeramente oblicuo</option>
-                <option value="30">30° — Oblicuo (fachadas)</option>
-                <option value="45">45° — Oblicuo alto</option>
-              </select>
-            </div>
-          </div>
-          <button class="fbtn p" style="width:100%;padding:12px;font-size:14px" onclick="fotoCalc()">
-            ⚡ CALCULAR PLAN DE VUELO
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <div id="fg-resultado">
-          <div class="fst info"><span>ℹ️</span><span>Configura cámara y parámetros para ver el plan de vuelo completo</span></div>
-        </div>
-        <div class="fg4" style="margin-top:10px" id="fg-metrics" style="display:none">
-          <div class="fmet"><div class="fmet-val" id="fm-gsd">—</div><div class="fmet-u">cm/px</div><div class="fmet-lbl">GSD</div></div>
-          <div class="fmet"><div class="fmet-val" id="fm-fotos">—</div><div class="fmet-u">fotos</div><div class="fmet-lbl">Total</div></div>
-          <div class="fmet"><div class="fmet-val" id="fm-franjas">—</div><div class="fmet-u">franjas</div><div class="fmet-lbl">Pasadas</div></div>
-          <div class="fmet"><div class="fmet-val" id="fm-baterias">—</div><div class="fmet-u">baterías</div><div class="fmet-lbl">Necesarias</div></div>
-        </div>
-        <div class="fc" style="margin-top:10px">
-          <div class="fc-t">📊 Escala mínima cartográfica según GSD</div>
-          <table>
-            <thead><tr><th>GSD (cm/px)</th><th>Escala máx.</th><th>Precisión H</th><th>Aplicación típica</th></tr></thead>
-            <tbody>
-              <tr><td>0.5 – 1.0</td><td style="color:var(--fac2)">1:500</td><td>±1.5 cm</td><td>Catastro urbano, construcción</td></tr>
-              <tr><td>1.0 – 2.0</td><td style="color:var(--fac2)">1:1.000</td><td>±3 cm</td><td>Levantamiento predial, vías</td></tr>
-              <tr><td>2.0 – 3.0</td><td style="color:var(--fac2)">1:2.000</td><td>±5 cm</td><td>Topografía de diseño</td></tr>
-              <tr><td>3.0 – 5.0</td><td>1:5.000</td><td>±10 cm</td><td>Planificación, minería</td></tr>
-              <tr><td>5.0 – 10.0</td><td>1:10.000</td><td>±25 cm</td><td>Agricultura, inventario forestal</td></tr>
-              <tr><td>&gt; 10.0</td><td>1:25.000</td><td>&gt; 50 cm</td><td>Cartografía regional</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ PLAN DE VUELO ══ -->
-  <div class="fpanel" id="fp-vuelo">
-    <div class="fg2" style="align-items:start">
-      <div>
-        <div class="fc">
-          <div class="fc-t">🗺️ Configuración del polígono de vuelo</div>
-          <div class="fg2">
-            <div class="ffg"><label>Latitud centro (°)</label>
-              <input class="finp" id="fv-lat" type="number" step="0.0001" placeholder="7.9274" value="7.9274"></div>
-            <div class="ffg"><label>Longitud centro (°)</label>
-              <input class="finp" id="fv-lon" type="number" step="0.0001" placeholder="-72.5115" value="-72.5115"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Ancho del área (m)</label>
-              <input class="finp" id="fv-ancho" type="number" step="10" value="400" oninput="fotoVueloCalc()"></div>
-            <div class="ffg"><label>Largo del área (m)</label>
-              <input class="finp" id="fv-largo" type="number" step="10" value="500" oninput="fotoVueloCalc()"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Ángulo de franjas (°)</label>
-              <input class="finp" id="fv-angulo" type="number" step="1" value="0" placeholder="0=E-O, 90=N-S" oninput="fotoVueloCalc()"></div>
-            <div class="ffg"><label>Distancia home (m)</label>
-              <input class="finp" id="fv-home" type="number" step="10" value="50" oninput="fotoVueloCalc()"></div>
-          </div>
-          <button class="fbtn p" style="width:100%;padding:12px" onclick="fotoVueloCalc()">⚡ GENERAR PLAN</button>
-        </div>
-        <div id="fv-resultado"></div>
-        <div class="fbtn-g" style="margin-top:6px">
-          <button class="fbtn p" onclick="fotoExportKML()">📄 Exportar KML</button>
-          <button class="fbtn" onclick="fotoExportCSV()">📊 CSV Waypoints</button>
-        </div>
-      </div>
-      <div>
-        <div class="fc" style="padding:0;overflow:hidden">
-          <div style="padding:12px 14px 8px"><div class="fc-t" style="margin:0">🎨 Vista del plan de vuelo</div></div>
-          <canvas id="fv-canvas" width="440" height="360"
-            style="width:100%;background:#060e08;display:block"></canvas>
-          <div style="padding:8px 14px;background:var(--fbg2);font-size:11px;color:var(--ftx3);display:flex;gap:16px">
-            <span>🟩 Franjas · <span style="color:#f0b429">━━</span> Tránsito · <span style="color:#c41e3a">●</span> Inicio · <span style="color:#3d9424">●</span> Fin</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ GCPs ══ -->
-  <div class="fpanel" id="fp-gcps">
-    <div class="fg2" style="align-items:start">
-      <div>
-        <div class="fc">
-          <div class="fc-t">📍 Calculadora de GCPs (Puntos de Control)</div>
-          <div class="fst info"><span>ℹ️</span><span>Los GCPs son esenciales para georreferenciar el modelo fotogramétrico en MAGNA-SIRGAS CTM12. Se miden con GNSS diferencial (precisión ≤ 5 cm) antes o durante el vuelo.</span></div>
-          <div class="fg2" style="margin-top:12px">
-            <div class="ffg"><label>Área del proyecto (ha)</label>
-              <input class="finp" id="fg2-area" type="number" step="0.5" value="10" oninput="fotoGCPCalc()"></div>
-            <div class="ffg"><label>Precisión requerida</label>
-              <select class="fsel" id="fg2-prec" onchange="fotoGCPCalc()">
-                <option value="2">≤ 2 cm (catastro / ingeniería)</option>
-                <option value="5" selected>≤ 5 cm (topografía general)</option>
-                <option value="10">≤ 10 cm (planificación)</option>
-                <option value="25">≤ 25 cm (agricultura / forestal)</option>
-              </select>
-            </div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Tipo de terreno</label>
-              <select class="fsel" id="fg2-terreno" onchange="fotoGCPCalc()">
-                <option value="plano">Plano (Δh &lt; 20 m)</option>
-                <option value="ondulado" selected>Ondulado (Δh 20–100 m)</option>
-                <option value="montanoso">Montañoso (Δh &gt; 100 m)</option>
-              </select>
-            </div>
-            <div class="ffg"><label>¿El dron tiene RTK/PPK?</label>
-              <select class="fsel" id="fg2-rtk" onchange="fotoGCPCalc()">
-                <option value="no" selected>No — solo GPS</option>
-                <option value="rtk">Sí — RTK integrado</option>
-                <option value="ppk">Sí — PPK post-proceso</option>
-              </select>
-            </div>
-          </div>
-          <div class="ffg"><label>Forma aproximada del área</label>
-            <select class="fsel" id="fg2-forma" onchange="fotoGCPCalc()">
-              <option value="cuadrado" selected>Compacta (cuadrada / circular)</option>
-              <option value="rectangular">Rectangular (ratio &gt; 3:1)</option>
-              <option value="lineal">Lineal (corredor / carretera)</option>
-            </select>
-          </div>
-          <button class="fbtn p" style="width:100%;padding:12px" onclick="fotoGCPCalc()">📍 CALCULAR GCPs</button>
-        </div>
-        <div id="fg2-resultado"></div>
-      </div>
-      <div>
-        <div class="fc">
-          <div class="fc-t">📋 Registro de GCPs medidos</div>
-          <div class="fst info"><span>ℹ️</span><span>Ingresa las coordenadas de los GCPs medidos con GNSS. El sistema verifica la distribución y calcula el residual esperado.</span></div>
-          <div style="overflow-x:auto;margin-top:10px">
-            <table id="fg2-tabla">
-              <thead><tr><th>#</th><th>Nombre</th><th>Norte CTM12 (m)</th><th>Este CTM12 (m)</th><th>H_ort (m)</th><th>Tipo</th></tr></thead>
-              <tbody id="fg2-tbody"></tbody>
-            </table>
-          </div>
-          <div class="fbtn-g" style="margin-top:8px">
-            <button class="fbtn p" onclick="fotoAddGCP()">➕ Agregar GCP</button>
-            <button class="fbtn" onclick="fotoExportGCPs()">💾 Exportar lista</button>
-          </div>
-          <div id="fg2-distribucion" style="margin-top:10px"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ PRECISIÓN Y ESCALA ══ -->
-  <div class="fpanel" id="fp-precision">
-    <div class="fg2" style="align-items:start">
-      <div>
-        <div class="fc">
-          <div class="fc-t">🎯 Verificación de precisión del levantamiento</div>
-          <div class="fg2">
-            <div class="ffg"><label>GSD obtenido (cm/px)</label>
-              <input class="finp" id="fp-gsd-real" type="number" step="0.1" value="3.0" oninput="fotoPrecCalc()"></div>
-            <div class="ffg"><label>Altura de vuelo (m AGL)</label>
-              <input class="finp" id="fp-alt-real" type="number" step="1" value="100" oninput="fotoPrecCalc()"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Precisión GCPs (cm, 1σ)</label>
-              <input class="finp" id="fp-prec-gcp" type="number" step="0.5" value="3.0" oninput="fotoPrecCalc()"></div>
-            <div class="ffg"><label>RMS residual fotogramétrico (px)</label>
-              <input class="finp" id="fp-rms" type="number" step="0.01" value="0.5" oninput="fotoPrecCalc()"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Número de GCPs</label>
-              <input class="finp" id="fp-ngcp" type="number" step="1" value="6" oninput="fotoPrecCalc()"></div>
-            <div class="ffg"><label>Número de puntos check</label>
-              <input class="finp" id="fp-nchk" type="number" step="1" value="3" oninput="fotoPrecCalc()"></div>
-          </div>
-          <div class="ffg"><label>Software de procesamiento</label>
-            <select class="fsel" id="fp-sw">
-              <option value="agisoft">Agisoft Metashape</option>
-              <option value="pix4d">Pix4D Mapper</option>
-              <option value="odm">OpenDroneMap (WebODM)</option>
-              <option value="dji_terra">DJI Terra</option>
-              <option value="correlator3d">Correlator3D</option>
-            </select>
-          </div>
-          <button class="fbtn p" style="width:100%;padding:12px" onclick="fotoPrecCalc()">🎯 CALCULAR PRECISIÓN</button>
-        </div>
-      </div>
-      <div>
-        <div id="fp-resultado">
-          <div class="fst info"><span>ℹ️</span><span>Ingresa los parámetros de vuelo y GCPs para calcular la precisión esperada del producto fotogramétrico</span></div>
-        </div>
-        <div class="fc" style="margin-top:10px">
-          <div class="fc-t">📊 Estándares de precisión fotogramétrica</div>
-          <table>
-            <thead><tr><th>Producto</th><th>Prec. H típica</th><th>Prec. V típica</th><th>Factor GSD</th></tr></thead>
-            <tbody>
-              <tr><td>Ortomosaico</td><td>1–2× GSD</td><td>—</td><td>×1.5</td></tr>
-              <tr><td>MDT (terreno)</td><td>1–2× GSD</td><td>2–3× GSD</td><td>×2.5</td></tr>
-              <tr><td>MDS (superficie)</td><td>1× GSD</td><td>1.5× GSD</td><td>×1.5</td></tr>
-              <tr><td>Nube de puntos</td><td>0.5× GSD</td><td>1× GSD</td><td>×1.0</td></tr>
-              <tr><td>Con RTK/PPK</td><td style="color:var(--fac2)">0.5× GSD</td><td style="color:var(--fac2)">1× GSD</td><td>×1.0</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ BASE DE DATOS CÁMARAS ══ -->
-  <div class="fpanel" id="fp-camara">
-    <div class="fc">
-      <div class="fc-t">📷 Base de datos de cámaras y drones topográficos</div>
-      <div style="overflow-x:auto">
-        <table>
-          <thead><tr><th>Dron / Cámara</th><th>Sensor (mm)</th><th>Focal (mm)</th><th>Resolución (MP)</th><th>Tipo</th><th>GSD @100m</th><th>Autonomía</th><th>Peso</th></tr></thead>
-          <tbody>
-            <tr><td><strong>DJI Mini 4 Pro</strong></td><td>9.53×7.15</td><td>12.29</td><td>48 MP</td><td>RGB</td><td style="color:var(--fac2)">2.3 cm</td><td>34 min</td><td>249 g</td></tr>
-            <tr><td><strong>DJI Mavic 3E</strong></td><td>17.3×13.0</td><td>12.29</td><td>45 MP</td><td>RGB</td><td style="color:var(--fac2)">1.8 cm</td><td>45 min</td><td>915 g</td></tr>
-            <tr><td><strong>DJI Mavic 3M</strong></td><td>9.53×7.15</td><td>12.29</td><td>20 MP + 5 bandas</td><td>Multiespectral</td><td>2.7 cm</td><td>43 min</td><td>958 g</td></tr>
-            <tr><td><strong>DJI Phantom 4 RTK</strong></td><td>13.2×8.8</td><td>8.8</td><td>20 MP</td><td>RGB + RTK</td><td style="color:var(--fac2)">2.74 cm</td><td>30 min</td><td>1.39 kg</td></tr>
-            <tr><td><strong>DJI M300 + P1</strong></td><td>35.9×24.0</td><td>24.0</td><td>45 MP</td><td>RGB full-frame</td><td style="color:var(--fac2)">0.8 cm</td><td>55 min</td><td>905 g (cám.)</td></tr>
-            <tr><td><strong>DJI M300 + L1</strong></td><td>—</td><td>—</td><td>LiDAR 450K pts/s</td><td>LiDAR + RGB</td><td style="color:var(--fac2)">0.5 cm</td><td>55 min</td><td>930 g (cám.)</td></tr>
-            <tr><td><strong>DJI M30T</strong></td><td>Doble: RGB + Térmico</td><td>5.1 / 9.7</td><td>48 MP + 640×512</td><td>RGB + Térmico</td><td>1.0 cm</td><td>41 min</td><td>899 g (cám.)</td></tr>
-            <tr><td><strong>MicaSense RedEdge-MX</strong></td><td>4.8×3.6 ×5 bandas</td><td>5.5</td><td>1.2 MP × 5</td><td>Multiespectral</td><td>8.2 cm @120m</td><td>—</td><td>232 g</td></tr>
-            <tr><td><strong>senseFly eBee X</strong></td><td>Intercambiable</td><td>Variable</td><td>20–47 MP</td><td>Ala fija RTK/PPK</td><td style="color:var(--fac2)">1.5 cm</td><td>90 min</td><td>1.6 kg</td></tr>
-            <tr><td><strong>Autel EVO II Pro</strong></td><td>17.3×13.0</td><td>9.7</td><td>20 MP</td><td>RGB</td><td>2.5 cm</td><td>40 min</td><td>1.1 kg</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="fst info" style="margin-top:10px"><span>ℹ️</span><span>GSD calculado con solapamiento estándar 80/70%. La precisión final depende de los GCPs, condiciones atmosféricas y el software de procesamiento. Datos según especificaciones del fabricante.</span></div>
-    </div>
-    <div class="fg2">
-      <div class="fc">
-        <div class="fc-t">⚖️ ¿Qué dron usar para cada proyecto?</div>
-        <div style="font-size:12px;color:var(--ftx2);line-height:1.8">
-          <div style="margin-bottom:8px"><strong style="color:var(--fac2)">Levantamiento topográfico predial (cat. C, Orden D):</strong><br>
-          DJI Mavic 3E o Phantom 4 RTK. GSD ≤ 3 cm. Con 5–8 GCPs medidos con GNSS diferencial. Sin RTK: procesamiento PPP en NRCAN + GCPs.</div>
-          <div style="margin-bottom:8px"><strong style="color:var(--fac2)">Agricultura de precisión / NDVI:</strong><br>
-          DJI Mavic 3M o MicaSense RedEdge. GSD 5–10 cm. Vuelo a 80–120 m. Calibración radiométrica obligatoria (panel reflectante).</div>
-          <div style="margin-bottom:8px"><strong style="color:var(--fac2)">Infraestructura vial / ingeniería:</strong><br>
-          DJI M300 + P1 o senseFly eBee X. GSD ≤ 2 cm. RTK/PPK obligatorio. Mínimo 8 GCPs distribuidos.</div>
-          <div><strong style="color:var(--fac2)">Minería / movimiento de tierras:</strong><br>
-          DJI M300 + L1 (LiDAR) o P1. GSD ≤ 1 cm. Alta densidad de puntos. Nivelación de control independiente.</div>
-        </div>
-      </div>
-      <div class="fc">
-        <div class="fc-t">📋 Checklist prevuelo fotogramétrico</div>
-        <div style="font-size:12px;color:var(--ftx2);line-height:1.9">
-          <div>☐ GCPs materializados y medidos con GNSS diferencial</div>
-          <div>☐ GCPs fotografiados con GPS y numerados en campo</div>
-          <div>☐ Verificar zona RAC 100 (UAEAC) y autorización vuelo</div>
-          <div>☐ PDOP &lt; 3 en el horario de vuelo planificado</div>
-          <div>☐ Viento ≤ 8 m/s (categoría abierta) ó ≤ 12 m/s (profesional)</div>
-          <div>☐ Iluminación homogénea (10:00–14:00 o nubes altas)</div>
-          <div>☐ Baterías 100% — verificar autonomía vs. área planificada</div>
-          <div>☐ Tarjeta SD formateada y con espacio suficiente</div>
-          <div>☐ Parámetros de cámara: ISO auto, velocidad &gt; 1/800s</div>
-          <div>☐ Solapamiento verificado en software de planificación</div>
-          <div>☐ Hover test 30s antes de iniciar la misión</div>
-          <div>☐ Bitácora de vuelo diligenciada (RAC 100 §100.510)</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ INFORME DE MISIÓN ══ -->
-  <div class="fpanel" id="fp-informe">
-    <div class="fg2" style="align-items:start">
-      <div>
-        <div class="fc">
-          <div class="fc-t">📄 Datos del informe</div>
-          <div class="ffg"><label>Nombre del proyecto</label>
-            <input class="finp" id="fi-proyecto" placeholder="Ej: Levantamiento topográfico Lote 12 — Cúcuta"></div>
-          <div class="fg2">
-            <div class="ffg"><label>Operador / Piloto UAS</label>
-              <input class="finp" id="fi-piloto" placeholder="Nombre del piloto certificado"></div>
-            <div class="ffg"><label>Certificado UAEAC No.</label>
-              <input class="finp" id="fi-cert" placeholder="No. de certificado piloto UAS"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Fecha del vuelo</label>
-              <input class="finp" id="fi-fecha" type="date"></div>
-            <div class="ffg"><label>Hora inicio / fin</label>
-              <input class="finp" id="fi-hora" placeholder="08:30 – 10:45"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Municipio / Departamento</label>
-              <input class="finp" id="fi-municipio" placeholder="Cúcuta, Norte de Santander"></div>
-            <div class="ffg"><label>Categoría RAC 100</label>
-              <select class="fsel" id="fi-cat">
-                <option value="especifica">Específica — con autorización UAEAC</option>
-                <option value="abierta">Abierta — sin ánimo de lucro</option>
-              </select>
-            </div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Dron / modelo</label>
-              <input class="finp" id="fi-dron" placeholder="DJI Mavic 3E SN: XXXXXXXX"></div>
-            <div class="ffg"><label>No. vuelos realizados</label>
-              <input class="finp" id="fi-nvuelos" type="number" value="1" min="1"></div>
-          </div>
-          <div class="fg2">
-            <div class="ffg"><label>Condición meteorológica</label>
-              <select class="fsel" id="fi-meteo">
-                <option value="despejado">Despejado — cielo claro</option>
-                <option value="parcial">Parcialmente nublado</option>
-                <option value="nublado">Nublado homogéneo (ideal)</option>
-              </select>
-            </div>
-            <div class="ffg"><label>Viento promedio (m/s)</label>
-              <input class="finp" id="fi-viento" type="number" step="0.5" value="3" min="0"></div>
-          </div>
-          <div class="ffg"><label>Observaciones de campo</label>
-            <input class="finp" id="fi-obs" placeholder="Condiciones especiales, incidentes, etc."></div>
-          <button class="fbtn p" style="width:100%;padding:13px;font-size:14px;margin-top:4px" onclick="fotoGenerarInforme()">
-            📄 GENERAR INFORME TÉCNICO DE MISIÓN
-          </button>
-        </div>
-      </div>
-      <div>
-        <div id="fi-output">
-          <div class="fst info"><span>ℹ️</span><span>Completa los datos y genera el informe técnico de la misión fotogramétrica. Incluye todos los parámetros calculados, datos del vuelo, GCPs y cumplimiento RAC 100.</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /hw-foto -->
 
 
 <div class="topo-hw" id="hw-coming">
@@ -4782,45 +4310,67 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
             </div>
             <div style="font-size:11px;color:var(--dtx3);max-width:190px;line-height:1.5">El GSD (tamaño de píxel en terreno) depende de la <strong>altura de vuelo</strong> y del <strong>sensor del dron</strong> seleccionado arriba.</div>
           </div>
-          <div class="dg2" style="margin-bottom:10px">
-            <div class="dfgrp">
-              <label>GSD objetivo (cm/px)</label>
-              <input class="dinp" id="pv-gsd" type="number" step="0.5" min="0.5" max="50" value="3" oninput="pvEval()">
-            </div>
-            <div class="dfgrp">
-              <label>&nbsp;</label>
-              <button class="dbtn" style="width:100%" onclick="pvAlturaParaGSD()" title="Calcula la altura de vuelo necesaria para lograr el GSD objetivo">🎯 Calcular altura para este GSD</button>
-            </div>
-          </div>
+          <div style="font-size:10.5px;color:var(--dtx3);margin-bottom:8px">⚙️ Valores recomendados ya cargados automáticamente — solo edítalos si tu proyecto lo requiere.</div>
           <div class="dg2" style="margin-bottom:10px">
             <div class="dfgrp">
               <label>Solapamiento frontal (%)</label>
-              <input class="dinp" id="pv-solap-f" type="number" min="50" max="95" value="80" oninput="pvEval()">
+              <input class="dinp" id="pv-solap-f" type="number" min="50" max="95" value="80" oninput="pvEval();pvAutoRecalc()">
             </div>
             <div class="dfgrp">
               <label>Solapamiento lateral (%)</label>
-              <input class="dinp" id="pv-solap-l" type="number" min="50" max="95" value="70" oninput="pvEval()">
+              <input class="dinp" id="pv-solap-l" type="number" min="50" max="95" value="70" oninput="pvEval();pvAutoRecalc()">
             </div>
           </div>
           <div class="dg2" style="margin-bottom:10px">
             <div class="dfgrp">
               <label>Ángulo de las franjas de vuelo (°)</label>
-              <input class="dinp" id="pv-angulo" type="number" min="0" max="179" value="0" placeholder="0 = Este-Oeste, 90 = Norte-Sur">
+              <input class="dinp" id="pv-angulo" type="number" min="0" max="179" value="0" placeholder="0 = Este-Oeste, 90 = Norte-Sur" oninput="pvAutoRecalc()">
             </div>
             <div class="dfgrp">
               <label>Patrón de vuelo</label>
-              <select class="dsel" id="pv-patron">
+              <select class="dsel" id="pv-patron" onchange="pvAutoRecalc()">
                 <option value="simple">Líneas simples — un solo sentido</option>
                 <option value="cruzada">Cuadrícula cruzada (doble malla / "3D")</option>
               </select>
             </div>
           </div>
           <div class="dbtn-grp">
-            <button class="dbtn prim" style="flex:1" onclick="pvGenerarLineas()">✈️ GENERAR LÍNEAS DE VUELO</button>
+            <button class="dbtn prim" style="flex:1" onclick="pvGenerarLineas()">✈️ Generar / recalcular líneas de vuelo</button>
             <button class="dbtn" onclick="pvClearLineas()">🗑️ Quitar líneas</button>
           </div>
           <div id="pv-lineas-info" style="margin-top:8px"></div>
         </div>
+
+        <!-- Resultados automáticos: escala, GCPs, precisión -->
+        <div class="dcard" style="margin-top:0" id="pv-auto-card">
+          <div class="dcard-title"><span class="ico">📊</span> Resultados Automáticos de la Misión</div>
+          <div id="pv-escala-box" style="margin-bottom:10px"></div>
+          <div class="sep"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+            <div class="dcard-title" style="margin:0;font-size:14px"><span class="ico">📍</span> GCPs de Control Recomendados</div>
+          </div>
+          <div class="dg2" style="margin-bottom:10px">
+            <div class="dfgrp">
+              <label>Tipo de terreno</label>
+              <select class="dsel" id="pv-gcp-terreno" onchange="pvGCPCalc()">
+                <option value="plano">Plano (Δh &lt; 20 m)</option>
+                <option value="ondulado" selected>Ondulado (Δh 20–100 m)</option>
+                <option value="montanoso">Montañoso (Δh &gt; 100 m)</option>
+              </select>
+            </div>
+            <div class="dfgrp">
+              <label>Precisión horizontal requerida</label>
+              <select class="dsel" id="pv-gcp-prec" onchange="pvGCPCalc()">
+                <option value="2">≤ 2 cm (catastro / ingeniería)</option>
+                <option value="5" selected>≤ 5 cm (topografía general)</option>
+                <option value="10">≤ 10 cm (planificación)</option>
+                <option value="25">≤ 25 cm (agricultura / forestal)</option>
+              </select>
+            </div>
+          </div>
+          <div id="pv-gcp-resultado"></div>
+        </div>
+
         <!-- Exportar -->
         <div class="dcard" style="margin-top:0">
           <div class="dcard-title"><span class="ico">📥</span> Exportar Planificación</div>
@@ -14802,6 +14352,7 @@ function pvCalcGSD(){
     boxGsd.textContent = 'No aplica';
     boxFp.textContent = 'Dron sin cámara de mapeo (uso agrícola/operativo)';
     window._pvGsdReal = null;
+    pvEscalaCartografica(null);
     return;
   }
   var gsd = (s.sw * alt) / (s.f * s.rw) * 100; // cm/píxel
@@ -14809,17 +14360,38 @@ function pvCalcGSD(){
   boxGsd.textContent = gsd.toFixed(2)+' cm/px';
   boxFp.textContent = 'Huella de imagen: '+fp.w.toFixed(1)+' × '+fp.h.toFixed(1)+' m a '+alt+' m AGL';
   window._pvGsdReal = gsd;
+  pvEscalaCartografica(gsd);
 }
 
-// Calcula la altura de vuelo necesaria para lograr el GSD objetivo, según el sensor activo
-function pvAlturaParaGSD(){
-  var s = window._pvSensor;
-  if(!s){ alert('El dron seleccionado no tiene cámara de mapeo — no aplica cálculo de GSD.'); return; }
-  var gsdObj = parseFloat(document.getElementById('pv-gsd').value) || 3;
-  var alt = (gsdObj/100) * s.f * s.rw / s.sw;
-  document.getElementById('pv-altura').value = Math.round(alt);
-  pvCalcGSD();
-  pvEval();
+// Tabla de referencia: escala cartográfica máxima y precisión horizontal típica según el GSD.
+var PV_ESCALA_TABLA = [
+  {max:1.0,  escala:'1:500',   prec:'±1.5 cm', app:'Catastro urbano, construcción'},
+  {max:2.0,  escala:'1:1.000', prec:'±3 cm',   app:'Levantamiento predial, vías'},
+  {max:3.0,  escala:'1:2.000', prec:'±5 cm',   app:'Topografía de diseño'},
+  {max:5.0,  escala:'1:5.000', prec:'±10 cm',  app:'Planificación, minería'},
+  {max:10.0, escala:'1:10.000',prec:'±25 cm',  app:'Agricultura, inventario forestal'},
+  {max:Infinity, escala:'1:25.000', prec:'> 50 cm', app:'Cartografía regional'}
+];
+// Muestra la escala cartográfica máxima recomendada y la precisión típica esperada
+// según el GSD real calculado — es una consulta a una tabla, no requiere datos adicionales.
+function pvEscalaCartografica(gsd){
+  var box = document.getElementById('pv-escala-box');
+  if(!box) return;
+  if(!gsd){ box.innerHTML = '<div class="dstat info" style="font-size:12px"><span class="dico">ℹ️</span>Selecciona un dron con cámara de mapeo para ver la escala cartográfica recomendada.</div>'; return; }
+  var row = PV_ESCALA_TABLA.find(function(r){ return gsd <= r.max; }) || PV_ESCALA_TABLA[PV_ESCALA_TABLA.length-1];
+  box.innerHTML =
+    '<div class="dg3">'+
+      '<div class="dstat ok" style="flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:10px;text-transform:uppercase;opacity:.75">Escala cartográfica máx.</span><strong style="font-size:16px">'+row.escala+'</strong></div>'+
+      '<div class="dstat ok" style="flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:10px;text-transform:uppercase;opacity:.75">Precisión horizontal típica</span><strong style="font-size:16px">'+row.prec+'</strong></div>'+
+      '<div class="dstat ok" style="flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:10px;text-transform:uppercase;opacity:.75">Aplicación recomendada</span><strong style="font-size:13px">'+row.app+'</strong></div>'+
+    '</div>';
+}
+
+// Velocidad de crucero recomendada para fotogrametría (fracción de la velocidad máxima
+// del fabricante, acotada a un máximo razonable para evitar barrido/desenfoque de imagen).
+function pvVelocidadCrucero(d){
+  var vmax = (d && d.velmax) || 12;
+  return Math.max(3, Math.min(vmax*0.6, 12));
 }
 
 // Carga las características reales del dron seleccionado (peso, autonomía, sensor)
@@ -14845,6 +14417,16 @@ function pvLoadDrone(){
 
   pvCalcGSD();
   pvEval();
+  pvGCPCalc();
+  pvAutoRecalc();
+}
+
+// Recalcula automáticamente las líneas de vuelo cuando ya existe un área dibujada,
+// para que cambiar el dron, la altura o los parámetros de misión actualice todo en vivo
+// sin necesidad de volver a presionar el botón manualmente.
+function pvAutoRecalc(){
+  if(pvShapes && pvShapes.length>0){ pvGenerarLineas(); }
+  pvGCPCalc();
 }
 
 function pvGenerarLineas(){
@@ -14885,21 +14467,72 @@ function pvGenerarLineas(){
   var avance = fpNow.h * (1 - solapF);
 
   // Guardar datos de la misión para exportar (KML/KMZ/GeoJSON) y para el mapa del reporte PDF
+  var drone    = PV_DRONES[window._pvDroneKey] || {};
+  var velCrus  = pvVelocidadCrucero(drone);
+  var autonomia = parseFloat(document.getElementById('pv-autonomia').value)||30;
+  var tiempoMin = Math.ceil(totalDist / velCrus / 60);
+  var nBaterias = Math.max(1, Math.ceil(tiempoMin / (autonomia*0.8)));
+  var batPct    = Math.ceil(tiempoMin / autonomia * 100);
+
   pvMap._missionWaypoints = allWaypoints;
   pvMap._missionFranjas   = allFranjas; // [{pts:[LatLng,LatLng], pass:1|2}]
-  pvMap._missionStats = {lineas: totalLineas, fotos: totalFotos, dist: totalDist, altm: altm, sep: sep, avance: avance, fp: fpNow, gsd: window._pvGsdReal, patron: patron};
+  pvMap._missionStats = {lineas: totalLineas, fotos: totalFotos, dist: totalDist, altm: altm, sep: sep, avance: avance, fp: fpNow, gsd: window._pvGsdReal, patron: patron, tiempoMin: tiempoMin, nBaterias: nBaterias, velCrus: velCrus};
 
   var distKm = (totalDist/1000).toFixed(2);
-  var tiempoMin = Math.ceil(totalDist / 8 / 60); // 8 m/s velocidad media
-  var batPct = Math.ceil(tiempoMin / (parseFloat(document.getElementById('pv-autonomia').value)||30) * 100);
 
   pvShowLineasInfo('ok',
     '✅ <strong>'+totalLineas+' franjas</strong> '+(patron==='cruzada'?'(cuadrícula cruzada, 2 pasadas)':'')+' · <strong>'+totalFotos+' fotos</strong> · '+distKm+' km recorrido<br>'+
-    '⏱️ Tiempo estimado: ~'+tiempoMin+' min · 🔋 Batería: ~'+batPct+'%'+
-    (batPct > 80 ? ' <span style="color:#c41e3a">(⚠️ supera 80% — considera dividir la misión, o dividir por pasada)</span>':'')+'<br>'+
+    '⏱️ Tiempo estimado: ~'+tiempoMin+' min (a '+velCrus.toFixed(1)+' m/s) · 🔋 <strong>'+nBaterias+' batería(s)</strong> necesaria(s) ('+batPct+'% de autonomía total)'+
+    (batPct > 80 && nBaterias===1 ? ' <span style="color:#c41e3a">(⚠️ supera 80% — considera dividir la misión)</span>':'')+'<br>'+
     '📐 Footprint: '+fpNow.w.toFixed(1)+'m × '+fpNow.h.toFixed(1)+'m · GSD: '+(window._pvGsdReal?window._pvGsdReal.toFixed(2):'—')+' cm/px · '+
     'Sep. franjas: '+sep.toFixed(1)+'m · Avance: '+avance.toFixed(1)+'m'
   );
+  pvGCPCalc();
+}
+
+// GCPs de control recomendados: área tomada automáticamente del polígono dibujado y
+// disponibilidad de RTK/PPK detectada automáticamente del dron seleccionado — solo el
+// tipo de terreno y la precisión objetivo quedan como criterio profesional del usuario.
+function pvGCPCalc(){
+  var out = document.getElementById('pv-gcp-resultado');
+  if(!out) return;
+  var areaTxt = (document.getElementById('pv-area')||{}).textContent || '—';
+  var m = areaTxt.match(/^([\d.]+)\s*ha/);
+  var areaHa = m ? parseFloat(m[1]) : NaN;
+  if(!areaHa || isNaN(areaHa)){
+    window._pvGCP = null;
+    out.innerHTML = '<div class="dstat info" style="font-size:12px"><span class="dico">💡</span>Dibuja el área de vuelo en el mapa para calcular los GCPs recomendados.</div>';
+    return;
+  }
+  var drone = PV_DRONES[window._pvDroneKey] || {};
+  var rtk   = !!drone.rtk;
+  var prec  = parseFloat(document.getElementById('pv-gcp-prec').value)||5;
+  var terreno = document.getElementById('pv-gcp-terreno').value;
+
+  var nBase = 5;
+  if(prec<=2) nBase = 8;
+  if(prec>=10) nBase = 4;
+  if(terreno==='montanoso') nBase += 2;
+  if(areaHa>50) nBase += Math.ceil((areaHa-50)/50);
+  if(rtk) nBase = Math.max(3, nBase-3);
+  var nCheck = Math.max(3, Math.floor(nBase*0.4));
+  window._pvGCP = {nBase:nBase, nCheck:nCheck, areaHa:areaHa, rtk:rtk, prec:prec, terreno:terreno};
+
+  out.innerHTML =
+    '<div class="dg3" style="margin-bottom:8px">'+
+      '<div class="dstat ok" style="flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:10px;text-transform:uppercase;opacity:.75">GCPs de control</span><strong style="font-size:16px">'+nBase+'</strong></div>'+
+      '<div class="dstat ok" style="flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:10px;text-transform:uppercase;opacity:.75">Puntos de check</span><strong style="font-size:16px">'+nCheck+'</strong></div>'+
+      '<div class="dstat ok" style="flex-direction:column;align-items:flex-start;gap:2px"><span style="font-size:10px;text-transform:uppercase;opacity:.75">Total en terreno</span><strong style="font-size:16px">'+(nBase+nCheck)+'</strong></div>'+
+    '</div>'+
+    '<div class="dstat info" style="font-size:12px"><span class="dico">📐</span>Área detectada: <strong>'+areaHa.toFixed(2)+' ha</strong> · Posicionamiento del dron: <strong>'+(rtk?'RTK/PPK (GCPs reducidos)':'GNSS estándar')+'</strong> · Distribución: mínimo 1 GCP en cada esquina + 1 al centro, más en zonas de relieve complejo. Los puntos de check no se usan en el ajuste, solo para verificar la precisión.</div>';
+}
+
+// Precisión horizontal/vertical esperada del ortomosaico y MDT, a partir del GSD real
+// y de la precisión de los GCPs — fórmula estándar de propagación de error fotogramétrico.
+function pvPrecisionEsperada(gsd, precGcpCm){
+  var precH = Math.sqrt(precGcpCm*precGcpCm + (1.5*gsd)*(1.5*gsd));
+  var precV = Math.sqrt(precGcpCm*precGcpCm + (2.5*gsd)*(2.5*gsd));
+  return {h: precH, v: precV};
 }
 
 // Genera una pasada completa de franjas (una sola dirección/ángulo) sobre todas las
@@ -15485,6 +15118,7 @@ function pvMapClick(e){
       pvMapTool_reset();
       pvUpdateStats();
       pvCheckZone(center);
+      pvAutoRecalc();
     }
     return;
   }
@@ -15548,6 +15182,7 @@ function pvFinishPolygon(){
   pvMapTool_reset();
   pvUpdateStats();
   if(pts.length>0) pvCheckZone(pts[0]);
+  pvAutoRecalc();
 }
 
 function pvMapTool_reset(){
@@ -15674,7 +15309,7 @@ function pvEval(){
   document.getElementById('pv-resumen').innerHTML=html;
 }
 
-function pvUpdateAltLine(){ pvEval(); pvCalcGSD(); }
+function pvUpdateAltLine(){ pvEval(); pvCalcGSD(); pvAutoRecalc(); }
 
 // ─── EXPORTAR KML ───
 function pvBuildKMLCoords(shape){
@@ -15828,7 +15463,18 @@ function pvNiceScale(approx){
 // con norte y barra de escala — para incrustar en la última hoja del reporte PDF.
 // Es un dibujo geométrico propio (no una captura del mapa), así que se ve nítido al
 // imprimir y no depende de la disponibilidad de los tiles del mapa en ese momento.
-function pvBuildPlanSVG(){
+// Redondea a un paso "bonito" en grados (para las líneas de la cuadrícula geográfica)
+function pvNiceDeg(approxDeg){
+  var steps = [0.0005,0.001,0.002,0.005,0.01,0.02,0.05,0.1,0.2,0.5,1];
+  for(var i=0;i<steps.length;i++){ if(approxDeg <= steps[i]*4) return steps[i]; }
+  return 1;
+}
+function pvFmtDeg(v, isLat){
+  var suf = isLat ? (v>=0?'N':'S') : (v>=0?'E':'W');
+  return Math.abs(v).toFixed(4)+'°'+suf;
+}
+
+function pvBuildPlanSVG(nombreProyecto){
   if(pvShapes.length===0) return null;
 
   var franjas = pvMap._missionFranjas || [];
@@ -15845,6 +15491,11 @@ function pvBuildPlanSVG(){
   var mPerDegLng = 111320*Math.cos(lat0*Math.PI/180);
   function toXY(p){ return {x: p.lng*mPerDegLng, y: -p.lat*mPerDegLat}; } // Y invertido: norte arriba
 
+  var minLat = Math.min.apply(null, allPts.map(function(p){return p.lat;}));
+  var maxLat = Math.max.apply(null, allPts.map(function(p){return p.lat;}));
+  var minLng = Math.min.apply(null, allPts.map(function(p){return p.lng;}));
+  var maxLng = Math.max.apply(null, allPts.map(function(p){return p.lng;}));
+
   var xy = allPts.map(toXY);
   var minX = Math.min.apply(null, xy.map(function(p){return p.x;}));
   var maxX = Math.max.apply(null, xy.map(function(p){return p.x;}));
@@ -15852,24 +15503,49 @@ function pvBuildPlanSVG(){
   var maxY = Math.max.apply(null, xy.map(function(p){return p.y;}));
   var wM = Math.max(maxX-minX, 1), hM = Math.max(maxY-minY, 1);
 
-  var canvasW=760, canvasH=520, padPx=48, northW=50;
-  var drawW = canvasW - padPx*2 - northW, drawH = canvasH - padPx*2;
+  var canvasW=780, canvasH=600, padL=56, padR=64, padT=70, padB=54;
+  var drawW = canvasW - padL - padR, drawH = canvasH - padT - padB;
   var scale = Math.min(drawW/wM, drawH/hM);
-  var offX = padPx + (drawW - wM*scale)/2;
-  var offY = padPx + (drawH - hM*scale)/2;
+  var offX = padL + (drawW - wM*scale)/2;
+  var offY = padT + (drawH - hM*scale)/2;
 
   function px(p){
     var c = toXY(p);
     return {x: offX + (c.x-minX)*scale, y: offY + (c.y-minY)*scale};
   }
 
-  var svg = '<svg viewBox="0 0 '+canvasW+' '+canvasH+'" width="100%" height="'+canvasH+'" style="max-width:'+canvasW+'px;border:1px solid #c8ddc4;border-radius:6px;background:#f7faf5">';
+  var FR = '#1e3318', GRID = '#c8ddc4';
+  var svg = '<svg viewBox="0 0 '+canvasW+' '+canvasH+'" width="100%" height="'+canvasH+'" style="max-width:'+canvasW+'px;border-radius:8px" font-family="Arial,Helvetica,sans-serif">';
+  svg += '<rect x="0" y="0" width="'+canvasW+'" height="'+canvasH+'" fill="#ffffff" stroke="'+FR+'" stroke-width="2"/>';
+  // Barra de título
+  svg += '<rect x="0" y="0" width="'+canvasW+'" height="34" fill="'+FR+'"/>';
+  svg += '<text x="16" y="22" font-size="14" font-weight="700" fill="#ffffff">MAPA DE PLANIFICACIÓN DE VUELO'+(nombreProyecto?' — '+nombreProyecto:'')+'</text>';
+  // Marco del área de dibujo
+  svg += '<rect x="'+padL+'" y="'+padT+'" width="'+drawW+'" height="'+drawH+'" fill="#f4f8f2" stroke="'+GRID+'" stroke-width="1"/>';
+
+  // Cuadrícula geográfica (graticule) con etiquetas de lat/lon
+  var stepLat = pvNiceDeg((maxLat-minLat)/3 || 0.001);
+  var stepLng = pvNiceDeg((maxLng-minLng)/3 || 0.001);
+  var g0lat = Math.ceil(minLat/stepLat)*stepLat;
+  for(var glat=g0lat; glat<=maxLat+1e-9; glat+=stepLat){
+    var y = px({lat:glat, lng:minLng}).y;
+    if(y<padT-1 || y>padT+drawH+1) continue;
+    svg += '<line x1="'+padL+'" y1="'+y.toFixed(1)+'" x2="'+(padL+drawW)+'" y2="'+y.toFixed(1)+'" stroke="'+GRID+'" stroke-width="1" stroke-dasharray="3,3"/>';
+    svg += '<text x="'+(padL-6)+'" y="'+(y+3).toFixed(1)+'" font-size="9" text-anchor="end" fill="#546850">'+pvFmtDeg(glat,true)+'</text>';
+  }
+  var g0lng = Math.ceil(minLng/stepLng)*stepLng;
+  for(var glng=g0lng; glng<=maxLng+1e-9; glng+=stepLng){
+    var x = px({lat:minLat, lng:glng}).x;
+    if(x<padL-1 || x>padL+drawW+1) continue;
+    svg += '<line x1="'+x.toFixed(1)+'" y1="'+padT+'" x2="'+x.toFixed(1)+'" y2="'+(padT+drawH)+'" stroke="'+GRID+'" stroke-width="1" stroke-dasharray="3,3"/>';
+    svg += '<text x="'+x.toFixed(1)+'" y="'+(padT+drawH+16)+'" font-size="9" text-anchor="middle" fill="#546850">'+pvFmtDeg(glng,false)+'</text>';
+  }
 
   pvShapes.forEach(function(sh){
     var pts = pvGetPolyPts(sh);
     if(!pts) return;
     var d = pts.map(function(p){ var c=px(p); return c.x.toFixed(1)+','+c.y.toFixed(1); }).join(' ');
-    svg += '<polygon points="'+d+'" fill="rgba(120,196,84,.20)" stroke="#2e7d1a" stroke-width="2"/>';
+    svg += '<polygon points="'+d+'" fill="rgba(120,196,84,.25)" stroke="#2e7d1a" stroke-width="2.5"/>';
   });
 
   var colors = {1:'#2e7d1a', 2:'#1a6fc4'};
@@ -15885,18 +15561,38 @@ function pvBuildPlanSVG(){
     svg += '<rect x="'+(e.x-5).toFixed(1)+'" y="'+(e.y-5).toFixed(1)+'" width="10" height="10" fill="#c41e3a" stroke="#fff" stroke-width="1.5"/>';
   }
 
-  var nx = canvasW-30, ny=52;
-  svg += '<line x1="'+nx+'" y1="'+(ny+24)+'" x2="'+nx+'" y2="'+(ny-16)+'" stroke="#1a2a17" stroke-width="2"/>'+
-    '<polygon points="'+nx+','+(ny-24)+' '+(nx-7)+','+(ny-12)+' '+(nx+7)+','+(ny-12)+'" fill="#1a2a17"/>'+
-    '<text x="'+nx+'" y="'+(ny+38)+'" font-size="13" font-weight="700" text-anchor="middle" fill="#1a2a17">N</text>';
+  // Rosa de los vientos
+  var nx = padL+drawW-24, ny=padT+34;
+  svg += '<circle cx="'+nx+'" cy="'+ny+'" r="22" fill="#fff" stroke="'+FR+'" stroke-width="1.5"/>';
+  svg += '<line x1="'+nx+'" y1="'+(ny+16)+'" x2="'+nx+'" y2="'+(ny-16)+'" stroke="'+FR+'" stroke-width="2"/>'+
+    '<polygon points="'+nx+','+(ny-19)+' '+(nx-6)+','+(ny-9)+' '+(nx+6)+','+(ny-9)+'" fill="'+FR+'"/>'+
+    '<text x="'+nx+'" y="'+(ny-24)+'" font-size="12" font-weight="700" text-anchor="middle" fill="'+FR+'">N</text>';
 
+  // Barra de escala segmentada (blanco/negro estilo cartográfico)
   var niceMeters = pvNiceScale(wM/4);
   var scalePx = niceMeters*scale;
-  var sbX = padPx, sbY = canvasH-24;
-  svg += '<line x1="'+sbX+'" y1="'+sbY+'" x2="'+(sbX+scalePx)+'" y2="'+sbY+'" stroke="#1a2a17" stroke-width="2"/>'+
-    '<line x1="'+sbX+'" y1="'+(sbY-5)+'" x2="'+sbX+'" y2="'+(sbY+5)+'" stroke="#1a2a17" stroke-width="2"/>'+
-    '<line x1="'+(sbX+scalePx)+'" y1="'+(sbY-5)+'" x2="'+(sbX+scalePx)+'" y2="'+(sbY+5)+'" stroke="#1a2a17" stroke-width="2"/>'+
-    '<text x="'+(sbX+scalePx/2)+'" y="'+(sbY-8)+'" font-size="11" text-anchor="middle" fill="#1a2a17">'+niceMeters.toLocaleString('es-CO')+' m</text>';
+  var seg = scalePx/4;
+  var sbX = padL, sbY = padT+drawH+34;
+  for(var si=0; si<4; si++){
+    svg += '<rect x="'+(sbX+si*seg).toFixed(1)+'" y="'+(sbY-4)+'" width="'+seg.toFixed(1)+'" height="6" fill="'+(si%2===0?FR:'#fff')+'" stroke="'+FR+'" stroke-width="1"/>';
+  }
+  svg += '<text x="'+sbX+'" y="'+(sbY-8)+'" font-size="9" fill="'+FR+'">0</text>';
+  svg += '<text x="'+(sbX+scalePx)+'" y="'+(sbY-8)+'" font-size="9" text-anchor="end" fill="'+FR+'">'+niceMeters.toLocaleString('es-CO')+' m</text>';
+
+  // Leyenda embebida
+  var lgX = padL+8, lgY = padT+drawH-8;
+  var lgItems = franjas.length ? (
+      (pvMap._missionStats && pvMap._missionStats.patron==='cruzada') ?
+      [['#2e7d1a','Pasada 1'],['#1a6fc4','Pasada 2 (cruzada)'],['#2e7d1a','● Inicio'],['#c41e3a','■ Fin']] :
+      [['#2e7d1a','Franja de vuelo'],['#2e7d1a','● Inicio'],['#c41e3a','■ Fin']]
+    ) : [['#2e7d1a','Área de vuelo']];
+  svg += '<g font-size="9.5" fill="'+FR+'">';
+  lgItems.forEach(function(it, i){
+    var ly = lgY - (lgItems.length-1-i)*14;
+    svg += '<rect x="'+lgX+'" y="'+(ly-8)+'" width="10" height="10" rx="2" fill="'+it[0]+'"/>';
+    svg += '<text x="'+(lgX+15)+'" y="'+ly+'">'+it[1]+'</text>';
+  });
+  svg += '</g>';
 
   svg += '</svg>';
   return svg;
@@ -15929,6 +15625,9 @@ function pvExportPlan(){
   var solapF    = document.getElementById('pv-solap-f').value;
   var solapL    = document.getElementById('pv-solap-l').value;
   var ms        = pvMap && pvMap._missionStats;
+  var gcp       = window._pvGCP || null;
+  var escalaRow = window._pvGsdReal ? (PV_ESCALA_TABLA.find(function(r){return window._pvGsdReal<=r.max;}) || PV_ESCALA_TABLA[PV_ESCALA_TABLA.length-1]) : null;
+  var precEsp   = (window._pvGsdReal && gcp) ? pvPrecisionEsperada(window._pvGsdReal, gcp.prec) : null;
   var now       = new Date().toLocaleString('es-CO');
   var LOGO_URL  = 'https://www.dgeomaping.com/img/logo-dgeomap.png';
 
@@ -15966,9 +15665,6 @@ function pvExportPlan(){
   html+='.sign div{flex:1;border-top:1px solid #1a2a17;padding-top:6px;font-size:11px;text-align:center;color:#333}';
   html+='.ftr{color:#8a9e86;font-size:10px;margin-top:22px;border-top:1px solid #c8ddc4;padding-top:8px;display:flex;justify-content:space-between}';
   html+='.pagebreak{page-break-before:always}';
-  html+='.map-legend{display:flex;gap:18px;flex-wrap:wrap;margin:8px 0 4px;font-size:11px;color:#333}';
-  html+='.map-legend span{display:inline-flex;align-items:center;gap:6px}';
-  html+='.sw{display:inline-block;width:16px;height:3px;border-radius:2px}';
   html+='@media print{.no-print{display:none}}';
   html+='</style></head><body>';
 
@@ -15998,18 +15694,31 @@ function pvExportPlan(){
   html+='<tr><td><b>Huella de imagen (footprint)</b></td><td>'+footprint+'</td><td><b>Solapamiento front. / lateral</b></td><td>'+solapF+'% / '+solapL+'%</td></tr>';
   if(ms){
     html+='<tr><td><b>Franjas de vuelo</b></td><td>'+ms.lineas+'</td><td><b>Fotografías estimadas</b></td><td>'+ms.fotos+'</td></tr>';
-    html+='<tr><td><b>Distancia total de vuelo</b></td><td>'+(ms.dist/1000).toFixed(2)+' km</td><td><b>Tiempo estimado de misión</b></td><td>'+Math.ceil(ms.dist/8/60)+' min</td></tr>';
+    html+='<tr><td><b>Distancia total de vuelo</b></td><td>'+(ms.dist/1000).toFixed(2)+' km</td><td><b>Tiempo estimado de misión</b></td><td>~'+ms.tiempoMin+' min (a '+ms.velCrus.toFixed(1)+' m/s)</td></tr>';
+    html+='<tr><td><b>Baterías necesarias</b></td><td>'+ms.nBaterias+'</td><td><b>Escala cartográfica máxima</b></td><td>'+(escalaRow?escalaRow.escala:'—')+'</td></tr>';
   } else {
     html+='<tr><td colspan="4">Líneas de vuelo fotogramétricas no generadas para esta planificación.</td></tr>';
   }
   html+='</table>';
 
-  html+='<h2>4. Área de operación</h2><table>';
+  html+='<h2>4. Puntos de control (GCPs) recomendados y precisión esperada</h2><table>';
+  if(gcp){
+    html+='<tr><td style="width:25%"><b>GCPs de control</b></td><td style="width:25%">'+gcp.nBase+'</td><td style="width:25%"><b>Puntos de verificación (check)</b></td><td style="width:25%">'+gcp.nCheck+'</td></tr>';
+    html+='<tr><td><b>Total puntos en terreno</b></td><td>'+(gcp.nBase+gcp.nCheck)+'</td><td><b>Precisión GCP objetivo</b></td><td>≤ '+gcp.prec+' cm</td></tr>';
+    html+='<tr><td><b>Posicionamiento del dron</b></td><td>'+(gcp.rtk?'RTK/PPK (GCPs reducidos)':'GNSS estándar')+'</td><td><b>Tipo de terreno</b></td><td>'+({plano:'Plano',ondulado:'Ondulado',montanoso:'Montañoso'}[gcp.terreno]||gcp.terreno)+'</td></tr>';
+    if(precEsp) html+='<tr><td><b>Precisión horizontal esperada</b></td><td>±'+precEsp.h.toFixed(1)+' cm</td><td><b>Precisión vertical esperada</b></td><td>±'+precEsp.v.toFixed(1)+' cm</td></tr>';
+    html+='</table>';
+    html+='<div class="note" style="background:#eaf2e6;border-left-color:#2e7d1a;color:#1e5c1e">Distribución sugerida: mínimo 1 GCP en cada esquina del área y 1 en el centro, con puntos adicionales en zonas de relieve complejo. Los puntos de check no se usan en el ajuste — solo para verificar la precisión final del modelo.</div>';
+  } else {
+    html+='<tr><td colspan="4">Dibuja el área de vuelo para calcular los GCPs recomendados.</td></tr></table>';
+  }
+
+  html+='<h2>5. Área de operación</h2><table>';
   html+='<tr><td style="width:25%"><b>Área</b></td><td style="width:25%">'+area+'</td><td style="width:25%"><b>Perímetro</b></td><td style="width:25%">'+perim+'</td></tr>';
   html+='<tr><td><b>Centro geográfico</b></td><td colspan="3">'+centro+'</td></tr>';
   html+='</table>';
 
-  html+='<h2>5. Cumplimiento normativo — RAC 100 (Res. UAEAC 01983/2023, Enmienda 1, Abr. 2024)</h2>';
+  html+='<h2>6. Cumplimiento normativo — RAC 100 (Res. UAEAC 01983/2023, Enmienda 1, Abr. 2024)</h2>';
   html+='<table><tr><th>Requisito</th><th>Valor de la misión</th><th style="text-align:center">Estado</th></tr>';
   html+=fila('Altura máxima 122 m (400 pies) AGL', altura+' m AGL', okAltura);
   html+=fila('Uso de energía ≤ 80% de la autonomía (§100.210(k))', pctAuton+'% de autonomía', okEnergia);
@@ -16023,18 +15732,13 @@ function pvExportPlan(){
     html+='<div class="note"><b>Atención:</b> uno o más parámetros de esta misión superan los límites permitidos por el RAC 100. Ajustar la planificación antes de operar.</div>';
   }
 
-  html+='<h2>6. Observaciones</h2><table><tr><td>'+obs+'</td></tr></table>';
+  html+='<h2>7. Observaciones</h2><table><tr><td>'+obs+'</td></tr></table>';
 
-  var planSVG = pvBuildPlanSVG();
+  var planSVG = pvBuildPlanSVG(nombre);
   if(planSVG){
     html+='<div class="pagebreak">';
-    html+='<h2>7. Mapa de la planificación de vuelo</h2>';
+    html+='<h2>8. Mapa de la planificación de vuelo</h2>';
     html+='<div class="doc-sub" style="margin-bottom:8px">Área de operación y franjas de vuelo generadas'+(ms&&ms.patron==='cruzada'?' — patrón de cuadrícula cruzada (doble malla, recomendado para modelos 3D)':' — patrón de líneas simples')+'.</div>';
-    if(ms && ms.patron==='cruzada'){
-      html+='<div class="map-legend"><span><span class="sw" style="background:#2e7d1a"></span>Pasada 1 ('+(document.getElementById('pv-angulo').value||0)+'°)</span><span><span class="sw" style="background:#1a6fc4"></span>Pasada 2 (+90°, cruzada)</span><span><span class="sw" style="background:#2e7d1a;border-radius:50%;width:10px;height:10px"></span>Inicio</span><span><span class="sw" style="background:#c41e3a;width:10px;height:10px"></span>Fin</span></span>';
-    } else {
-      html+='<div class="map-legend"><span><span class="sw" style="background:#2e7d1a"></span>Franja de vuelo</span><span><span class="sw" style="background:#2e7d1a;border-radius:50%;width:10px;height:10px"></span>Inicio</span><span><span class="sw" style="background:#c41e3a;width:10px;height:10px"></span>Fin</span></span>';
-    }
     html+='<div style="display:flex;justify-content:center">'+planSVG+'</div>';
     html+='<div class="doc-sub" style="margin-top:6px">Diagrama esquemático georreferenciado (norte arriba, escala aproximada) — no reemplaza la ortoimagen ni la cartografía base del proyecto.</div>';
     html+='</div>';
@@ -18178,542 +17882,6 @@ window.addEventListener('popstate', function(e){
   }
 });
 
-// ════════════════════════════════════════════════════════
-// MÓDULO FOTOGRAMETRÍA CON DRONES — DGeoMap Ing. S.A.S.
-// ════════════════════════════════════════════════════════
-
-// Base de datos de cámaras
-var FOTO_CAMS = {
-  dji_mini4pro:  {sw:9.53,  sh:7.15,  rw:8064, rh:6048, f:12.29, bat:34, nom:'DJI Mini 4 Pro'},
-  dji_mavic3m:   {sw:9.53,  sh:7.15,  rw:5280, rh:3956, f:12.29, bat:43, nom:'DJI Mavic 3 Multispectral'},
-  dji_mavic3e:   {sw:17.3,  sh:13.0,  rw:8064, rh:6048, f:12.29, bat:45, nom:'DJI Mavic 3 Enterprise'},
-  dji_p4rtk:     {sw:13.2,  sh:8.8,   rw:5472, rh:3648, f:8.8,   bat:30, nom:'DJI Phantom 4 RTK'},
-  dji_m300_p1:   {sw:35.9,  sh:24.0,  rw:8192, rh:5460, f:24.0,  bat:55, nom:'DJI M300 + Zenmuse P1'},
-  dji_m300_l1:   {sw:13.2,  sh:8.8,   rw:5472, rh:3648, f:8.8,   bat:55, nom:'DJI M300 + Zenmuse L1'},
-  dji_m30t:      {sw:9.53,  sh:7.15,  rw:8064, rh:6048, f:5.1,   bat:41, nom:'DJI M30T'},
-  mica_rededge:  {sw:4.8,   sh:3.6,   rw:1280, rh:960,  f:5.5,   bat:0,  nom:'MicaSense RedEdge-MX'},
-  parrot_sequoia:{sw:6.17,  sh:4.55,  rw:1280, rh:960,  f:3.98,  bat:0,  nom:'Parrot Sequoia+'},
-  senseFly_eBee: {sw:23.5,  sh:15.6,  rw:7264, rh:4802, f:15.0,  bat:90, nom:'senseFly eBee X'},
-};
-
-function fotoGoTab(id, btn){
-  var root = document.getElementById('hw-foto');
-  if(!root) return;
-  root.querySelectorAll('.fpanel').forEach(function(p){ p.classList.remove('on'); });
-  root.querySelectorAll('.ftab').forEach(function(b){ b.classList.remove('on'); });
-  var p = document.getElementById('fp-'+id); if(p) p.classList.add('on');
-  if(btn) btn.classList.add('on');
-}
-
-function fotoLoadCam(){
-  var key = document.getElementById('fg-camara').value;
-  var cam = FOTO_CAMS[key];
-  if(!cam) return;
-  document.getElementById('fg-sw').value = cam.sw;
-  document.getElementById('fg-sh').value = cam.sh;
-  document.getElementById('fg-rw').value = cam.rw;
-  document.getElementById('fg-rh').value = cam.rh;
-  document.getElementById('fg-f').value  = cam.f;
-  if(cam.bat > 0) document.getElementById('fg-bat').value = cam.bat;
-  fotoCalc();
-}
-
-// ── Cálculo GSD y plan ────────────────────────────────────
-function fotoCalc(){
-  var sw   = parseFloat(document.getElementById('fg-sw').value)||9.53;
-  var sh   = parseFloat(document.getElementById('fg-sh').value)||7.15;
-  var rw   = parseFloat(document.getElementById('fg-rw').value)||8064;
-  var rh   = parseFloat(document.getElementById('fg-rh').value)||6048;
-  var f    = parseFloat(document.getElementById('fg-f').value)||12.29;
-  var alt  = parseFloat(document.getElementById('fg-alt').value)||100;
-  var sf   = parseFloat(document.getElementById('fg-sf').value)/100||0.80;
-  var sl   = parseFloat(document.getElementById('fg-sl').value)/100||0.70;
-  var area = parseFloat(document.getElementById('fg-area').value)||10;
-  var vel  = parseFloat(document.getElementById('fg-vel').value)||8;
-  var bat  = parseFloat(document.getElementById('fg-bat').value)||30;
-  var ang  = parseFloat(document.getElementById('fg-angulo').value)||0;
-
-  // GSD en cm/px
-  var gsdW = (sw * alt) / (f * rw) * 100;  // cm/px
-  var gsdH = (sh * alt) / (f * rh) * 100;
-  var gsd  = Math.max(gsdW, gsdH);
-
-  // Footprint de la imagen (m)
-  var fpW = (sw * alt) / f / 1000;  // metros
-  var fpH = (sh * alt) / f / 1000;
-
-  // Separación entre líneas y entre fotos
-  var sepL  = fpW * (1 - sl);   // separación lateral entre franjas (m)
-  var avance = fpH * (1 - sf);  // avance entre fotos (m)
-
-  // Número de franjas y fotos
-  var areaM2 = area * 10000;
-  var lado = Math.sqrt(areaM2);
-  var nFranjas = Math.ceil(lado / sepL) + 2;
-  var nFotos_franja = Math.ceil(lado / avance) + 2;
-  var nFotos = nFranjas * nFotos_franja;
-
-  // Distancia total de vuelo
-  var distTotal = nFranjas * lado + nFranjas * sepL;  // aprox
-  var tiempoMin = distTotal / vel / 60;
-  var bateriasPct = tiempoMin / (bat * 0.8) * 100;  // usar 80% autonomía
-  var baterias = Math.ceil(bateriasPct / 100);
-
-  // Almacenamiento estimado (JPG ~8MB, RAW ~25MB)
-  var tamJPG_GB = nFotos * 8 / 1024;
-  var tamRAW_GB = nFotos * 25 / 1024;
-
-  // Escala máxima
-  var escala = Math.round(gsd * 500);
-  escala = escala < 500 ? 500 : escala;
-
-  // Altura para GSD objetivo
-  var gsdObj = [1, 2, 3, 5, 10];
-
-  var out = document.getElementById('fg-resultado');
-
-  // Semáforo de calidad
-  var calidad = gsd < 2 ? 'ok' : gsd < 5 ? 'warn' : 'err';
-  var calidadTxt = gsd < 2 ? 'Excelente — apto para ingeniería y catastro' :
-                   gsd < 5 ? 'Bueno — topografía general y planificación' : 'Bajo — solo referencial';
-
-  var html = '<div class="fres"><div class="fres-t">📐 RESULTADOS — GSD Y PLAN DE VUELO</div>';
-  html += '<div class="fres-row"><span class="fres-lbl">GSD calculado</span><span class="fres-val hi">'+gsd.toFixed(2)+' cm/px</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Footprint imagen</span><span class="fres-val">'+fpW.toFixed(1)+' × '+fpH.toFixed(1)+' m</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Separación entre franjas</span><span class="fres-val">'+sepL.toFixed(1)+' m</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Avance entre fotos</span><span class="fres-val">'+avance.toFixed(1)+' m</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Número de franjas</span><span class="fres-val hi">'+nFranjas+'</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Fotos por franja</span><span class="fres-val">'+nFotos_franja+'</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Total de fotos estimadas</span><span class="fres-val hi">'+nFotos.toLocaleString('es-CO')+'</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Distancia de vuelo</span><span class="fres-val">'+(distTotal/1000).toFixed(2)+' km</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Tiempo de vuelo estimado</span><span class="fres-val">'+tiempoMin.toFixed(0)+' min</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Baterías necesarias</span><span class="fres-val hi">'+baterias+' batería'+(baterias>1?'s':'')+' ('+bateriasPct.toFixed(0)+'%)</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Almacenamiento JPG / RAW</span><span class="fres-val">'+tamJPG_GB.toFixed(1)+' GB / '+tamRAW_GB.toFixed(1)+' GB</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Escala cartográfica máx.</span><span class="fres-val">1:'+escala.toLocaleString('es-CO')+'</span></div>';
-  html += '</div>';
-  html += '<div class="fst '+ calidad +'" style="margin-top:8px"><span>'+(calidad==='ok'?'✅':calidad==='warn'?'⚠️':'❌')+'</span><span><strong>GSD '+gsd.toFixed(2)+' cm/px</strong> — '+calidadTxt+'</span></div>';
-
-  // Tabla de alturas para distintos GSD
-  html += '<div class="fc" style="margin-top:10px"><div class="fc-t" style="font-size:14px">Altura de vuelo para GSD objetivo — misma cámara</div><table><thead><tr><th>GSD objetivo</th><th>Altura AGL</th><th>Fotos est.</th><th>Escala máx.</th></tr></thead><tbody>';
-  [1, 2, 3, 5, 8, 10].forEach(function(g){
-    var altG = g / 100 * f * rw / sw;
-    var nFG = Math.ceil(Math.sqrt(areaM2)/(fpW*(altG/alt)*(1-sl))+2)*Math.ceil(Math.sqrt(areaM2)/(fpH*(altG/alt)*(1-sf))+2);
-    var escG = Math.max(500, Math.round(g*500));
-    html += '<tr'+(Math.abs(g-gsd)<0.5?' style="background:rgba(85,170,54,.08)"':'')+'>'+
-      '<td style="color:var(--fac2)">'+g+' cm/px</td>'+
-      '<td>'+altG.toFixed(0)+' m</td>'+
-      '<td>'+nFG.toLocaleString('es-CO')+'</td>'+
-      '<td>1:'+escG.toLocaleString('es-CO')+'</td></tr>';
-  });
-  html += '</tbody></table></div>';
-  out.innerHTML = html;
-
-  // Métricas superiores
-  document.getElementById('fm-gsd').textContent     = gsd.toFixed(1);
-  document.getElementById('fm-fotos').textContent   = nFotos.toLocaleString('es-CO');
-  document.getElementById('fm-franjas').textContent = nFranjas;
-  document.getElementById('fm-baterias').textContent= baterias;
-
-  // Propagar al plan de vuelo
-  document.getElementById('fv-ancho').value = Math.round(Math.sqrt(area*10000));
-  document.getElementById('fv-largo').value = Math.round(Math.sqrt(area*10000));
-  window._fotoParams = {gsd, fpW, fpH, sepL, avance, nFranjas, nFotos, alt, sf, sl, area, vel, bat, baterias};
-}
-
-// ── Plan de vuelo + canvas ────────────────────────────────
-function fotoVueloCalc(){
-  var ancho  = parseFloat(document.getElementById('fv-ancho').value)||400;
-  var largo  = parseFloat(document.getElementById('fv-largo').value)||500;
-  var angDeg = parseFloat(document.getElementById('fv-angulo').value)||0;
-  var homeD  = parseFloat(document.getElementById('fv-home').value)||50;
-  var params = window._fotoParams || {sepL:70, avance:60, alt:100, nFotos:120};
-
-  var sepL   = params.sepL || 70;
-  var avance = params.avance || 60;
-  var alt    = params.alt || 100;
-
-  // Calcular franjas en el polígono
-  var nFranjas = Math.ceil(ancho / sepL) + 1;
-  var nFotos_f = Math.ceil(largo / avance) + 2;
-  var nFotos   = nFranjas * nFotos_f;
-  var dist     = nFranjas * largo + nFranjas * sepL;
-  var tiempo   = dist / ((params.vel||8) * 60);
-
-  var html = '<div class="fres"><div class="fres-t">🗺️ PLAN DE VUELO GENERADO</div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Área planificada</span><span class="fres-val hi">'+(ancho*largo/10000).toFixed(2)+' ha</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Franjas de vuelo</span><span class="fres-val hi">'+nFranjas+'</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Fotos por franja</span><span class="fres-val">'+nFotos_f+'</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Total fotos</span><span class="fres-val hi">'+nFotos.toLocaleString('es-CO')+'</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Distancia total</span><span class="fres-val">'+(dist/1000).toFixed(2)+' km</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Tiempo estimado</span><span class="fres-val">'+tiempo.toFixed(0)+' min</span></div>';
-  html += '<div class="fres-row"><span class="fres-lbl">Altura AGL</span><span class="fres-val">'+alt.toFixed(0)+' m</span></div>';
-  html += '</div>';
-  document.getElementById('fv-resultado').innerHTML = html;
-
-  // Dibujar canvas
-  fotoDrawPlan(ancho, largo, sepL, avance, angDeg, homeD, nFranjas, nFotos_f);
-
-  // Guardar waypoints para exportar
-  window._fotoWaypoints = generarWaypoints(ancho, largo, sepL, avance, angDeg,
-    parseFloat(document.getElementById('fv-lat').value)||7.9274,
-    parseFloat(document.getElementById('fv-lon').value)||-72.5115, alt);
-}
-
-function fotoDrawPlan(ancho, largo, sepL, avance, angDeg, homeD, nFranjas, nFotosF){
-  var cvs = document.getElementById('fv-canvas');
-  if(!cvs) return;
-  var ctx = cvs.getContext('2d'), W=cvs.width, H=cvs.height;
-  ctx.clearRect(0,0,W,H); ctx.fillStyle='#060e08'; ctx.fillRect(0,0,W,H);
-
-  var PAD=40;
-  var scX=(W-2*PAD)/ancho, scY=(H-2*PAD)/largo;
-  var SC=Math.min(scX,scY);
-  var ox=W/2-ancho*SC/2, oy=H/2-largo*SC/2;
-
-  function px(x,y){ return [ox+x*SC, oy+y*SC]; }
-
-  // Área de vuelo
-  ctx.strokeStyle='rgba(85,170,54,.5)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
-  ctx.strokeRect(ox, oy, ancho*SC, largo*SC);
-  ctx.fillStyle='rgba(85,170,54,.05)'; ctx.fillRect(ox, oy, ancho*SC, largo*SC);
-  ctx.setLineDash([]);
-
-  // Franjas y fotos
-  var waypoints = [];
-  for(var i=0; i<nFranjas; i++){
-    var x = i * sepL;
-    if(x > ancho) break;
-    var dir = i%2===0 ? 1 : -1;
-    var y1 = dir===1 ? 0 : largo;
-    var y2 = dir===1 ? largo : 0;
-    var p1=px(x,y1), p2=px(x,y2);
-
-    ctx.strokeStyle='rgba(85,170,54,.7)'; ctx.lineWidth=1.5;
-    ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke();
-
-    // Fotos en la franja
-    var nf = Math.ceil(largo/avance)+1;
-    for(var j=0; j<=nf; j++){
-      var yf = dir===1 ? j/nf*largo : largo-j/nf*largo;
-      var pf = px(x, yf);
-      ctx.fillStyle='rgba(120,196,84,.6)';
-      ctx.beginPath(); ctx.arc(pf[0],pf[1],2,0,2*Math.PI); ctx.fill();
-      waypoints.push([x, yf]);
-    }
-
-    // Línea de tránsito entre franjas
-    if(i < nFranjas-1){
-      var xn = (i+1)*sepL;
-      var pEnd = px(x, y2), pStart = px(xn, y2);
-      ctx.strokeStyle='rgba(240,180,41,.5)'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
-      ctx.beginPath(); ctx.moveTo(pEnd[0],pEnd[1]); ctx.lineTo(pStart[0],pStart[1]); ctx.stroke();
-      ctx.setLineDash([]);
-    }
-  }
-
-  // Punto inicio
-  var pi0 = px(0, 0);
-  ctx.fillStyle='#c41e3a';
-  ctx.beginPath(); ctx.arc(pi0[0],pi0[1],7,0,2*Math.PI); ctx.fill();
-  ctx.fillStyle='#fff'; ctx.font='bold 9px IBM Plex Mono'; ctx.fillText('★',pi0[0]-4,pi0[1]+3);
-
-  // Punto home
-  var ph = px(0, -homeD*SC/largo);
-  ctx.fillStyle='rgba(255,255,255,.3)';
-  ctx.beginPath(); ctx.arc(px(ancho/2,-homeD*SC*0+5)[0], oy-12, 6, 0, 2*Math.PI); ctx.fill();
-
-  // Labels
-  ctx.fillStyle='rgba(255,255,255,.4)'; ctx.font='9px IBM Plex Mono';
-  ctx.fillText(ancho+'m', ox+2, oy+largo*SC+14);
-  ctx.fillText(largo+'m', ox-30, oy+largo*SC/2);
-  ctx.fillStyle='var(--fac4)||#78c454'; ctx.fillStyle='#78c454';
-  ctx.font='10px IBM Plex Mono'; ctx.fillText(nFranjas+' franjas', ox+4, oy+16);
-}
-
-function generarWaypoints(ancho, largo, sepL, avance, angDeg, latC, lonC, alt){
-  var R = 6378137;
-  var wps = [];
-  var nFranjas = Math.ceil(ancho/sepL)+1;
-  for(var i=0; i<nFranjas; i++){
-    var x = i*sepL - ancho/2;
-    var nf = Math.ceil(largo/avance)+1;
-    var dir = i%2===0 ? 1 : -1;
-    for(var j=0; j<=nf; j++){
-      var y = (dir===1 ? j/nf : 1-j/nf)*largo - largo/2;
-      var dlat = y/R*(180/Math.PI);
-      var dlng = x/(R*Math.cos(latC*Math.PI/180))*(180/Math.PI);
-      wps.push({lat:latC+dlat, lon:lonC+dlng, alt:alt, idx:wps.length+1});
-    }
-  }
-  return wps;
-}
-
-function fotoExportKML(){
-  var wps = window._fotoWaypoints;
-  if(!wps||!wps.length){ alert('Genera el plan de vuelo primero'); return; }
-  var proyecto = document.getElementById('fi-proyecto').value || 'Plan_Vuelo_DGeoMap';
-  var alt = (window._fotoParams||{}).alt||100;
-  var kml='<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2">\n<Document>\n';
-  kml+='<name>'+proyecto+'</name>\n';
-  kml+='<Style id="wp"><IconStyle><color>ff1a7d2e</color><scale>0.8</scale></IconStyle></Style>\n';
-  kml+='<Style id="ruta"><LineStyle><color>ff55aa36</color><width>2</width></LineStyle></Style>\n';
-  kml+='<Folder><name>Waypoints</name>\n';
-  wps.forEach(function(wp){
-    kml+='<Placemark><name>WP '+wp.idx+'</name><styleUrl>#wp</styleUrl>';
-    kml+='<Point><altitudeMode>relativeToGround</altitudeMode>';
-    kml+='<coordinates>'+wp.lon.toFixed(8)+','+wp.lat.toFixed(8)+','+wp.alt+'</coordinates></Point></Placemark>\n';
-  });
-  kml+='</Folder>\n<Folder><name>Trayectoria</name>\n';
-  kml+='<Placemark><styleUrl>#ruta</styleUrl>';
-  kml+='<LineString><altitudeMode>relativeToGround</altitudeMode><coordinates>';
-  wps.forEach(function(wp){ kml+=wp.lon.toFixed(8)+','+wp.lat.toFixed(8)+','+wp.alt+' '; });
-  kml+='</coordinates></LineString></Placemark></Folder></Document></kml>';
-  var blob=new Blob([kml],{type:'text/xml'});
-  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='DGeoMap_Plan_Vuelo.kml'; a.click();
-}
-
-function fotoExportCSV(){
-  var wps = window._fotoWaypoints;
-  if(!wps||!wps.length){ alert('Genera el plan de vuelo primero'); return; }
-  var csv='WP,Latitud,Longitud,Altitud_AGL_m\n';
-  wps.forEach(function(wp){ csv+=wp.idx+','+wp.lat.toFixed(8)+','+wp.lon.toFixed(8)+','+wp.alt+'\n'; });
-  var blob=new Blob([csv],{type:'text/csv'});
-  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='DGeoMap_Waypoints.csv'; a.click();
-}
-
-// ── GCPs ─────────────────────────────────────────────────
-var _gcpList = [];
-var _gcpId = 1;
-
-function fotoGCPCalc(){
-  var area    = parseFloat(document.getElementById('fg2-area').value)||10;
-  var prec    = parseFloat(document.getElementById('fg2-prec').value)||5;
-  var terreno = document.getElementById('fg2-terreno').value;
-  var rtk     = document.getElementById('fg2-rtk').value;
-  var forma   = document.getElementById('fg2-forma').value;
-  var out     = document.getElementById('fg2-resultado');
-
-  // Número mínimo de GCPs recomendados
-  var nBase = 5;
-  if(prec <= 2)  nBase = 8;
-  if(prec >= 10) nBase = 4;
-  if(terreno==='montanoso') nBase += 2;
-  if(forma==='rectangular') nBase += 2;
-  if(forma==='lineal') nBase = Math.max(5, Math.ceil(area)*2);
-  if(rtk!=='no') nBase = Math.max(3, nBase-3);  // RTK reduce los GCPs necesarios
-
-  var nCheck = Math.max(3, Math.floor(nBase*0.4));
-  var nTotal = nBase + nCheck;
-
-  // Equipo recomendado
-  var equipo = prec<=2 ? 'Receptor GNSS geodésico doble frecuencia + procesamiento diferencial con CORS IGAC (Res. 643/2018 Orden C)' :
-               prec<=5 ? 'Receptor GNSS doble frecuencia + NRCAN-PPP o CORS IGAC (Orden D)' :
-                         'Receptor GNSS simple frecuencia + NRCAN-PPP (Orden E)';
-
-  var html='<div class="fres"><div class="fres-t">📍 GCPs RECOMENDADOS</div>';
-  html+='<div class="fres-row"><span class="fres-lbl">GCPs de control</span><span class="fres-val hi">'+nBase+' puntos</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Puntos de verificación (check)</span><span class="fres-val hi">'+nCheck+' puntos</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Total puntos terreno</span><span class="fres-val">'+nTotal+' puntos</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Precisión requerida GCPs</span><span class="fres-val">≤ '+prec+' cm (1σ)</span></div>';
-  if(rtk==='rtk') html+='<div class="fres-row"><span class="fres-lbl">Con RTK</span><span class="fres-val" style="color:var(--fac2)">GCPs reducidos — verificar cobertura RTK</span></div>';
-  if(rtk==='ppk') html+='<div class="fres-row"><span class="fres-lbl">Con PPK</span><span class="fres-val" style="color:var(--fac2)">GCPs reducidos — procesar con CORS IGAC</span></div>';
-  html+='</div>';
-  html+='<div class="fst ok" style="margin-top:8px"><span>📡</span><span><strong>Equipo recomendado:</strong> '+equipo+'</span></div>';
-  html+='<div class="fst info" style="margin-top:4px"><span>📐</span><span><strong>Distribución:</strong> Mínimo 1 GCP en cada esquina + 1 en el centro + adicionales en zonas de relieve complejo. Los puntos de check NO se usan en el ajuste — solo para verificar la precisión.</span></div>';
-  out.innerHTML = html;
-}
-
-function fotoAddGCP(){
-  var tbody = document.getElementById('fg2-tbody');
-  var id = _gcpId++;
-  var tipo = id <= 2 ? 'Check' : 'GCP';
-  var row = '<tr id="gcp-row-'+id+'">' +
-    '<td>'+id+'</td>' +
-    '<td><input style="width:70px;background:var(--fbg2);border:1px solid var(--fbrd);border-radius:4px;padding:3px 6px;color:var(--ftx);font-size:12px" value="GCP-'+String(id).padStart(2,'0')+'"></td>' +
-    '<td><input type="number" step="0.001" style="width:110px;background:var(--fbg2);border:1px solid var(--fbrd);border-radius:4px;padding:3px 6px;color:var(--ftx);font-family:monospace;font-size:12px" placeholder="2000000.000"></td>' +
-    '<td><input type="number" step="0.001" style="width:110px;background:var(--fbg2);border:1px solid var(--fbrd);border-radius:4px;padding:3px 6px;color:var(--ftx);font-family:monospace;font-size:12px" placeholder="5000000.000"></td>' +
-    '<td><input type="number" step="0.001" style="width:80px;background:var(--fbg2);border:1px solid var(--fbrd);border-radius:4px;padding:3px 6px;color:var(--ftx);font-family:monospace;font-size:12px" placeholder="0.000"></td>' +
-    '<td><select style="background:var(--fbg2);border:1px solid var(--fbrd);border-radius:4px;padding:3px;color:var(--ftx);font-size:12px"><option>GCP</option><option>Check</option></select></td>' +
-    '</tr>';
-  tbody.innerHTML += row;
-}
-
-function fotoExportGCPs(){
-  var rows = document.querySelectorAll('#fg2-tbody tr');
-  var csv = 'ID,NOMBRE,NORTE_CTM12_m,ESTE_CTM12_m,H_ORT_m,TIPO\n';
-  rows.forEach(function(row, i){
-    var inputs = row.querySelectorAll('input,select');
-    if(inputs.length >= 5){
-      csv += (i+1)+','+inputs[0].value+','+inputs[1].value+','+inputs[2].value+','+inputs[3].value+','+inputs[4].value+'\n';
-    }
-  });
-  var blob=new Blob([csv],{type:'text/csv'});
-  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='DGeoMap_GCPs_CTM12.csv'; a.click();
-}
-
-// ── Precisión ─────────────────────────────────────────────
-function fotoPrecCalc(){
-  var gsd   = parseFloat(document.getElementById('fp-gsd-real').value)||3;
-  var alt   = parseFloat(document.getElementById('fp-alt-real').value)||100;
-  var precGCP = parseFloat(document.getElementById('fp-prec-gcp').value)||3;
-  var rms   = parseFloat(document.getElementById('fp-rms').value)||0.5;
-  var ngcp  = parseInt(document.getElementById('fp-ngcp').value)||6;
-  var nchk  = parseInt(document.getElementById('fp-nchk').value)||3;
-  var out   = document.getElementById('fp-resultado');
-
-  // Precisión en imagen (cm)
-  var precPx_cm = rms * gsd;
-  // Precisión horizontal del ortomosaico
-  var precH_cm  = Math.sqrt(precGCP*precGCP + (1.5*gsd)*(1.5*gsd));
-  // Precisión vertical del MDT
-  var precV_cm  = Math.sqrt(precGCP*precGCP + (2.5*gsd)*(2.5*gsd));
-  // Factor de redundancia GCPs
-  var redundancia = ngcp >= 8 ? 'Alta' : ngcp >= 5 ? 'Buena' : 'Mínima';
-  // Escala equivalente
-  var escH = Math.round(precH_cm * 500);
-  escH = Math.max(500, escH);
-
-  var html='<div class="fres"><div class="fres-t">🎯 PRECISIÓN ESPERADA</div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Precisión en imagen (RMS)</span><span class="fres-val">'+precPx_cm.toFixed(2)+' cm ('+rms+' px)</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Precisión horizontal ortomosaico</span><span class="fres-val hi">±'+precH_cm.toFixed(1)+' cm</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Precisión vertical MDT</span><span class="fres-val hi">±'+precV_cm.toFixed(1)+' cm</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Escala cartográfica equivalente</span><span class="fres-val">1:'+escH.toLocaleString('es-CO')+'</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Redundancia de GCPs ('+ngcp+')</span><span class="fres-val">'+(ngcp>=8?'✅':'⚠️')+' '+redundancia+'</span></div>';
-  html+='<div class="fres-row"><span class="fres-lbl">Puntos de verificación ('+nchk+')</span><span class="fres-val">'+(nchk>=3?'✅ Suficiente':'⚠️ Aumentar a 3 mín.')+'</span></div>';
-  html+='</div>';
-
-  var cumpleOrdenC = precH_cm <= 5 && precV_cm <= 8;
-  var cumpleOrdenD = precH_cm <= 10 && precV_cm <= 15;
-  html+='<div class="fst '+(cumpleOrdenC?'ok':cumpleOrdenD?'warn':'err')+'" style="margin-top:8px"><span>'+(cumpleOrdenC?'✅':cumpleOrdenD?'⚠️':'❌')+'</span>';
-  html+='<span>Resolución IGAC 643/2018: '+
-    (cumpleOrdenC?'<strong>Cumple Orden D (densificación)</strong> — apto para levantamientos topográficos generales':
-     cumpleOrdenD?'Cumple Orden E (apoyo fotogramétrico) — GSD muy alto para trabajo catastral':'No cumple precisión mínima para levantamientos oficiales')+
-    '</span></div>';
-  out.innerHTML=html;
-}
-
-// ── Informe de misión ─────────────────────────────────────
-function fotoGenerarInforme(){
-  var proyecto  = document.getElementById('fi-proyecto').value || 'Misión fotogramétrica';
-  var piloto    = document.getElementById('fi-piloto').value   || '—';
-  var cert      = document.getElementById('fi-cert').value     || '—';
-  var fecha     = document.getElementById('fi-fecha').value    || new Date().toISOString().split('T')[0];
-  var hora      = document.getElementById('fi-hora').value     || '—';
-  var municipio = document.getElementById('fi-municipio').value|| '—';
-  var cat       = document.getElementById('fi-cat').value;
-  var dron      = document.getElementById('fi-dron').value     || '—';
-  var nvuelos   = document.getElementById('fi-nvuelos').value  || '1';
-  var meteo     = document.getElementById('fi-meteo').options[document.getElementById('fi-meteo').selectedIndex].text;
-  var viento    = document.getElementById('fi-viento').value   || '—';
-  var obs       = document.getElementById('fi-obs').value      || '—';
-  var params    = window._fotoParams || {};
-  var now       = new Date().toLocaleString('es-CO');
-  var sep       = '═'.repeat(68);
-  var sep2      = '─'.repeat(68);
-
-  var txt = sep+'\n';
-  txt += '  INFORME TÉCNICO DE MISIÓN FOTOGRAMÉTRICA CON DRONES\n';
-  txt += '  DGeoMap Ingeniería S.A.S. · dgeomaping.com\n';
-  txt += '  Resolución UAEAC RAC 100 · Enmienda 1 — Abril 2024\n';
-  txt += sep+'\n\n';
-  txt += sep2+'\n  1. IDENTIFICACIÓN DE LA MISIÓN\n'+sep2+'\n';
-  txt += 'Proyecto             : '+proyecto+'\n';
-  txt += 'Municipio/Depto.     : '+municipio+'\n';
-  txt += 'Fecha del vuelo      : '+fecha+'\n';
-  txt += 'Horario de operación : '+hora+'\n';
-  txt += 'No. vuelos realizados: '+nvuelos+'\n';
-  txt += 'Categoría RAC 100    : '+cat.toUpperCase()+'\n\n';
-  txt += sep2+'\n  2. PERSONAL Y EQUIPO\n'+sep2+'\n';
-  txt += 'Piloto UAS           : '+piloto+'\n';
-  txt += 'Certificado UAEAC    : '+cert+'\n';
-  txt += 'Dron / Modelo        : '+dron+'\n';
-  txt += 'Empresa              : DGeoMap Ingeniería S.A.S.\n\n';
-  txt += sep2+'\n  3. PARÁMETROS DE VUELO\n'+sep2+'\n';
-  if(params.alt){
-    txt += 'Altura de vuelo AGL  : '+params.alt.toFixed(0)+' m\n';
-    txt += 'GSD calculado        : '+(params.gsd||0).toFixed(2)+' cm/px\n';
-    txt += 'Solapamiento frontal : '+((1-(params.avance||0)/(params.fpH||1))*100).toFixed(0)+'%\n';
-    txt += 'Solapamiento lateral : '+((1-(params.sepL||0)/(params.fpW||1))*100).toFixed(0)+'%\n';
-    txt += 'No. franjas          : '+(params.nFranjas||'—')+'\n';
-    txt += 'Total fotos          : '+(params.nFotos||'—')+'\n';
-    txt += 'Baterías utilizadas  : '+(params.baterias||'—')+'\n';
-  } else {
-    txt += 'Completar desde el módulo GSD y Parámetros.\n';
-  }
-  txt += '\n'+sep2+'\n  4. CONDICIONES METEOROLÓGICAS\n'+sep2+'\n';
-  txt += 'Condición del cielo  : '+meteo+'\n';
-  txt += 'Viento promedio      : '+viento+' m/s\n\n';
-  txt += sep2+'\n  5. GEORREFERENCIACIÓN (GCPs)\n'+sep2+'\n';
-  var gcpRows = document.querySelectorAll('#fg2-tbody tr');
-  if(gcpRows.length > 0){
-    txt += 'Puntos de control medidos en campo:\n';
-    txt += String('ID').padEnd(8)+String('NOMBRE').padEnd(12)+String('NORTE CTM12').padEnd(18)+String('ESTE CTM12').padEnd(18)+String('H_ORT').padEnd(12)+'TIPO\n';
-    txt += '─'.repeat(70)+'\n';
-    gcpRows.forEach(function(row, i){
-      var inputs = row.querySelectorAll('input,select');
-      if(inputs.length>=5){
-        txt += String(i+1).padEnd(8)+String(inputs[0].value).padEnd(12)+String(inputs[1].value).padEnd(18)+String(inputs[2].value).padEnd(18)+String(inputs[3].value).padEnd(12)+inputs[4].value+'\n';
-      }
-    });
-  } else {
-    txt += 'GCPs: Ingresar desde la pestaña GCPs Control.\n';
-  }
-  txt += '\nSistema de referencia: MAGNA-SIRGAS CTM12 (EPSG:9377)\n';
-  txt += 'FE=5.000.000 m · FN=2.000.000 m · MC=73°W · k₀=0.9992 · GRS80\n';
-  txt += 'Modelo geoidal: GEOCOL17 (IGAC 2017)\n\n';
-  txt += sep2+'\n  6. OBSERVACIONES DE CAMPO\n'+sep2+'\n';
-  txt += obs+'\n\n';
-  txt += sep2+'\n  7. CUMPLIMIENTO RAC 100\n'+sep2+'\n';
-  txt += 'La presente misión fue ejecutada en cumplimiento de la Resolución UAEAC\n';
-  txt += 'No. 01983 del 27 de septiembre de 2023 (RAC 100, Enmienda 1 — Abril 2024).\n';
-  txt += 'Categoría de operación: '+cat.toUpperCase()+'\n';
-  txt += 'Piloto UAS certificado: Sí (' + cert + ')\n\n';
-  txt += sep+'\n';
-  txt += '  DGeoMap Ingeniería S.A.S. · dgeomaping.com\n';
-  txt += '  Generado: '+now+'\n';
-  txt += sep+'\n';
-
-  window._fotoInforme = txt;
-  var out = document.getElementById('fi-output');
-  var html='<div class="fres" style="margin-top:10px;max-height:500px;overflow-y:auto"><div class="fres-t">INFORME TÉCNICO — '+proyecto+'</div>';
-  html+='</div>';
-  html+='<div style="background:#060e08;border:1px solid var(--fac3);border-radius:10px;padding:14px;font-family:\'IBM Plex Mono\',monospace;font-size:11.5px;color:#d0e8d8;max-height:450px;overflow-y:auto;white-space:pre;line-height:1.7">'+txt.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
-  html+='<div class="fbtn-g" style="margin-top:8px">';
-  html+='<button class="fbtn p" onclick="navigator.clipboard.writeText(window._fotoInforme).then(function(){alert(\'Copiado!\')})">📋 Copiar</button>';
-  html+='<button class="fbtn p" onclick="fotoDescargaInforme()">💾 Descargar TXT</button>';
-  html+='<button class="fbtn" onclick="fotoImprimirInforme()">🖨️ Imprimir / PDF</button></div>';
-  out.innerHTML = html;
-  out.scrollIntoView({behavior:'smooth'});
-}
-
-function fotoDescargaInforme(){
-  var txt=window._fotoInforme||'';
-  var nombre=(document.getElementById('fi-proyecto').value||'Informe_Vuelo').replace(/[^a-zA-Z0-9]/g,'_').substring(0,50);
-  var blob=new Blob([txt],{type:'text/plain;charset=utf-8'});
-  var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download='DGeoMap_Informe_Vuelo_'+nombre+'_'+new Date().toISOString().split('T')[0]+'.txt'; a.click();
-}
-function fotoImprimirInforme(){
-  var w=window.open('','_blank');
-  w.document.write('<html><head><title>Informe Vuelo</title><style>body{font-family:Courier New,monospace;font-size:12px;margin:20px;line-height:1.6}@page{size:A4;margin:2cm}@media print{body{margin:0}}</style></head><body>');
-  w.document.write('<pre>'+(window._fotoInforme||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</pre>');
-  w.document.write('</body></html>'); w.document.close(); w.print();
-}
-
-// Init
-document.addEventListener('DOMContentLoaded', function(){
-  fotoCalc();
-  fotoGCPCalc();
-  fotoPrecCalc();
-  var d=new Date(); var fecha=document.getElementById('fi-fecha');
-  if(fecha) fecha.value=d.getFullYear()+'-'+(d.getMonth()+1<10?'0':'')+(d.getMonth()+1)+'-'+(d.getDate()<10?'0':'')+d.getDate();
-});
-// ════════════════════════════════════════════════════════
-// FIN MÓDULO FOTOGRAMETRÍA
-// ════════════════════════════════════════════════════════
 
 
 // ── CARRUSEL FOTOS NOSOTROS ──
