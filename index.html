@@ -2048,7 +2048,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           <div style="font-size:13px;color:var(--tx2);line-height:1.7">
             <strong>¿Para qué sirve?</strong> Los receptores GNSS miden la altura <b>elipsoidal (h)</b>, referida a la superficie matemática del elipsoide (GRS80/WGS84). La ingeniería, la topografía y el diseño hidráulico usan la altura <b>ortométrica (H)</b>, referida al geoide — la misma referencia de los BM del IGAC y de los planos de un proyecto. La <b>ondulación geoidal (N)</b> es la separación entre esas dos superficies en cada punto (H = h − N) y varía de un lugar a otro de Colombia, por lo que debe calcularse puntualmente, no asumirse constante.
           </div>
-          <div style="font-size:11.5px;color:#1e5c1e;margin-top:8px;background:#eaf5ea;border-left:3px solid #2e7d1a;padding:8px 10px;border-radius:4px">✅ El modelo <strong>GEOCOL2004</strong> usa la cuadrícula oficial del IGAC (interpolación bilineal sobre sus 4 vértices) — el mismo método y los mismos resultados que el aplicativo Magna Sirgas Pro, que solo maneja este modelo. Esta herramienta además calcula en paralelo el modelo <strong>QGeoidCOL2023</strong>, una aproximación propia ajustada con puntos de control, para comparación — no es la cuadrícula oficial.</div>
+          <div style="font-size:11.5px;color:#1e5c1e;margin-top:8px;background:#eaf5ea;border-left:3px solid #2e7d1a;padding:8px 10px;border-radius:4px">✅ Ambos modelos usan su cuadrícula oficial real del IGAC (interpolación bilineal sobre sus 4 vértices): <strong>GEOCOL2004</strong> es el modelo histórico — el mismo que usa el aplicativo Magna Sirgas Pro, que aún no se ha actualizado — y <strong>QGeoidCOL2023</strong> es su reemplazo oficial vigente en Colombia desde 2023, con información gravimétrica más reciente. Se calculan ambos para comparación.</div>
         </div>
 
         <!-- Controles -->
@@ -3361,7 +3361,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       </div>
     </div>
 
-    <div class="mst ok" id="cp-geo-disclaimer" style="margin-bottom:14px"><span>✅</span><span>El modelo <strong>GEOCOL2004</strong> usa la cuadrícula oficial del IGAC (la misma que el aplicativo Magna Sirgas Pro) mediante interpolación bilineal.</span></div>
+    <div class="mst ok" id="cp-geo-disclaimer" style="margin-bottom:14px"><span>✅</span><span>El modelo <strong>QGeoidCOL2023</strong> usa la cuadrícula oficial del IGAC (interpolación bilineal), vigente en Colombia desde 2023 en reemplazo de GEOCOL2004.</span></div>
 
     <div class="m2" style="align-items:start;gap:18px">
       <!-- ORIGEN -->
@@ -11933,6 +11933,39 @@ function geocolInterpola(lat, lon){
   return v0*(1-tr)+v1*tr;
 }
 
+var QGEOID_GRID = null;
+var _qgeoidLoading = null;
+function loadQgeoidGrid(){
+  if(QGEOID_GRID) return Promise.resolve(QGEOID_GRID);
+  if(_qgeoidLoading) return _qgeoidLoading;
+  _qgeoidLoading = Promise.all([
+    fetch('data/qgeoidcol2023.meta.json').then(function(r){ return r.json(); }),
+    fetch('data/qgeoidcol2023.bin').then(function(r){ return r.arrayBuffer(); })
+  ]).then(function(res){
+    QGEOID_GRID = {meta: res[0], view: new Int16Array(res[1])};
+    return QGEOID_GRID;
+  }).catch(function(err){ console.warn('No se pudo cargar la cuadrícula QGeoidCOL2023, se usará el modelo aproximado:', err); return null; });
+  return _qgeoidLoading;
+}
+
+// Interpolación bilineal sobre la cuadrícula QGeoidCOL2023 real (IGAC, 2023),
+// descargada de https://redgeodesica.igac.gov.co/documentos/QGeoidCOL2023.txt
+// (212 x 152 puntos, malla 5' x 5'). Reemplaza la fórmula aproximada anterior.
+function qgeoidInterpola(lat, lon){
+  if(!QGEOID_GRID) return null;
+  var m = QGEOID_GRID.meta, v = QGEOID_GRID.view;
+  if(lat < m.minLat || lat > m.maxLat || lon < m.minLon || lon > m.maxLon) return null;
+  var rf = (m.maxLat - lat) / m.dLat;
+  var cf = (lon - m.minLon) / m.dLon;
+  var r0 = Math.min(Math.floor(rf), m.nRows-2);
+  var c0 = Math.min(Math.floor(cf), m.nCols-2);
+  var tr = rf-r0, tc = cf-c0;
+  function val(r,c){ return v[r*m.nCols+c] / m.scale; }
+  var v00=val(r0,c0), v01=val(r0,c0+1), v10=val(r0+1,c0), v11=val(r0+1,c0+1);
+  var v0 = v00*(1-tc)+v01*tc, v1 = v10*(1-tc)+v11*tc;
+  return v0*(1-tr)+v1*tr;
+}
+
 // Interpolación IDW (distancia inversa, potencia 1) sobre los 4 puntos más
 // cercanos de la cuadrícula VEMOS2017 real. Se verificó contra el aplicativo
 // oficial Magna Sirgas Pro (decompilando su VelocitiesCalulate/StatisticsCalculate):
@@ -11961,7 +11994,7 @@ function vemosInterpola(lat, lon){
 
 // Precarga en segundo plano al abrir la página (no bloquea nada; los cálculos
 // esperan explícitamente a que termine solo cuando el usuario pulsa Calcular).
-document.addEventListener('DOMContentLoaded', function(){ loadGeocolGrid(); loadVemosGrid(); });
+document.addEventListener('DOMContentLoaded', function(){ loadGeocolGrid(); loadVemosGrid(); loadQgeoidGrid(); });
 
 // ── Ondulación geoidal GEOCOL2004 ──
 // Usa la cuadrícula oficial del IGAC (interpolación bilineal) cuando ya cargó;
@@ -12246,9 +12279,14 @@ function cpUtmParams(zona){
   return {lon0: zona*6-183, lat0:0, k0:0.9996, FE:500000, FN:0};
 }
 
-// ── Modelos de ondulación geoidal (aproximados) ──
+// ── Modelos de ondulación geoidal ──
+// Ambos usan la cuadrícula oficial real del IGAC (interpolación bilineal),
+// con una fórmula polinomial aproximada como respaldo solo mientras carga
+// la cuadrícula o para puntos fuera de su cobertura.
 function cpGeoidGEOCOL2004(lat, lon){ return calcGeoidalN(lat, lon); }
 function cpGeoidQGeoidCOL2023(lat, lon){
+  var real = qgeoidInterpola(lat, lon);
+  if(real !== null) return real;
   var N = calcGeoidalN(lat, lon);
   N += 0.28 - 0.05*Math.cos((lon+74)*Math.PI/10) + 0.04*Math.sin(lat*Math.PI/9);
   return N;
@@ -12288,10 +12326,10 @@ function cpSetModelo(m){
   if(disc){
     if(m==='geocol2004'){
       disc.className = 'mst ok';
-      disc.innerHTML = '<span>✅</span><span>El modelo <strong>GEOCOL2004</strong> usa la cuadrícula oficial del IGAC (la misma que el aplicativo Magna Sirgas Pro) mediante interpolación bilineal.</span>';
+      disc.innerHTML = '<span>✅</span><span>El modelo <strong>GEOCOL2004</strong> usa la cuadrícula oficial del IGAC (interpolación bilineal), el modelo histórico — es el que aún usa el aplicativo Magna Sirgas Pro.</span>';
     } else {
-      disc.className = 'mst warn';
-      disc.innerHTML = '<span>⚠️</span><span>El modelo <strong>QGeoidCOL2023</strong> es una aproximación propia ajustada con puntos de control de referencia de Colombia, no la cuadrícula oficial del IGAC. Para trámites legales, use GEOCOL2004 o verifique con la fuente oficial.</span>';
+      disc.className = 'mst ok';
+      disc.innerHTML = '<span>✅</span><span>El modelo <strong>QGeoidCOL2023</strong> usa la cuadrícula oficial del IGAC (interpolación bilineal), vigente en Colombia desde 2023 en reemplazo de GEOCOL2004.</span>';
     }
   }
   cpCalcular();
@@ -12388,6 +12426,7 @@ function cpGeoASalida(lat, lon){
 // ── Cálculo principal ──
 async function cpCalcular(){
   await loadGeocolGrid();
+  await loadQgeoidGrid();
   var out = document.getElementById('cp-resultado');
   var entrada = cpEntradaAGeoMagna();
   if(!entrada){ out.innerHTML='<div class="mst info"><span>💡</span><span>Ingresa las coordenadas de origen y presiona Calcular Coordenadas</span></div>'; cpLastResult=null; return; }
@@ -12470,8 +12509,8 @@ function cpGenerarInforme(){
   extra += '</div>';
 
   extra += r.modelo==='GEOCOL 2004'
-    ? '<div style="background:#eaf5ea;border:1px solid #2e7d1a;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#1e5c1e;margin-bottom:6px">✅ El valor de ondulación geoidal se calculó con la <b>cuadrícula oficial GEOCOL2004 del IGAC</b> (interpolación bilineal), la misma que usa el aplicativo Magna Sirgas Pro.</div>'
-    : '<div style="background:#fff8e1;border:1px solid #ffca28;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#7a5c00;margin-bottom:6px">⚠️ El valor de ondulación geoidal se calculó con el modelo <b>QGeoidCOL2023</b>, una aproximación propia ajustada a puntos de control de referencia en Colombia, y no corresponde a la cuadrícula oficial del IGAC. Para trámites legales o catastrales, use el modelo GEOCOL2004 o verifique el valor oficial ante la entidad competente.</div>';
+    ? '<div style="background:#eaf5ea;border:1px solid #2e7d1a;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#1e5c1e;margin-bottom:6px">✅ El valor de ondulación geoidal se calculó con la <b>cuadrícula oficial GEOCOL2004 del IGAC</b> (interpolación bilineal), el modelo histórico, el mismo que usa el aplicativo Magna Sirgas Pro.</div>'
+    : '<div style="background:#eaf5ea;border:1px solid #2e7d1a;border-radius:8px;padding:10px 14px;font-size:10.5px;color:#1e5c1e;margin-bottom:6px">✅ El valor de ondulación geoidal se calculó con la <b>cuadrícula oficial QGeoidCOL2023 del IGAC</b> (interpolación bilineal), el modelo vigente en Colombia desde 2023 en reemplazo de GEOCOL2004.</div>';
 
   var html = _buildReporteHTML(
     'Informe de Transformación de Coordenadas',
@@ -13012,9 +13051,10 @@ function gePuntoProcesar(pto){
 async function geProcesar(){
   if(GE.puntos.length===0){ alert('Agrega al menos un punto para procesar.'); return; }
   await loadGeocolGrid();
+  await loadQgeoidGrid();
 
   var resultados = GE.puntos.map(gePuntoProcesar);
-  GE.resultados = {items: resultados, geoidReal: GEOCOL_GRID!==null};
+  GE.resultados = {items: resultados, geoidReal: GEOCOL_GRID!==null && QGEOID_GRID!==null};
 
   var cols = geColumnas();
   var dec = GE.sistema==='geograficas' ? 8 : 4;
@@ -13041,8 +13081,8 @@ async function geProcesar(){
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.h.toFixed(4)+'</td>'+
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.nGeocol.toFixed(3)+'</td>'+
       '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.hGeocol.toFixed(4)+'</td>'+
-      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.nQgeo.toFixed(3)+'</td>'+
-      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3)">'+r.hQgeo.toFixed(4)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.nQgeo.toFixed(3)+'</td>'+
+      '<td style="padding:6px 8px;border-bottom:1px solid var(--bg3);color:var(--ac1);font-weight:700">'+r.hQgeo.toFixed(4)+'</td>'+
       '</tr>';
   });
   html += '</tbody>';
@@ -13100,13 +13140,13 @@ function geGenerarInforme(){
   html += '<table><thead><tr><th>Nombre</th><th>'+cols[0].lbl+'</th><th>'+cols[1].lbl+'</th><th>h elipsoidal (m)</th><th>N GEOCOL2004 (m)</th><th>H orto. GEOCOL2004 (m)</th><th>N QGeoidCOL2023 (m)</th><th>H orto. QGeoidCOL2023 (m)</th></tr></thead><tbody>';
   res.items.forEach(function(r){
     if(r.error){ html += '<tr><td>'+peEscXML(r.nombre)+'</td><td colspan="7">'+peEscXML(r.error)+'</td></tr>'; return; }
-    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.salida.v1.toFixed(dec)+'</td><td>'+r.salida.v2.toFixed(dec)+'</td><td>'+r.h.toFixed(4)+'</td><td><b>'+r.nGeocol.toFixed(3)+'</b></td><td><b>'+r.hGeocol.toFixed(4)+'</b></td><td>'+r.nQgeo.toFixed(3)+'</td><td>'+r.hQgeo.toFixed(4)+'</td></tr>';
+    html += '<tr><td><b>'+peEscXML(r.nombre)+'</b></td><td>'+r.salida.v1.toFixed(dec)+'</td><td>'+r.salida.v2.toFixed(dec)+'</td><td>'+r.h.toFixed(4)+'</td><td><b>'+r.nGeocol.toFixed(3)+'</b></td><td><b>'+r.hGeocol.toFixed(4)+'</b></td><td><b>'+r.nQgeo.toFixed(3)+'</b></td><td><b>'+r.hQgeo.toFixed(4)+'</b></td></tr>';
   });
   html += '</tbody></table>';
 
   html += res.geoidReal
-    ? '<div class="note">La columna <b>GEOCOL2004</b> usa la cuadrícula oficial del IGAC (interpolación bilineal sobre sus 4 vértices) — el mismo modelo y resultado que entrega el aplicativo Magna Sirgas Pro, que únicamente maneja este modelo geoidal. La columna <b>QGeoidCOL2023</b> es una aproximación propia de DGeoMap Ingeniería, ajustada con puntos de control, incluida solo como referencia comparativa — no es la cuadrícula oficial. Para trámites legales o catastrales, use siempre el valor de GEOCOL2004.</div>'
-    : '<div class="note">La cuadrícula oficial GEOCOL2004 no se pudo cargar en este cálculo (revise su conexión a internet) y se usó un modelo aproximado de respaldo. Recargue la página e intente de nuevo antes de usar estos resultados para trámites legales o catastrales.</div>';
+    ? '<div class="note">Ambas columnas usan la cuadrícula oficial real del IGAC de su respectivo modelo (interpolación bilineal sobre sus 4 vértices). <b>GEOCOL2004</b> es el modelo histórico — el mismo que usa el aplicativo Magna Sirgas Pro, que aún no se ha actualizado. <b>QGeoidCOL2023</b> es su reemplazo oficial vigente en Colombia desde 2023, con información gravimétrica más reciente, y es el valor recomendado para trabajos nuevos salvo que el trámite exija explícitamente GEOCOL2004.</div>'
+    : '<div class="note">Las cuadrículas oficiales (GEOCOL2004 y/o QGeoidCOL2023) no se pudieron cargar en este cálculo (revise su conexión a internet) y se usó un modelo aproximado de respaldo. Recargue la página e intente de nuevo antes de usar estos resultados para trámites legales o catastrales.</div>';
 
   html += '<div class="legal">Este documento es de carácter técnico e informativo, elaborado como apoyo a la interpretación de resultados geodésicos. DGeoMap Ingeniería S.A.S. recomienda verificar siempre los valores oficiales ante el Instituto Geográfico Agustín Codazzi (IGAC) antes de su uso en trámites legales o catastrales.</div>';
   html += '<div class="ftr"><span>DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · www.dgeomaping.com · topografia@dgeomaping.com</span><span>Generado: '+now+'</span></div>';
