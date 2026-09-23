@@ -586,6 +586,12 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 #hw-dron .dtab.on{background:var(--dac);color:#fff}
 #hw-dron .dpanel{display:none}
 #hw-dron .dpanel.on{display:block}
+#hw-dron .dsub{display:none}
+#hw-dron .dsub.on{display:block}
+#hw-dron .dtabs2{margin-bottom:16px}
+#hw-dron .dtab2{background:none;border:none;color:var(--dtx2);font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:6px 12px;cursor:pointer;border-radius:6px;transition:all .15s;white-space:nowrap}
+#hw-dron .dtab2:hover{background:var(--dbg4);color:var(--dac3)}
+#hw-dron .dtab2.on{background:var(--dac2);color:#fff}
 #hw-dron .dcard{background:var(--dbg2);border:1px solid var(--dbrd);border-radius:12px;padding:18px;margin-bottom:14px}
 #hw-dron .dcard-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px;color:var(--dac3);margin-bottom:10px;display:flex;align-items:center;gap:8px}
 #hw-dron .dcard-title .ico{font-size:21px}
@@ -1532,9 +1538,9 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <!-- SUB-TABS -->
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;border-bottom:2px solid var(--bg3);padding-bottom:10px" class="anim-up d3">
       <button class="topo-st on" id="st-gnss" onclick="switchST('gnss',this)">🛰️ Herramientas GNSS</button>
+      <button class="topo-st" id="st-dron" onclick="switchST('dron',this)">🚁 Dron Colombia</button>
       <button class="topo-st" id="st-cartera" onclick="switchST('cartera',this)">📓 Carteras de Campo</button>
       <button class="topo-st" id="st-vias" onclick="switchST('vias',this)">🛣️ Diseño de Vías</button>
-      <button class="topo-st" id="st-dron" onclick="switchST('dron',this)">🚁 Dron Colombia</button>
       <button class="topo-st" id="st-gnsspro" onclick="switchST('gnsspro',this)">📡 GNSS Procesador</button>
       <button class="topo-st" id="st-magnasirgas" onclick="switchST('magnasirgas',this)">🇨🇴 MAGNA Pro</button>
       <button class="topo-st" onclick="switchST('coming',this)" style="opacity:.5">📐 Próximamente...</button>
@@ -3982,17 +3988,25 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 
   <!-- TABS PRINCIPALES -->
   <div class="dtabs">
-    <button class="dtab on" id="dt-reglamento" onclick="dronGoTab('reglamento',this)">📋 Reglamento RAC 100</button>
-    <button class="dtab" id="dt-categorias" onclick="dronGoTab('categorias',this)">🏷️ Categorías</button>
+    <button class="dtab on" id="dt-info" onclick="dronGoTab('info',this)">📋 Información y Requisitos</button>
     <button class="dtab" id="dt-planificador" onclick="dronGoTab('planificador',this)">🗺️ Planificador de Vuelo</button>
-    <button class="dtab" id="dt-requisitos" onclick="dronGoTab('requisitos',this)">📄 Mis Requisitos</button>
-    <button class="dtab" id="dt-zonas" onclick="dronGoTab('zonas',this)">🚫 Zonas Restringidas</button>
-    <button class="dtab" id="dt-checklist" onclick="dronGoTab('checklist',this)">✅ Checklist Pre-Vuelo</button>
-    <button class="dtab" id="dt-registro" onclick="dronGoTab('registro',this)">🆔 Registro & Docs</button>
   </div>
 
-  <!-- ══ PANEL: REGLAMENTO RAC 100 ══ -->
-  <div class="dpanel on" id="dp-reglamento">
+  <!-- ══ PANEL: INFORMACIÓN Y REQUISITOS (todo lo que hay que saber para volar, en un solo lugar) ══ -->
+  <div class="dpanel on" id="dp-info">
+
+    <!-- SUB-TABS DE CONSULTA -->
+    <div class="dtabs dtabs2" style="background:var(--dbg3)">
+      <button class="dtab2 on" id="dst-reglamento" onclick="dronInfoTab('reglamento',this)">📋 Reglamento RAC 100</button>
+      <button class="dtab2" id="dst-categorias" onclick="dronInfoTab('categorias',this)">🏷️ Categorías</button>
+      <button class="dtab2" id="dst-requisitos" onclick="dronInfoTab('requisitos',this)">📄 Mis Requisitos</button>
+      <button class="dtab2" id="dst-zonas" onclick="dronInfoTab('zonas',this)">🚫 Zonas Restringidas</button>
+      <button class="dtab2" id="dst-checklist" onclick="dronInfoTab('checklist',this)">✅ Checklist Pre-Vuelo</button>
+      <button class="dtab2" id="dst-registro" onclick="dronInfoTab('registro',this)">🆔 Registro & Docs</button>
+    </div>
+
+  <!-- ══ SUB-PANEL: REGLAMENTO RAC 100 ══ -->
+  <div class="dsub on" id="dsub-reglamento">
     <div class="dcard">
       <div class="dcard-title"><span class="ico">📋</span> ¿Qué es el RAC 100?</div>
       <div class="dstat info"><span class="dico">ℹ️</span><span>El <strong>RAC 100</strong> (Resolución 01983 del 27/Sep/2023, Enmienda 1 Abr/2024) es el reglamento de la UAEAC que rige toda operación de sistemas de aeronaves no tripuladas (UAS/Drones) en Colombia. Aplica a personas naturales y jurídicas, nacionales y extranjeras.</span></div>
@@ -4054,8 +4068,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     </div>
   </div>
 
-  <!-- ══ PANEL: CATEGORÍAS ══ -->
-  <div class="dpanel" id="dp-categorias">
+  <!-- ══ SUB-PANEL: CATEGORÍAS ══ -->
+  <div class="dsub" id="dsub-categorias">
     <div class="dcard">
       <div class="dcard-title"><span class="ico">🏷️</span> ¿Cuál categoría necesito?</div>
       <div class="dstat info"><span class="dico">💡</span><span>Responde estas preguntas para determinar tu categoría de operación según el RAC 100.</span></div>
@@ -4116,6 +4130,197 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   </div>
 
   <!-- ══ PANEL: PLANIFICADOR DE VUELO ══ -->
+  <!-- ══ PANEL: REQUISITOS ══ -->
+  <div class="dsub" id="dsub-requisitos">
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">📄</span> ¿Qué necesito según mi perfil?</div>
+      <div class="dfgrp" style="margin-bottom:12px">
+        <label>Mi perfil de operador</label>
+        <select class="dsel" id="dreq-perfil" onchange="dronMostrarRequisitos()">
+          <option value="">— Selecciona tu perfil —</option>
+          <option value="hobby">Hobbyista / uso recreativo personal</option>
+          <option value="topografo">Topógrafo / geomático (uso profesional)</option>
+          <option value="foto_com">Fotógrafo / videógrafo comercial</option>
+          <option value="aspersion">Fumigador agrícola</option>
+          <option value="empresa">Empresa de servicios con dron</option>
+          <option value="cargo">Operador drone delivery</option>
+          <option value="show">Productor shows / enjambre</option>
+          <option value="entidad">Entidad pública civil</option>
+        </select>
+      </div>
+      <div id="dreq-resultado"></div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🎓</span> Certificado de Idoneidad Piloto UAS — RAC 100 Cap. G</div>
+      <div class="dg2">
+        <div>
+          <div class="drule"><div class="rnum">A</div><div class="rtxt"><strong>Requisitos básicos</strong>Mayor de 18 años · Documento de identidad válido</div></div>
+          <div class="drule"><div class="rnum">B</div><div class="rtxt"><strong>Curso CIAC/CEAC aprobado</strong>94 horas: 78 teóricas + 16 prácticas de vuelo</div></div>
+          <div class="drule"><div class="rnum">C</div><div class="rtxt"><strong>OVA UAEAC</strong>Objeto Virtual de Aprendizaje aviación no tripulada (plataforma CEA)</div></div>
+          <div class="drule"><div class="rnum">D</div><div class="rtxt"><strong>Examen teórico</strong>Mínimo 75% ante la UAEAC</div></div>
+        </div>
+        <div>
+          <div class="drule"><div class="rnum">E</div><div class="rtxt"><strong>Certificado médico ocupacional</strong>Visión 20/20 · Audición · Extremidades superiores · Vigencia mínima 1 año</div></div>
+          <div class="drule"><div class="rnum">F</div><div class="rtxt"><strong>Pago de derechos</strong>Tarifas UAEAC vigentes</div></div>
+          <div class="drule"><div class="rnum">G</div><div class="rtxt"><strong>Solicitud en aplicativo</strong>Portal UAEAC con documentación completa</div></div>
+          <div class="drule" style="border-left:2px solid var(--dac2)"><div class="rnum" style="color:var(--dac3)">+</div><div class="rtxt"><strong>Adiciones disponibles</strong>Peso >25kg · Aspersión · Enjambre · Carga · Nocturno · BVLOS · Instructor</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🏢</span> Certificado de Explotador UAS (Categoría Específica)</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">1. Registro mercantil</div><div class="dreq-desc">Actividad económica relacionada con el tipo de operación en el objeto social.</div></div>
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">2. Solicitud a UAEAC</div><div class="dreq-desc">Formato en aerocivil.gov.co → aviación no tripulada → solicitud de cita.</div></div>
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">3. Manual de Operaciones (MO)</div><div class="dreq-desc">Documento completo de procedimientos, pilotos, flota y gestión de operaciones.</div></div>
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">4. Manual de Mantenimiento (MCM)</div><div class="dreq-desc">Programa de mantenimiento, personal técnico y datos de fabricantes.</div></div>
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">5. Póliza RCE</div><div class="dreq-desc">Responsabilidad Civil Extracontractual vigente por cada UA operativa.</div></div>
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">6. SMS implantado</div><div class="dreq-desc">Sistema de Gestión de Seguridad Operacional conforme RAC 219.</div></div>
+        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">7. Inspección UAEAC</div><div class="dreq-desc">Demostración operacional en instalaciones del solicitante + vuelo de verificación.</div></div>
+        <div class="dreq-item warn" style="flex:1;min-width:200px"><div class="dreq-title">8. Jefe de Pilotos UAS</div><div class="dreq-desc">Obligatorio con ≥3 UA: mín. 100 h de vuelo + 6 meses admin + 40 h SMS.</div></div>
+        <div class="dreq-item warn" style="flex:1;min-width:200px"><div class="dreq-title">9. Gerente de Seguridad</div><div class="dreq-desc">Obligatorio con ≥3 UA: 40 h SMS + formación aeronáutica + 12 meses experiencia.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: ZONAS RESTRINGIDAS ══ -->
+  <div class="dsub" id="dsub-zonas">
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🚫</span> Restricciones Operacionales — RAC 100 §100.315</div>
+      <div class="dstat err"><span class="dico">🚨</span><span><strong>Categoría Abierta NO puede operar en estas zonas.</strong> La categoría específica puede solicitar autorización especial en algunos casos.</span></div>
+    </div>
+    <div class="dg2">
+      <div class="dcard">
+        <div class="dcard-title"><span class="ico">✈️</span> Restricciones Aeronáuticas</div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Aeropuerto: 0–6 km del ARP</strong>Prohibido en categoría abierta. Específica requiere coordinación CDM con ATS.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--dwarn2)">⚠️</div><div class="rtxt"><strong>Aeropuerto: 6–9 km del ARP</strong>Categoría abierta permitida máx. 200 pies (61 m). Específica con coordinación ATS.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Helipuerto: dentro de 3 km</strong>Prohibido en categoría abierta. Radio medido desde ARH.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Zona prohibida/restringida/peligrosa</strong>Prohibido en cualquier caso sin autorización especial.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Zona de Entrenamiento Aéreo</strong>Prohibido para categoría abierta.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>ZNVD — Zona de No Vuelo Dron</strong>Prohibido absolutamente. Consultar UAEAC.gov.co.</div></div>
+      </div>
+      <div class="dcard">
+        <div class="dcard-title"><span class="ico">🏛️</span> Restricciones de Seguridad</div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Radio 2 km — Presidente de la República</strong>Prohibido cuando el Presidente esté en la zona.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Bases militares y policiales</strong>Dentro de 2 km del perímetro. También cárceles e infraestructura crítica.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Áreas BVLOS sin autorización</strong>Solo en áreas definidas por la UAEAC con explotador certificado BVLOS.</div></div>
+        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Espacio aéreo restringido</strong>Verificar RAC 211 y publicaciones UAEAC antes de cada vuelo.</div></div>
+        <div class="drule" style="margin-top:12px;border-left-color:var(--dac2)"><div class="rnum" style="color:var(--dac3)">✅</div><div class="rtxt"><strong>¿Cómo verificar zonas?</strong>App DroneOpenMap · aerocivil.gov.co · Consultar visor GIS UAEAC antes de cada misión.</div></div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🏙️</span> Vuelo en Zona Urbana — Reglas Especiales §100.220(b)</div>
+      <div class="dg3">
+        <div class="dstat err"><span class="dico">📏</span><span><strong>30 m mínimo</strong> horizontal de cualquier persona ajena a la operación</span></div>
+        <div class="dstat err"><span class="dico">🏢</span><span><strong>30 m mínimo</strong> horizontal/vertical de cualquier edificación</span></div>
+        <div class="dstat warn"><span class="dico">👁️</span><span>Solo operación <strong>VLOS</strong>. Máximo <strong>400 pies</strong> (122 m) sobre el terreno</span></div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🌙</span> Vuelo Nocturno — §100.220(a)</div>
+      <div class="dg2">
+        <div class="dreq-item"><div class="dreq-title">Luces de navegación de fábrica</div><div class="dreq-desc">Permanentemente encendidas y visibles. Puede usar estroboscópicas adicionales.</div></div>
+        <div class="dreq-item"><div class="dreq-title">Máx. 750 m desde posición fija</div><div class="dreq-desc">No se pueden hacer operaciones nocturnas EVLOS ni BVLOS.</div></div>
+        <div class="dreq-item warn"><div class="dreq-title">Observador UA requerido</div><div class="dreq-desc">Obligatorio para toda operación nocturna en cualquier categoría.</div></div>
+        <div class="dreq-item err"><div class="dreq-title">❌ Drone Delivery nocturno</div><div class="dreq-desc">No se autorizan operaciones nocturnas de transporte de carga. Prohibido RAC 100.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: CHECKLIST ══ -->
+  <div class="dsub" id="dsub-checklist">
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">✅</span> Checklist Pre-Vuelo Interactivo — RAC 100</div>
+      <div class="dstat info"><span class="dico">📋</span><span>Marca cada ítem antes de volar. El sistema calcula tu nivel de preparación.</span></div>
+      <div id="dcl-lista" style="margin-top:14px"></div>
+      <div style="margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--dtx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nivel de preparación</div>
+          <div class="dprogress"><div class="dprogress-bar" id="dcl-bar" style="width:0%"></div></div>
+          <div style="font-size:11px;color:var(--dtx2);margin-top:3px" id="dcl-pct">0 / 0 ítems</div>
+        </div>
+        <div>
+          <div class="dscore-circle ok" id="dcl-score" style="width:70px;height:70px">
+            <div class="dscore-num" id="dcl-num">0%</div>
+            <div class="dscore-label">LISTO</div>
+          </div>
+        </div>
+      </div>
+      <div class="dbtn-grp">
+        <button class="dbtn prim" onclick="dronCheckAll()">✅ Marcar todos</button>
+        <button class="dbtn" onclick="dronUncheckAll()">↩️ Reiniciar</button>
+        <button class="dbtn warn" onclick="dronChecklistExport()">📋 Copiar resumen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: REGISTRO & DOCS ══ -->
+  <div class="dsub" id="dsub-registro">
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🆔</span> Registro del UAS ante la UAEAC — §100.105</div>
+      <div class="dg2">
+        <div>
+          <div class="dreq-item"><div class="dreq-title">UA ≥ 200 g — Registro obligatorio</div><div class="dreq-desc">Todo UAS con peso igual o superior a 200 gramos debe registrarse.</div></div>
+          <div class="dreq-item"><div class="dreq-title">UA &lt; 200 g — Sin registro</div><div class="dreq-desc">Las aeronaves no tripuladas menores de 200 g no requieren registro UAEAC.</div></div>
+          <div class="dreq-item warn"><div class="dreq-title">Transferencia de dominio</div><div class="dreq-desc">Toda venta o arrendamiento debe reportarse inmediatamente a la UAEAC.</div></div>
+          <div class="dreq-item err"><div class="dreq-title">Baja del UAS</div><div class="dreq-desc">Por fin de vida útil, robo o pérdida de vuelo → reportar a UAEAC para cancelar registro.</div></div>
+        </div>
+        <div>
+          <div style="background:var(--dbg3);border:1px solid var(--dbrd2);border-radius:10px;padding:16px">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--dac3);letter-spacing:.5px;margin-bottom:10px">🏷️ ETIQUETA DE IDENTIFICACIÓN OBLIGATORIA §100.110</div>
+            <div style="font-size:12px;color:var(--dtx2);line-height:1.8">
+              Tamaño mínimo: <strong style="color:var(--dtx)">2 cm × 4 cm</strong><br>
+              Fuente Arial mín. tamaño <strong style="color:var(--dtx)">8</strong><br>
+              Adhesión permanente a la estructura<br>
+              Visible desde el exterior en todo momento<br>
+              Debe contener:<br>
+              &nbsp;• Número de registro UAEAC<br>
+              &nbsp;• Nombre completo / razón social<br>
+              &nbsp;• Correo electrónico del propietario<br>
+              &nbsp;• Email UAEAC: <strong style="color:var(--dac3)">atencionalciudadano@aerocivil.gov.co</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">📁</span> Documentos en Campo — Inspección §100.225</div>
+      <div class="dg2">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--dac3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Categoría Abierta</div>
+          <div class="drule"><div class="rnum" style="font-size:17px">📄</div><div class="rtxt"><strong>Certificado de registro UA</strong>Expedido por la UAEAC. Llevar durante la operación.</div></div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--dwarn2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Categoría Específica (en campo)</div>
+          <div class="drule"><div class="rnum" style="font-size:13px">1</div><div class="rtxt"><strong>Certificado registro UAS</strong></div></div>
+          <div class="drule"><div class="rnum" style="font-size:13px">2</div><div class="rtxt"><strong>Copia póliza RCE vigente</strong></div></div>
+          <div class="drule"><div class="rnum" style="font-size:13px">3</div><div class="rtxt"><strong>Certificado idoneidad piloto(s) UAS</strong></div></div>
+          <div class="drule"><div class="rnum" style="font-size:13px">4</div><div class="rtxt"><strong>Copia certificado explotador UAS</strong></div></div>
+          <div class="drule"><div class="rnum" style="font-size:13px">5</div><div class="rtxt"><strong>Autorización de vuelo UAS (UAEAC)</strong></div></div>
+          <div class="drule"><div class="rnum" style="font-size:13px">6</div><div class="rtxt"><strong>Libro de vuelo y mantenimiento UA</strong></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="dcard">
+      <div class="dcard-title"><span class="ico">🔗</span> Links Oficiales UAEAC</div>
+      <div class="dg2">
+        <a href="https://www.aerocivil.gov.co/servicios-a-la-navegacion/sistema-%20de-aeronaves-pilotadas-a-distancia-rpas-drones/Paginas/default.aspx" target="_blank" style="text-decoration:none">
+          <div class="drule" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--dbg4)'" onmouseout="this.style.background=''">
+            <div class="rnum">🌐</div><div class="rtxt"><strong>Portal UAS / Drones UAEAC</strong>Registro, certificaciones, autorizaciones de vuelo, formatos.</div></div></a>
+        <a href="https://www.aerocivil.gov.co/autoridad-de-la-aviacion-civil/investigacion/Pages/DIACC.aspx" target="_blank" style="text-decoration:none">
+          <div class="drule" style="cursor:pointer" onmouseover="this.style.background='var(--dbg4)'" onmouseout="this.style.background=''">
+            <div class="rnum">🚨</div><div class="rtxt"><strong>DIACC — Reporte Accidentes</strong>Dirección Técnica de Investigación de Accidentes. Reporte en 48h.</div></div></a>
+        <a href="https://www.aerocivil.gov.co" target="_blank" style="text-decoration:none">
+          <div class="drule" style="cursor:pointer" onmouseover="this.style.background='var(--dbg4)'" onmouseout="this.style.background=''">
+            <div class="rnum">✈️</div><div class="rtxt"><strong>aerocivil.gov.co</strong>Portal oficial UAEAC — Resoluciones, RAC, NOTAMs, cartas aéreas.</div></div></a>
+        <div class="drule" style="border-left-color:var(--dac2)">
+          <div class="rnum">📧</div><div class="rtxt"><strong>Contacto UAEAC</strong>atencionalciudadano@aerocivil.gov.co<br>Av. El Dorado #103-15, Bogotá D.C.</div></div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /dp-info -->
+
   <div class="dpanel" id="dp-planificador">
 
     <!-- FORMULARIO -->
@@ -4383,194 +4588,6 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   </div>
 
 
-  <!-- ══ PANEL: REQUISITOS ══ -->
-  <div class="dpanel" id="dp-requisitos">
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">📄</span> ¿Qué necesito según mi perfil?</div>
-      <div class="dfgrp" style="margin-bottom:12px">
-        <label>Mi perfil de operador</label>
-        <select class="dsel" id="dreq-perfil" onchange="dronMostrarRequisitos()">
-          <option value="">— Selecciona tu perfil —</option>
-          <option value="hobby">Hobbyista / uso recreativo personal</option>
-          <option value="topografo">Topógrafo / geomático (uso profesional)</option>
-          <option value="foto_com">Fotógrafo / videógrafo comercial</option>
-          <option value="aspersion">Fumigador agrícola</option>
-          <option value="empresa">Empresa de servicios con dron</option>
-          <option value="cargo">Operador drone delivery</option>
-          <option value="show">Productor shows / enjambre</option>
-          <option value="entidad">Entidad pública civil</option>
-        </select>
-      </div>
-      <div id="dreq-resultado"></div>
-    </div>
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🎓</span> Certificado de Idoneidad Piloto UAS — RAC 100 Cap. G</div>
-      <div class="dg2">
-        <div>
-          <div class="drule"><div class="rnum">A</div><div class="rtxt"><strong>Requisitos básicos</strong>Mayor de 18 años · Documento de identidad válido</div></div>
-          <div class="drule"><div class="rnum">B</div><div class="rtxt"><strong>Curso CIAC/CEAC aprobado</strong>94 horas: 78 teóricas + 16 prácticas de vuelo</div></div>
-          <div class="drule"><div class="rnum">C</div><div class="rtxt"><strong>OVA UAEAC</strong>Objeto Virtual de Aprendizaje aviación no tripulada (plataforma CEA)</div></div>
-          <div class="drule"><div class="rnum">D</div><div class="rtxt"><strong>Examen teórico</strong>Mínimo 75% ante la UAEAC</div></div>
-        </div>
-        <div>
-          <div class="drule"><div class="rnum">E</div><div class="rtxt"><strong>Certificado médico ocupacional</strong>Visión 20/20 · Audición · Extremidades superiores · Vigencia mínima 1 año</div></div>
-          <div class="drule"><div class="rnum">F</div><div class="rtxt"><strong>Pago de derechos</strong>Tarifas UAEAC vigentes</div></div>
-          <div class="drule"><div class="rnum">G</div><div class="rtxt"><strong>Solicitud en aplicativo</strong>Portal UAEAC con documentación completa</div></div>
-          <div class="drule" style="border-left:2px solid var(--dac2)"><div class="rnum" style="color:var(--dac3)">+</div><div class="rtxt"><strong>Adiciones disponibles</strong>Peso >25kg · Aspersión · Enjambre · Carga · Nocturno · BVLOS · Instructor</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🏢</span> Certificado de Explotador UAS (Categoría Específica)</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">1. Registro mercantil</div><div class="dreq-desc">Actividad económica relacionada con el tipo de operación en el objeto social.</div></div>
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">2. Solicitud a UAEAC</div><div class="dreq-desc">Formato en aerocivil.gov.co → aviación no tripulada → solicitud de cita.</div></div>
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">3. Manual de Operaciones (MO)</div><div class="dreq-desc">Documento completo de procedimientos, pilotos, flota y gestión de operaciones.</div></div>
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">4. Manual de Mantenimiento (MCM)</div><div class="dreq-desc">Programa de mantenimiento, personal técnico y datos de fabricantes.</div></div>
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">5. Póliza RCE</div><div class="dreq-desc">Responsabilidad Civil Extracontractual vigente por cada UA operativa.</div></div>
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">6. SMS implantado</div><div class="dreq-desc">Sistema de Gestión de Seguridad Operacional conforme RAC 219.</div></div>
-        <div class="dreq-item" style="flex:1;min-width:200px"><div class="dreq-title">7. Inspección UAEAC</div><div class="dreq-desc">Demostración operacional en instalaciones del solicitante + vuelo de verificación.</div></div>
-        <div class="dreq-item warn" style="flex:1;min-width:200px"><div class="dreq-title">8. Jefe de Pilotos UAS</div><div class="dreq-desc">Obligatorio con ≥3 UA: mín. 100 h de vuelo + 6 meses admin + 40 h SMS.</div></div>
-        <div class="dreq-item warn" style="flex:1;min-width:200px"><div class="dreq-title">9. Gerente de Seguridad</div><div class="dreq-desc">Obligatorio con ≥3 UA: 40 h SMS + formación aeronáutica + 12 meses experiencia.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ PANEL: ZONAS RESTRINGIDAS ══ -->
-  <div class="dpanel" id="dp-zonas">
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🚫</span> Restricciones Operacionales — RAC 100 §100.315</div>
-      <div class="dstat err"><span class="dico">🚨</span><span><strong>Categoría Abierta NO puede operar en estas zonas.</strong> La categoría específica puede solicitar autorización especial en algunos casos.</span></div>
-    </div>
-    <div class="dg2">
-      <div class="dcard">
-        <div class="dcard-title"><span class="ico">✈️</span> Restricciones Aeronáuticas</div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Aeropuerto: 0–6 km del ARP</strong>Prohibido en categoría abierta. Específica requiere coordinación CDM con ATS.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--dwarn2)">⚠️</div><div class="rtxt"><strong>Aeropuerto: 6–9 km del ARP</strong>Categoría abierta permitida máx. 200 pies (61 m). Específica con coordinación ATS.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Helipuerto: dentro de 3 km</strong>Prohibido en categoría abierta. Radio medido desde ARH.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Zona prohibida/restringida/peligrosa</strong>Prohibido en cualquier caso sin autorización especial.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Zona de Entrenamiento Aéreo</strong>Prohibido para categoría abierta.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>ZNVD — Zona de No Vuelo Dron</strong>Prohibido absolutamente. Consultar UAEAC.gov.co.</div></div>
-      </div>
-      <div class="dcard">
-        <div class="dcard-title"><span class="ico">🏛️</span> Restricciones de Seguridad</div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Radio 2 km — Presidente de la República</strong>Prohibido cuando el Presidente esté en la zona.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Bases militares y policiales</strong>Dentro de 2 km del perímetro. También cárceles e infraestructura crítica.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Áreas BVLOS sin autorización</strong>Solo en áreas definidas por la UAEAC con explotador certificado BVLOS.</div></div>
-        <div class="drule"><div class="rnum" style="color:var(--derr2)">🚫</div><div class="rtxt"><strong>Espacio aéreo restringido</strong>Verificar RAC 211 y publicaciones UAEAC antes de cada vuelo.</div></div>
-        <div class="drule" style="margin-top:12px;border-left-color:var(--dac2)"><div class="rnum" style="color:var(--dac3)">✅</div><div class="rtxt"><strong>¿Cómo verificar zonas?</strong>App DroneOpenMap · aerocivil.gov.co · Consultar visor GIS UAEAC antes de cada misión.</div></div>
-      </div>
-    </div>
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🏙️</span> Vuelo en Zona Urbana — Reglas Especiales §100.220(b)</div>
-      <div class="dg3">
-        <div class="dstat err"><span class="dico">📏</span><span><strong>30 m mínimo</strong> horizontal de cualquier persona ajena a la operación</span></div>
-        <div class="dstat err"><span class="dico">🏢</span><span><strong>30 m mínimo</strong> horizontal/vertical de cualquier edificación</span></div>
-        <div class="dstat warn"><span class="dico">👁️</span><span>Solo operación <strong>VLOS</strong>. Máximo <strong>400 pies</strong> (122 m) sobre el terreno</span></div>
-      </div>
-    </div>
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🌙</span> Vuelo Nocturno — §100.220(a)</div>
-      <div class="dg2">
-        <div class="dreq-item"><div class="dreq-title">Luces de navegación de fábrica</div><div class="dreq-desc">Permanentemente encendidas y visibles. Puede usar estroboscópicas adicionales.</div></div>
-        <div class="dreq-item"><div class="dreq-title">Máx. 750 m desde posición fija</div><div class="dreq-desc">No se pueden hacer operaciones nocturnas EVLOS ni BVLOS.</div></div>
-        <div class="dreq-item warn"><div class="dreq-title">Observador UA requerido</div><div class="dreq-desc">Obligatorio para toda operación nocturna en cualquier categoría.</div></div>
-        <div class="dreq-item err"><div class="dreq-title">❌ Drone Delivery nocturno</div><div class="dreq-desc">No se autorizan operaciones nocturnas de transporte de carga. Prohibido RAC 100.</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ PANEL: CHECKLIST ══ -->
-  <div class="dpanel" id="dp-checklist">
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">✅</span> Checklist Pre-Vuelo Interactivo — RAC 100</div>
-      <div class="dstat info"><span class="dico">📋</span><span>Marca cada ítem antes de volar. El sistema calcula tu nivel de preparación.</span></div>
-      <div id="dcl-lista" style="margin-top:14px"></div>
-      <div style="margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <div style="flex:1">
-          <div style="font-size:11px;color:var(--dtx3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Nivel de preparación</div>
-          <div class="dprogress"><div class="dprogress-bar" id="dcl-bar" style="width:0%"></div></div>
-          <div style="font-size:11px;color:var(--dtx2);margin-top:3px" id="dcl-pct">0 / 0 ítems</div>
-        </div>
-        <div>
-          <div class="dscore-circle ok" id="dcl-score" style="width:70px;height:70px">
-            <div class="dscore-num" id="dcl-num">0%</div>
-            <div class="dscore-label">LISTO</div>
-          </div>
-        </div>
-      </div>
-      <div class="dbtn-grp">
-        <button class="dbtn prim" onclick="dronCheckAll()">✅ Marcar todos</button>
-        <button class="dbtn" onclick="dronUncheckAll()">↩️ Reiniciar</button>
-        <button class="dbtn warn" onclick="dronChecklistExport()">📋 Copiar resumen</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ PANEL: REGISTRO & DOCS ══ -->
-  <div class="dpanel" id="dp-registro">
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🆔</span> Registro del UAS ante la UAEAC — §100.105</div>
-      <div class="dg2">
-        <div>
-          <div class="dreq-item"><div class="dreq-title">UA ≥ 200 g — Registro obligatorio</div><div class="dreq-desc">Todo UAS con peso igual o superior a 200 gramos debe registrarse.</div></div>
-          <div class="dreq-item"><div class="dreq-title">UA &lt; 200 g — Sin registro</div><div class="dreq-desc">Las aeronaves no tripuladas menores de 200 g no requieren registro UAEAC.</div></div>
-          <div class="dreq-item warn"><div class="dreq-title">Transferencia de dominio</div><div class="dreq-desc">Toda venta o arrendamiento debe reportarse inmediatamente a la UAEAC.</div></div>
-          <div class="dreq-item err"><div class="dreq-title">Baja del UAS</div><div class="dreq-desc">Por fin de vida útil, robo o pérdida de vuelo → reportar a UAEAC para cancelar registro.</div></div>
-        </div>
-        <div>
-          <div style="background:var(--dbg3);border:1px solid var(--dbrd2);border-radius:10px;padding:16px">
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--dac3);letter-spacing:.5px;margin-bottom:10px">🏷️ ETIQUETA DE IDENTIFICACIÓN OBLIGATORIA §100.110</div>
-            <div style="font-size:12px;color:var(--dtx2);line-height:1.8">
-              Tamaño mínimo: <strong style="color:var(--dtx)">2 cm × 4 cm</strong><br>
-              Fuente Arial mín. tamaño <strong style="color:var(--dtx)">8</strong><br>
-              Adhesión permanente a la estructura<br>
-              Visible desde el exterior en todo momento<br>
-              Debe contener:<br>
-              &nbsp;• Número de registro UAEAC<br>
-              &nbsp;• Nombre completo / razón social<br>
-              &nbsp;• Correo electrónico del propietario<br>
-              &nbsp;• Email UAEAC: <strong style="color:var(--dac3)">atencionalciudadano@aerocivil.gov.co</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">📁</span> Documentos en Campo — Inspección §100.225</div>
-      <div class="dg2">
-        <div>
-          <div style="font-size:12px;font-weight:700;color:var(--dac3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Categoría Abierta</div>
-          <div class="drule"><div class="rnum" style="font-size:17px">📄</div><div class="rtxt"><strong>Certificado de registro UA</strong>Expedido por la UAEAC. Llevar durante la operación.</div></div>
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:700;color:var(--dwarn2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Categoría Específica (en campo)</div>
-          <div class="drule"><div class="rnum" style="font-size:13px">1</div><div class="rtxt"><strong>Certificado registro UAS</strong></div></div>
-          <div class="drule"><div class="rnum" style="font-size:13px">2</div><div class="rtxt"><strong>Copia póliza RCE vigente</strong></div></div>
-          <div class="drule"><div class="rnum" style="font-size:13px">3</div><div class="rtxt"><strong>Certificado idoneidad piloto(s) UAS</strong></div></div>
-          <div class="drule"><div class="rnum" style="font-size:13px">4</div><div class="rtxt"><strong>Copia certificado explotador UAS</strong></div></div>
-          <div class="drule"><div class="rnum" style="font-size:13px">5</div><div class="rtxt"><strong>Autorización de vuelo UAS (UAEAC)</strong></div></div>
-          <div class="drule"><div class="rnum" style="font-size:13px">6</div><div class="rtxt"><strong>Libro de vuelo y mantenimiento UA</strong></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="dcard">
-      <div class="dcard-title"><span class="ico">🔗</span> Links Oficiales UAEAC</div>
-      <div class="dg2">
-        <a href="https://www.aerocivil.gov.co/servicios-a-la-navegacion/sistema-%20de-aeronaves-pilotadas-a-distancia-rpas-drones/Paginas/default.aspx" target="_blank" style="text-decoration:none">
-          <div class="drule" style="cursor:pointer;transition:background .15s" onmouseover="this.style.background='var(--dbg4)'" onmouseout="this.style.background=''">
-            <div class="rnum">🌐</div><div class="rtxt"><strong>Portal UAS / Drones UAEAC</strong>Registro, certificaciones, autorizaciones de vuelo, formatos.</div></div></a>
-        <a href="https://www.aerocivil.gov.co/autoridad-de-la-aviacion-civil/investigacion/Pages/DIACC.aspx" target="_blank" style="text-decoration:none">
-          <div class="drule" style="cursor:pointer" onmouseover="this.style.background='var(--dbg4)'" onmouseout="this.style.background=''">
-            <div class="rnum">🚨</div><div class="rtxt"><strong>DIACC — Reporte Accidentes</strong>Dirección Técnica de Investigación de Accidentes. Reporte en 48h.</div></div></a>
-        <a href="https://www.aerocivil.gov.co" target="_blank" style="text-decoration:none">
-          <div class="drule" style="cursor:pointer" onmouseover="this.style.background='var(--dbg4)'" onmouseout="this.style.background=''">
-            <div class="rnum">✈️</div><div class="rtxt"><strong>aerocivil.gov.co</strong>Portal oficial UAEAC — Resoluciones, RAC, NOTAMs, cartas aéreas.</div></div></a>
-        <div class="drule" style="border-left-color:var(--dac2)">
-          <div class="rnum">📧</div><div class="rtxt"><strong>Contacto UAEAC</strong>atencionalciudadano@aerocivil.gov.co<br>Av. El Dorado #103-15, Bogotá D.C.</div></div>
-      </div>
-    </div>
-  </div>
 
 </div><!-- /hw-dron -->
 
@@ -15822,6 +15839,19 @@ document.addEventListener('DOMContentLoaded', function(){
 // ════════════════════════════════════════════════
 // MÓDULO DRON COLOMBIA — RAC 100 Lógica JS
 // ════════════════════════════════════════════════
+
+// Cambia de sección dentro de la pestaña "Información y Requisitos" (consulta
+// didáctica: reglamento, categorías, mis requisitos, zonas, checklist, registro).
+function dronInfoTab(id, btn){
+  var root = document.getElementById('dp-info');
+  if(!root) return;
+  root.querySelectorAll('.dsub').forEach(function(p){ p.classList.remove('on'); });
+  root.querySelectorAll('.dtab2').forEach(function(b){ b.classList.remove('on'); });
+  var sub = document.getElementById('dsub-'+id);
+  if(sub) sub.classList.add('on');
+  if(btn) btn.classList.add('on');
+}
+
 function dronGoTab(id, btn){
   var root = document.getElementById('hw-dron');
   if(!root) return;
