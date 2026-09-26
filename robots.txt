@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /HTML%20EN%20LA%20WEB/
+Disallow: /img/index.html
+Disallow: /index_dgeomap%20-%20copia.html
 
 Sitemap: https://www.dgeomaping.com/sitemap.xml
