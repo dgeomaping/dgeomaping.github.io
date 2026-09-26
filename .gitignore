@@ -1,0 +1,4 @@
+# Secretos y credenciales — nunca deben subirse al repositorio
+.env
+.env.*
+!.env.example
