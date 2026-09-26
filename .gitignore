@@ -2,3 +2,6 @@
 .env
 .env.*
 !.env.example
+Codigos/
+*RECUPERACION*
+*recovery*codes*
