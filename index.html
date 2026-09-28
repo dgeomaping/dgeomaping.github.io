@@ -7612,8 +7612,8 @@ function crearMapa(){
   var el=document.getElementById('mapa-gnss');if(!el)return;
   gMapa=L.map('mapa-gnss',{center:[4.5,-73.5],zoom:5});
   // Capas del mapa
-  var osmStd = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap contributors © CARTO',subdomains:'abcd',maxZoom:19});
-  var osmDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap contributors © CARTO',subdomains:'abcd',maxZoom:19});
+  var osmStd = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19});
+  var osmDark = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19});
   var osmSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'© Esri',maxZoom:19});
   osmStd.addTo(gMapa);
   L.control.layers({'Claro (CARTO)':osmStd,'Oscuro (CARTO)':osmDark,'Satélite (Esri)':osmSat},{},{position:'topright'}).addTo(gMapa);
@@ -9363,8 +9363,8 @@ function cargarMapaAuto(tipo){
     } else {
       // Zoom general: CartoDB Positron (ligero y rápido)
       tileLayer = L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        {subdomains:'abcd', maxZoom:19, attribution:'© OpenStreetMap contributors © CARTO'}
+        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {maxZoom:19, attribution:'© OpenStreetMap contributors'}
       );
     }
     tileLayer.addTo(map);
