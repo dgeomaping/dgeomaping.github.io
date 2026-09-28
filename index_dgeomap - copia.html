@@ -6952,7 +6952,10 @@ function crearMapa(){
   var osmDark = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19});
   var osmSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'© Esri',maxZoom:19});
   osmStd.addTo(gMapa);
-  L.control.layers({'Claro (CARTO)':osmStd,'Oscuro (CARTO)':osmDark,'Satélite (Esri)':osmSat},{},{position:'topright'}).addTo(gMapa);
+  L.control.layers({'Mapa claro':osmStd,'Mapa oscuro':osmDark,'Satélite (Esri)':osmSat},{},{position:'topright'}).addTo(gMapa);
+  setTimeout(function(){ if(gMapa) gMapa.invalidateSize(); }, 150);
+  setTimeout(function(){ if(gMapa) gMapa.invalidateSize(); }, 500);
+  setTimeout(function(){ if(gMapa) gMapa.invalidateSize(); }, 1200);
 
   VERTS_IGAC.forEach(function(v){
     var esIGAC=v.src==='IGAC-MAGNA';
