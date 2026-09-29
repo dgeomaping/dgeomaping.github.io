@@ -4363,7 +4363,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
                 <option value="dji_inspire3">DJI Inspire 3</option>
               </optgroup>
               <optgroup label="Ala fija / VTOL">
-                <option value="wingtra_one">WingtraOne GEN II (VTOL)</option>
+                <option value="wingtra_one">WingtraOne GEN II (VTOL) — Sony RX1R II</option>
+                <option value="wingtra_rededge_p">WingtraOne GEN II (VTOL) — MicaSense RedEdge-P</option>
                 <option value="sensefly_ebee_x">senseFly eBee X</option>
               </optgroup>
               <optgroup label="Agrícola">
@@ -14361,6 +14362,13 @@ var pvLineasLayer = null;
 function pvGetFootprint(altm){
   var s = window._pvSensor;
   if(!s) return {w:0, h:0};
+  if(s.hfov){
+    // Sensores definidos por campo de vision (FOV) en vez de sw/f (p.ej. MicaSense RedEdge-P,
+    // cuyo fabricante no publica ancho de sensor ni distancia focal en mm)
+    var w = 2 * altm * Math.tan((s.hfov * Math.PI/180) / 2);
+    var h = 2 * altm * Math.tan((s.vfov * Math.PI/180) / 2);
+    return {w: w, h: h};
+  }
   var w = s.sw * altm / s.f;
   var h = s.sh * altm / s.f;
   return {w: w, h: h};
@@ -14380,7 +14388,9 @@ function pvCalcGSD(){
     pvEscalaCartografica(null);
     return;
   }
-  var gsd = (s.sw * alt) / (s.f * s.rw) * 100; // cm/píxel
+  var gsd = s.hfov
+    ? (2 * alt * Math.tan((s.hfov * Math.PI/180) / 2) / s.rw) * 100 // cm/píxel, sensores basados en FOV
+    : (s.sw * alt) / (s.f * s.rw) * 100; // cm/píxel, sensores basados en sw/f
   var fp = pvGetFootprint(alt);
   boxGsd.textContent = gsd.toFixed(2)+' cm/px';
   boxFp.textContent = 'Huella de imagen: '+fp.w.toFixed(1)+' × '+fp.h.toFixed(1)+' m a '+alt+' m AGL';
@@ -14435,7 +14445,8 @@ function pvLoadDrone(){
   var info = '<strong>'+d.fabricante+'</strong> · Vel. máx. '+d.velmax+' m/s ('+Math.round(d.velmax*3.6)+' km/h) · Viento máx. '+d.viento+' m/s';
   if(d.rtk) info += ' · <span style="color:var(--dac2);font-weight:700">RTK/PPK integrado</span>';
   if(d.lidar) info += ' · <span style="color:var(--dac2);font-weight:700">LiDAR</span>';
-  if(d.sensor) info += '<br>Sensor: '+d.sensor.nom+' — '+d.sensor.sw+'×'+d.sensor.sh+' mm, f='+d.sensor.f+' mm, '+d.sensor.rw+'×'+d.sensor.rh+' px';
+  if(d.sensor && d.sensor.hfov) info += '<br>Sensor: '+d.sensor.nom+' — FOV '+d.sensor.hfov+'°×'+d.sensor.vfov+'°, '+d.sensor.rw+'×'+d.sensor.rh+' px (banda usada para el GSD)';
+  else if(d.sensor) info += '<br>Sensor: '+d.sensor.nom+' — '+d.sensor.sw+'×'+d.sensor.sh+' mm, f='+d.sensor.f+' mm, '+d.sensor.rw+'×'+d.sensor.rh+' px';
   else info += '<br><span style="color:var(--dwarn2)">Sin cámara de mapeo — uso agrícola/operativo</span>';
   info += '<br><span style="opacity:.7">Parámetros de fábrica (referencia pública) — verifique el manual oficial antes de volar.</span>';
   document.getElementById('pv-dron-info').innerHTML = info;
@@ -14925,9 +14936,21 @@ var PV_DRONES = {
   },
   // ── Ala fija / VTOL ──
   wingtra_one: {
-    nom:'WingtraOne GEN II (VTOL)', tipo:'vtol', fabricante:'Wingtra', rtk:true,
+    nom:'WingtraOne GEN II (VTOL) — Sony RX1R II', tipo:'vtol', fabricante:'Wingtra', rtk:true,
     peso:4.5, autonomia:59, velmax:16, viento:12,
     sensor:{sw:35.9, sh:24.0, rw:7952, rh:5304, f:35.0, nom:'Sony RX1R II full-frame 42 MP'}
+  },
+  wingtra_rededge_p: {
+    nom:'WingtraOne GEN II (VTOL) — MicaSense RedEdge-P', tipo:'vtol', fabricante:'Wingtra / MicaSense', rtk:true,
+    peso:4.5, autonomia:59, velmax:16, viento:12,
+    // RedEdge-P: MicaSense/AgEagle no publica ancho de sensor ni distancia focal en mm;
+    // el GSD se calcula a partir del campo de vision oficial (FOV), validado contra el
+    // GSD publicado por el fabricante (3.98 cm/px pancromatico y 7.7 cm/px multiespectral a 120 m AGL).
+    sensor:{
+      hfov:44, vfov:38, rw:2464, rh:2056,
+      hfovMS:50, vfovMS:38, rwMS:1456, rhMS:1088,
+      nom:'MicaSense RedEdge-P — banda pancromática 5.1 MP (44°×38° FOV, GSD 3.98 cm/px @ 120 m); 5 bandas multiespectrales 1.6 MP c/u (50°×38° FOV, GSD 7.7 cm/px @ 120 m)'
+    }
   },
   sensefly_ebee_x: {
     nom:'senseFly eBee X', tipo:'ala_fija', fabricante:'senseFly (AgEagle)', rtk:true,
