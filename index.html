@@ -236,6 +236,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .ff input:focus,.ff textarea:focus,.ff select:focus{outline:none;border-color:var(--ac2);background:#fff}
 .ff textarea{min-height:88px;resize:vertical}
 .ff select option{background:var(--bg4)}
+.ff input[type=file]{padding:8px;font-size:13px}
+.ff-hint{display:block;font-size:11.5px;color:var(--tx3);margin-top:5px;line-height:1.4}
 .bwa{width:100%;background:var(--ac1);color:#fff;border:none;padding:13px;border-radius:var(--r);font-family:var(--fd);font-size:17px;font-weight:800;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
 .bwa:hover{background:var(--ac2);transform:translateY(-1px)}
 
@@ -1248,6 +1250,31 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <option>Sin urgencia, estoy cotizando</option>
             </select>
           </div>
+        </div>
+        <div class="ff"><label>Trámite o entidad ante la cual se presentará (opcional)</label>
+          <select id="f-tramite">
+            <option value="">Seleccione...</option>
+            <option>Notaría (compraventa / escrituración)</option>
+            <option>Oficina de Registro de Instrumentos Públicos (ORIP)</option>
+            <option>IGAC / Catastro municipal (actualización o corrección catastral)</option>
+            <option>Curaduría urbana (licencia de construcción)</option>
+            <option>Planeación municipal (licencia o concepto de uso del suelo)</option>
+            <option>Corrección o englobe/desenglobe de área y linderos</option>
+            <option>Proceso judicial (deslinde y amojonamiento, pertenencia, servidumbre)</option>
+            <option>Agencia Nacional de Tierras – ANT (formalización o titulación rural)</option>
+            <option>Autoridad ambiental – CAR / ANLA (licencia o permiso ambiental)</option>
+            <option>Entidad financiera (avalúo para crédito o garantía hipotecaria)</option>
+            <option>Aerocivil (permiso de operación de drones / RPAS)</option>
+            <option>Empresa de servicios públicos (servidumbres y redes)</option>
+            <option>Control de asentamiento y verticalidad de edificaciones</option>
+            <option>Diseño y construcción de vías u obra civil</option>
+            <option>Unidad de Restitución de Tierras</option>
+            <option>Otro trámite / no estoy seguro</option>
+          </select>
+        </div>
+        <div class="ff"><label>Documentos de soporte (opcional)</label>
+          <input type="file" id="f-docs" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"/>
+          <small class="ff-hint">Ej: escritura, certificado de tradición, plano anterior, cédula catastral. Selecciónelos aquí y adjúntelos en el chat de WhatsApp que se abrirá — la app de WhatsApp no permite enviar archivos automáticamente desde un enlace.</small>
         </div>
         <div class="ff"><label>Información adicional (opcional)</label><textarea id="f-msg" placeholder="Cualquier detalle adicional que quiera agregar..."></textarea></div>
         <button class="bwa" onclick="enviarWA()">📲 Enviar por WhatsApp</button>
@@ -7096,7 +7123,10 @@ function enviarWA() {
   const mun   = document.getElementById('f-mun').value.trim();
   const area  = document.getElementById('f-area').value;
   const tipo  = document.getElementById('f-tipo').value;
-  const plazo = document.getElementById('f-plazo').value;
+  const plazo   = document.getElementById('f-plazo').value;
+  const tramite = document.getElementById('f-tramite').value;
+  const docsEl  = document.getElementById('f-docs');
+  const docs    = docsEl && docsEl.files ? Array.from(docsEl.files).map(f => f.name) : [];
   const extra = document.getElementById('f-msg').value.trim();
 
   if (!n) { alert('Por favor ingrese su nombre.'); document.getElementById('f-nom').focus(); return; }
@@ -7108,11 +7138,16 @@ function enviarWA() {
   lineas.push('');
   lineas.push(`Quisiera solicitar una cotización para:`);
   lineas.push(`🔧 Servicio: *${s}*`);
-  if (mun)   lineas.push(`📍 Ubicación: ${mun}`);
-  if (area)  lineas.push(`📐 Área aproximada: ${area}`);
-  if (tipo)  lineas.push(`🏞️ Tipo de predio/proyecto: ${tipo}`);
-  if (plazo) lineas.push(`⏱️ Plazo deseado: ${plazo}`);
+  if (mun)     lineas.push(`📍 Ubicación: ${mun}`);
+  if (area)    lineas.push(`📐 Área aproximada: ${area}`);
+  if (tipo)    lineas.push(`🏞️ Tipo de predio/proyecto: ${tipo}`);
+  if (tramite) lineas.push(`🏛️ Trámite/entidad destino: ${tramite}`);
+  if (plazo)   lineas.push(`⏱️ Plazo deseado: ${plazo}`);
   if (extra) { lineas.push(''); lineas.push(`Información adicional: ${extra}`); }
+  if (docs.length) {
+    lineas.push('');
+    lineas.push(`📎 Documentos que adjuntaré en este chat: ${docs.join(', ')}`);
+  }
   lineas.push('');
   lineas.push('Quedo atento(a) a su respuesta. ¡Gracias!');
 
