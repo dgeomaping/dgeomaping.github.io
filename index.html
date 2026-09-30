@@ -372,6 +372,11 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .slider-wrap{position:absolute;inset:0;overflow:hidden}
 .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease}
 .slide.active{opacity:1}
+.slide video{width:100%;height:100%;object-fit:cover;display:block}
+#hero-mute-btn{position:absolute;right:18px;bottom:18px;z-index:5;width:38px;height:38px;border-radius:50%;
+  background:rgba(20,30,15,.55);border:1.5px solid rgba(255,255,255,.5);color:#fff;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);transition:background .2s}
+#hero-mute-btn:hover{background:rgba(46,125,26,.85)}
 .slider-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
 .sdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.6)}
 .sdot.active{background:#5aaa25;border-color:#5aaa25;width:22px;border-radius:4px}
@@ -1017,20 +1022,25 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     </div>
     <div class="hero-right" id="hero-right-slider">
       <div class="slider-wrap">
-        <div class="slide active" style="background-image:url('img/hero-slide-01.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-02.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-03.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-04.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-05.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-06.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-07.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-08.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-09.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-10.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-11.jpg')"></div>
-        <div class="slide" style="background-image:url('img/hero-slide-12.jpg')"></div>
+        <div class="slide active" data-duration="10000">
+          <video id="hero-video" src="img/DGeoMap_Hero_Dron.mp4" muted playsinline loop="false"></video>
+          <button id="hero-mute-btn" onclick="heroToggleMute(event)" aria-label="Activar sonido">🔇</button>
+        </div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-01.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-02.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-03.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-04.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-05.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-06.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-07.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-08.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-09.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-10.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-11.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-12.jpg')"></div>
+        <div class="slide" data-duration="5000" style="background-image:url('img/Dron20.jpeg')"></div>
       </div>
-      
+
       <div class="slider-dots">
         <span class="sdot active" onclick="goSlide(0)"></span>
         <span class="sdot" onclick="goSlide(1)"></span>
@@ -1044,6 +1054,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <span class="sdot" onclick="goSlide(9)"></span>
         <span class="sdot" onclick="goSlide(10)"></span>
         <span class="sdot" onclick="goSlide(11)"></span>
+        <span class="sdot" onclick="goSlide(12)"></span>
+        <span class="sdot" onclick="goSlide(13)"></span>
       </div>
     </div>
   </div>
@@ -6498,6 +6510,7 @@ const IMGS = {
   drone_agro2: 'img/testimonio-vuelo-agricola-sabana-bogota.jpg',
   drone_agro3: 'img/testimonio-dji-agras-agricultura-precision.jpg',
   ori: 'img/testimonio-plano-predial-san-francisco.jpg',
+  dron20: 'img/Dron20.jpeg',
 };
 
 const SRV_IMGS = {
@@ -6565,6 +6578,8 @@ const D = {
     {t:'Vuelo agricola — Sabana de Bogota', d:'Dron DJI multirotor en vuelo sobre campo colombiano para agricultura de precision y levantamiento.', tags:['Drones','Agricultura'], cat:'drone', img:'drone_agro2'},
     {t:'DJI Agras — Agricultura de precision', d:'Dron DJI Agras en campo abierto, Sabana de Bogota. Operacion bajo normativa colombiana vigente.', tags:['Drones','Agricultura'], cat:'drone', img:'drone_agro3'},
     {t:'Recorrido de campo — Vía rural', d:'Video de simulación de recorrido en vía rural colombiana para estudio topográfico vial.', tags:['Video','Vial'], cat:'vid', img:null, isVideo:true},
+    {t:'Despegue WingtraOne — Vuelo VTOL', d:'Despegue del dron de ala fija WingtraOne en misión de fotogrametría aérea, Cundinamarca.', tags:['Video','Drones'], cat:'vid', img:null, isVideo:true, vidSrc:'img/DGeoMap_Hero_Dron.mp4'},
+    {t:'Equipo GNSS y dron WingtraOne en campo', d:'Receptor GNSS RTK y dron WingtraOne listos para misión de vuelo, Cundinamarca.', tags:['Drones','Geodesia'], cat:'drone', img:'dron20'},
   ]
 };
 
@@ -6887,7 +6902,8 @@ function renderPort() {
   document.getElementById('port-cont').innerHTML = D.trabajos.map((t,i) => {
     const tagsHtml = `<div class="pc-tags">${t.tags.map(tg=>`<span class="pctag">${tg}</span>`).join('')}</div>`;
     if(t.isVideo) {
-      return `<div class="pc pc-video"><div class="vid-box"><video controls preload="metadata" muted><source src="${VID}" type="video/mp4"></video></div><div class="pc-body"><h4>${t.t}</h4><p>${t.d}</p>${tagsHtml}</div></div>`;
+      const src = t.vidSrc || VID;
+      return `<div class="pc pc-video"><div class="vid-box"><video controls preload="metadata" muted><source src="${src}" type="video/mp4"></video></div><div class="pc-body"><h4>${t.t}</h4><p>${t.d}</p>${tagsHtml}</div></div>`;
     }
     const mediaHtml = (t.img && IMGS[t.img])
       ? `<img src="${IMGS[t.img]}" alt="${t.t}" loading="lazy" onclick="openModal('${t.img}','${t.t}')"/>`
@@ -6982,20 +6998,6 @@ function handleFotos(event) {
       });
       renderPreview();
       renderSitio();
-
-// SLIDER AUTOMÁTICO
-let curSlide = 0;
-const slides = document.querySelectorAll('#hero-right-slider .slide');
-const sdots  = document.querySelectorAll('#hero-right-slider .sdot');
-function goSlide(n) {
-  slides[curSlide].classList.remove('active');
-  sdots[curSlide].classList.remove('active');
-  curSlide = n;
-  slides[curSlide].classList.add('active');
-  sdots[curSlide].classList.add('active');
-}
-setInterval(() => goSlide((curSlide + 1) % slides.length), 4000);
-
     };
     reader.readAsDataURL(file);
   });
@@ -7014,20 +7016,6 @@ function deleteFoto(key) {
   D.trabajos = D.trabajos.filter(t => t.img !== key);
   renderPreview();
   renderSitio();
-
-// SLIDER AUTOMÁTICO
-let curSlide = 0;
-const slides = document.querySelectorAll('#hero-right-slider .slide');
-const sdots  = document.querySelectorAll('#hero-right-slider .sdot');
-function goSlide(n) {
-  slides[curSlide].classList.remove('active');
-  sdots[curSlide].classList.remove('active');
-  curSlide = n;
-  slides[curSlide].classList.add('active');
-  sdots[curSlide].classList.add('active');
-}
-setInterval(() => goSlide((curSlide + 1) % slides.length), 4000);
-
 }
 
 // ── GUARDAR ──
@@ -7059,20 +7047,6 @@ function saveAll() {
   document.getElementById('c-hor').textContent = document.getElementById('e-hor').value;
   document.getElementById('c-cob').textContent = document.getElementById('e-cob').value;
   renderSitio();
-
-// SLIDER AUTOMÁTICO
-let curSlide = 0;
-const slides = document.querySelectorAll('#hero-right-slider .slide');
-const sdots  = document.querySelectorAll('#hero-right-slider .sdot');
-function goSlide(n) {
-  slides[curSlide].classList.remove('active');
-  sdots[curSlide].classList.remove('active');
-  curSlide = n;
-  slides[curSlide].classList.add('active');
-  sdots[curSlide].classList.add('active');
-}
-setInterval(() => goSlide((curSlide + 1) % slides.length), 4000);
-
   const m = document.getElementById('adm-msg'); m.style.display='block'; setTimeout(()=>m.style.display='none', 2500);
 }
 
@@ -7085,18 +7059,47 @@ function enviarWA() {
 
 renderSitio();
 
-// SLIDER AUTOMÁTICO
+// SLIDER AUTOMÁTICO — duración propia por diapositiva (video 10s via data-duration,
+// fotos 5s via data-duration) en vez de un intervalo fijo para todas.
 let curSlide = 0;
 const slides = document.querySelectorAll('#hero-right-slider .slide');
 const sdots  = document.querySelectorAll('#hero-right-slider .sdot');
+const heroVideoEl = document.getElementById('hero-video');
+let _heroTimer = null;
+
+function heroPlayIfVideo(n){
+  if(!heroVideoEl) return;
+  if(n === 0){
+    heroVideoEl.currentTime = 0;
+    heroVideoEl.play().catch(()=>{});
+  } else {
+    heroVideoEl.pause();
+  }
+}
+
 function goSlide(n) {
   slides[curSlide].classList.remove('active');
   sdots[curSlide].classList.remove('active');
   curSlide = n;
   slides[curSlide].classList.add('active');
   sdots[curSlide].classList.add('active');
+  heroPlayIfVideo(n);
+  clearTimeout(_heroTimer);
+  var dur = parseInt(slides[curSlide].getAttribute('data-duration'), 10) || 5000;
+  _heroTimer = setTimeout(function(){ goSlide((curSlide + 1) % slides.length); }, dur);
 }
-setInterval(() => goSlide((curSlide + 1) % slides.length), 4000);
+function heroToggleMute(ev){
+  if(ev) ev.stopPropagation();
+  if(!heroVideoEl) return;
+  heroVideoEl.muted = !heroVideoEl.muted;
+  var btn = document.getElementById('hero-mute-btn');
+  if(btn) btn.textContent = heroVideoEl.muted ? '🔇' : '🔊';
+}
+// Arranca la reproducción del video en la diapositiva inicial y programa el primer avance
+heroPlayIfVideo(0);
+clearTimeout(_heroTimer);
+_heroTimer = setTimeout(function(){ goSlide((curSlide + 1) % slides.length); },
+  parseInt(slides[0].getAttribute('data-duration'), 10) || 5000);
 
 
 function toggleMenu(){
