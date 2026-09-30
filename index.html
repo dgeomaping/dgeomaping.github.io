@@ -230,6 +230,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .ctc-form h3{font-family:var(--fd);font-size:21px;font-weight:800;color:var(--dk1);margin-bottom:3px}
 .ctc-form .sub{font-size:14px;color:var(--tx3);margin-bottom:20px}
 .ff{margin-bottom:12px}.ff label{display:block;font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.ff-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.ff-row{grid-template-columns:1fr}}
 .ff input,.ff textarea,.ff select{width:100%;padding:10px 13px;border:1.5px solid var(--bg3);border-radius:var(--r);font-family:var(--fb);font-size:14px;color:var(--tx1);background:var(--bg1);transition:border-color .2s}
 .ff input:focus,.ff textarea:focus,.ff select:focus{outline:none;border-color:var(--ac2);background:#fff}
 .ff textarea{min-height:88px;resize:vertical}
@@ -1200,17 +1202,54 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <div class="ff"><label>Correo / WhatsApp</label><input type="text" id="f-con" placeholder="Su contacto"/></div>
         <div class="ff"><label>Tipo de servicio</label>
           <select id="f-srv">
-            <option>Levantamiento topográfico</option>
-            <option>Cartografía y SIG</option>
-            <option>Vuelo fotogramétrico / dron</option>
+            <option>Topografía de precisión</option>
             <option>Geodesia y GNSS</option>
+            <option>Fotogrametría con drones</option>
+            <option>Catastro y cabida y linderos</option>
+            <option>Cartografía y Geomática/SIG</option>
             <option>Gestión ambiental</option>
-            <option>Catastro</option>
-            <option>Informe técnico</option>
+            <option>Diseño geométrico de vías</option>
+            <option>Informes y estudios técnicos</option>
             <option>Otro servicio</option>
           </select>
         </div>
-        <div class="ff"><label>Descripción del proyecto</label><textarea id="f-msg" placeholder="Municipio, área aproximada, tipo de predio..."></textarea></div>
+        <div class="ff-row">
+          <div class="ff"><label>Departamento / Municipio</label><input type="text" id="f-mun" placeholder="Ej: Cundinamarca, Chía"/></div>
+          <div class="ff"><label>Área aproximada</label>
+            <select id="f-area">
+              <option value="">Seleccione...</option>
+              <option>Menos de 1.000 m² (lote urbano)</option>
+              <option>1.000 – 10.000 m² (predio pequeño)</option>
+              <option>1 – 10 hectáreas</option>
+              <option>10 – 100 hectáreas</option>
+              <option>Más de 100 hectáreas</option>
+              <option>No aplica / no lo sé</option>
+            </select>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff"><label>Tipo de predio / proyecto</label>
+            <select id="f-tipo">
+              <option value="">Seleccione...</option>
+              <option>Predio urbano</option>
+              <option>Predio rural</option>
+              <option>Vía / carretera</option>
+              <option>Proyecto agrícola</option>
+              <option>Proyecto ambiental</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="ff"><label>Plazo deseado</label>
+            <select id="f-plazo">
+              <option value="">Seleccione...</option>
+              <option>Lo antes posible</option>
+              <option>Próximas 2 semanas</option>
+              <option>Este mes</option>
+              <option>Sin urgencia, estoy cotizando</option>
+            </select>
+          </div>
+        </div>
+        <div class="ff"><label>Información adicional (opcional)</label><textarea id="f-msg" placeholder="Cualquier detalle adicional que quiera agregar..."></textarea></div>
         <button class="bwa" onclick="enviarWA()">📲 Enviar por WhatsApp</button>
       </div>
     </div>
@@ -7051,10 +7090,34 @@ function saveAll() {
 }
 
 function enviarWA() {
-  const n = document.getElementById('f-nom').value || 'Sin nombre';
-  const s = document.getElementById('f-srv').value;
-  const msg = document.getElementById('f-msg').value || '';
-  window.open('https://wa.me/573222139210?text='+encodeURIComponent(`Hola DGeoMap Ingeniería! Soy ${n}, necesito información sobre: ${s}. ${msg}`),'_blank');
+  const n     = document.getElementById('f-nom').value.trim();
+  const con   = document.getElementById('f-con').value.trim();
+  const s     = document.getElementById('f-srv').value;
+  const mun   = document.getElementById('f-mun').value.trim();
+  const area  = document.getElementById('f-area').value;
+  const tipo  = document.getElementById('f-tipo').value;
+  const plazo = document.getElementById('f-plazo').value;
+  const extra = document.getElementById('f-msg').value.trim();
+
+  if (!n) { alert('Por favor ingrese su nombre.'); document.getElementById('f-nom').focus(); return; }
+  if (!con) { alert('Por favor ingrese su correo o número de WhatsApp de contacto.'); document.getElementById('f-con').focus(); return; }
+
+  let lineas = [];
+  lineas.push(`Hola DGeoMap Ingeniería 👋, soy *${n}*.`);
+  lineas.push(`Contacto: ${con}`);
+  lineas.push('');
+  lineas.push(`Quisiera solicitar una cotización para:`);
+  lineas.push(`🔧 Servicio: *${s}*`);
+  if (mun)   lineas.push(`📍 Ubicación: ${mun}`);
+  if (area)  lineas.push(`📐 Área aproximada: ${area}`);
+  if (tipo)  lineas.push(`🏞️ Tipo de predio/proyecto: ${tipo}`);
+  if (plazo) lineas.push(`⏱️ Plazo deseado: ${plazo}`);
+  if (extra) { lineas.push(''); lineas.push(`Información adicional: ${extra}`); }
+  lineas.push('');
+  lineas.push('Quedo atento(a) a su respuesta. ¡Gracias!');
+
+  const mensaje = lineas.join('\n');
+  window.open('https://wa.me/573222139210?text='+encodeURIComponent(mensaje),'_blank');
 }
 
 renderSitio();
