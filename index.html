@@ -11,7 +11,7 @@
   gtag('config', 'G-13T8CJ4ZV4');
 </script>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://api.anthropic.com https://maps.geoapify.com https://nominatim.openstreetmap.org https://overpass-api.de https://epsg.io https://cddis.nasa.gov https://geoportal.igac.gov.co https://redgeodesica.igac.gov.co https://server.arcgisonline.com https://tile.openstreetmap.org https://www.aerocivil.gov.co https://webapp.csrs-scrs.nrcan-rncan.gc.ca https://www.ibge.gov.br https://www.googletagmanager.com https://www.google.com https://schema.org; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdnjs.cloudflare.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://api.anthropic.com https://maps.geoapify.com https://nominatim.openstreetmap.org https://overpass-api.de https://epsg.io https://cddis.nasa.gov https://geoportal.igac.gov.co https://redgeodesica.igac.gov.co https://server.arcgisonline.com https://tile.openstreetmap.org https://www.aerocivil.gov.co https://webapp.csrs-scrs.nrcan-rncan.gc.ca https://www.ibge.gov.br https://www.googletagmanager.com https://www.google.com https://schema.org https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://wa.me">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="icon" type="image/png" href="img/favicon.png"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +67,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:var(--fb);background:var(--bg1);color:var(--tx1);overflow:hidden;font-size:18px}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--ac2);border-radius:3px}
-.app{width:100vw;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.app{width:100vw;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 
 /* NAV */
 nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-shrink:0;padding:0 28px;height:68px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(30,80,15,.35)}
@@ -104,7 +104,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .pg-sub{color:var(--tx3);font-size:15px;line-height:1.75;max-width:580px;margin-bottom:38px}
 
 /* HERO */
-.hero-wrap{min-height:calc(100vh - 62px);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-wrap{min-height:calc(100vh - 62px);min-height:calc(100dvh - 62px);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
 .hero-left{background:linear-gradient(150deg,#ffffff 0%,#f4faf0 50%,#eaf5e4 100%);display:flex;flex-direction:column;justify-content:center;padding:64px 56px;position:relative;overflow:hidden}
 .hero-left::before{content:'';position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(61,148,36,.12) 0%,transparent 70%);top:-80px;right:-80px}
 .hero-left::after{content:'';position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(61,148,36,.10) 0%,transparent 70%);bottom:-60px;left:-60px}
