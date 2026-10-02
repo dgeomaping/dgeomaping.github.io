@@ -414,7 +414,11 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   #gnss-grid{grid-template-columns:1fr!important}
   #mapa-gnss{height:260px!important}
   .topo-st{font-size:12px;padding:6px 11px}
+  #orto-grid{grid-template-columns:1fr!important}
+  #orto-map{height:360px!important}
 }
+.orto-base-btn{font-family:var(--fb);font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:7px;cursor:pointer;border:1.5px solid var(--bg3);color:var(--tx3);background:var(--bg4)}
+.orto-base-btn.on{background:var(--ac1);color:#fff;border-color:var(--ac1)}
 
 
 
@@ -1617,7 +1621,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <button class="topo-st" id="st-vias" onclick="switchST('vias',this)">🛣️ Diseño de Vías</button>
       <button class="topo-st" id="st-gnsspro" onclick="switchST('gnsspro',this)">📡 GNSS Procesador</button>
       <button class="topo-st" id="st-magnasirgas" onclick="switchST('magnasirgas',this)">🇨🇴 MAGNA Pro</button>
-      <button class="topo-st" onclick="switchST('coming',this)" style="opacity:.5">📐 Próximamente...</button>
+      <button class="topo-st" id="st-ortofotos" onclick="switchST('ortofotos',this)">🖼️ Visor de Ortofotos</button>
     </div>
 
     <!-- CALENDARIO GNSS -->
@@ -2836,15 +2840,69 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 
 
 
-<div class="topo-hw" id="hw-coming">
-      <div style="text-align:center;padding:70px 20px">
-        <div style="font-size:49px;margin-bottom:14px">🚧</div>
-        <div style="font-size:23px;font-weight:700;color:var(--dk1);margin-bottom:8px">Próximamente</div>
-        <div style="color:var(--tx3)">Nuevas herramientas topográficas en desarrollo</div>
+<div class="topo-hw" id="hw-ortofotos">
+      <div style="max-width:1400px;margin:0 auto">
+        <div class="pg-eye anim-left d1">🖼️ Visor de Ortofotos — Georreferenciación</div>
+        <div style="font-size:21px;font-weight:700;color:var(--dk1);margin-bottom:4px">Visor de Ortofotos</div>
+        <div style="font-size:13px;color:var(--tx3);margin-bottom:14px">Carga tu ortofoto georreferenciada y compárala con la imagen satelital</div>
+
+        <div id="orto-grid" style="display:grid;grid-template-columns:360px 1fr;gap:16px;align-items:start">
+          <!-- COLUMNA IZQUIERDA: controles -->
+          <div>
+            <div class="mvc anim-up d3" style="padding:16px;margin-bottom:12px">
+              <div style="font-size:15px;font-weight:700;color:var(--dk1);margin-bottom:10px">1️⃣ Cargar ortofoto</div>
+              <div id="orto-dropzone" style="border:2px dashed var(--bg3);border-radius:10px;padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--bg1)"
+                ondragover="event.preventDefault();this.style.borderColor='#2e7d1a'"
+                ondragleave="this.style.borderColor=''"
+                ondrop="ortoDrop(event)"
+                onclick="document.getElementById('orto-file').click()">
+                <div style="font-size:30px;margin-bottom:6px">📂</div>
+                <div style="font-size:14px;font-weight:700;color:var(--dk1);margin-bottom:4px">Arrastra tus ortofotos al mapa</div>
+                <div style="font-size:11px;color:var(--tx3)">GeoTIFF (.tif/.tiff) &nbsp;·&nbsp; o imagen (.jpg/.png) + archivo de mundo (.jgw/.tfw/.wld)</div>
+                <input type="file" id="orto-file" multiple style="display:none" onchange="ortoFileSelected(event)"/>
+              </div>
+              <div id="orto-status" style="margin-top:8px;font-size:12.5px;color:var(--tx3);line-height:1.5"></div>
+            </div>
+
+            <div class="mvc" style="padding:16px;margin-bottom:12px;display:none" id="orto-crs-wrap">
+              <div style="font-size:15px;font-weight:700;color:var(--dk1);margin-bottom:10px">2️⃣ Sistema de coordenadas de origen</div>
+              <select id="orto-crs" onchange="ortoRecalcular()" style="width:100%;padding:8px 10px;border:1.5px solid var(--bg3);border-radius:7px;font-size:14px;font-family:inherit;background:var(--bg1)">
+                <option value="ctm12" selected>Origen Nacional (CTM12 · EPSG:9377)</option>
+                <option value="bogota">Bogotá (zona clásica)</option>
+                <option value="oeste">Oeste (zona clásica)</option>
+                <option value="centro">Centro (zona clásica)</option>
+                <option value="este">Este (zona clásica)</option>
+                <option value="este_llanos">Este Llanos (zona clásica)</option>
+                <option value="wgs84">Ya está en grados (WGS84)</option>
+              </select>
+              <div style="font-size:11px;color:var(--tx3);margin-top:6px">El sistema de las coordenadas del archivo cargado (world file o GeoTIFF) — por defecto se asume CTM12, el oficial de Colombia (Res. IGAC 529/2020).</div>
+            </div>
+
+            <div class="mvc" style="padding:16px;display:none" id="orto-datos-card">
+              <div style="font-size:15px;font-weight:700;color:var(--dk1);margin-bottom:10px">3️⃣ Datos de la ortofoto</div>
+              <div id="orto-datos-html" style="font-size:12.5px;color:var(--tx2);line-height:1.7"></div>
+              <button onclick="generarPlanitoOrto()" id="orto-btn-planito" style="width:100%;margin-top:10px;background:var(--ac1);color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">🖨️ Generar planito en PDF</button>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: mapa -->
+          <div class="mvc" style="padding:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+              <div style="display:flex;gap:6px">
+                <button class="orto-base-btn on" id="orto-b-sat" onclick="ortoSetBase('sat')">🛰️ Satélite</button>
+                <button class="orto-base-btn" id="orto-b-osm" onclick="ortoSetBase('osm')">🗺️ Calles</button>
+              </div>
+              <button class="orto-base-btn" onclick="ortoFitBounds()">🔍 Centrar en ortofoto</button>
+            </div>
+            <div id="orto-map" style="width:100%;height:560px;border-radius:10px;overflow:hidden;background:#e8e8e8"></div>
+            <div style="margin-top:10px" id="orto-opacity-wrap">
+              <label style="font-size:12px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.5px">Opacidad ortofoto: <span id="orto-op-val">100%</span></label>
+              <input type="range" id="orto-opacity" min="0" max="100" value="100" oninput="ortoSetOpacity(this.value)" style="width:100%"/>
+            </div>
+          </div>
+        </div>
       </div>
-    
-  
-    </div><!-- /hw-coming -->
+    </div><!-- /hw-ortofotos -->
 
     <!-- DESCRIPCIÓN DE VÉRTICE TOPOGRÁFICO -->
     <!-- CARTERAS DE CAMPO GNSS -->
@@ -11353,6 +11411,300 @@ function tmToGeo(N, E, params){
   var lam=lam0+(D-(1+2*T1+C1)*D2*D/6+(5-2*C1+28*T1-3*C12+8*(e2/(1-e2))+24*T12)*D2*D2*D/120)/Math.cos(phi1);
   return {lat: phi*180/Math.PI, lon: lam*180/Math.PI};
 }
+
+// ════════════════════════════════════════════════════════════
+// VISOR DE ORTOFOTOS — DGeoMap Ingeniería S.A.S.
+// Carga GeoTIFF o imagen+world-file, reconoce la georreferenciación
+// (CTM12 por defecto) y compara contra la imagen satelital.
+// ════════════════════════════════════════════════════════════
+var ORTO = null; // {dataUrl,w,h,e0,n0,e1,n1,filename,resX,resY,crsKey}
+var ortoMap = null, ortoOverlay = null, ortoBaseSat = null, ortoBaseOsm = null;
+
+function ortoDrop(ev){ ev.preventDefault(); ev.currentTarget.style.borderColor=''; ortoHandleFiles(ev.dataTransfer.files); }
+function ortoFileSelected(ev){ ortoHandleFiles(ev.target.files); }
+
+function ortoSetStatus(msg, isError){
+  var el = document.getElementById('orto-status');
+  if(!el) return;
+  el.innerHTML = msg;
+  el.style.color = isError ? '#c0392b' : 'var(--tx3)';
+}
+
+async function ortoHandleFiles(fileList){
+  var files = Array.prototype.slice.call(fileList);
+  if(!files.length) return;
+  var tif = files.find(function(f){ return /\.tiff?$/i.test(f.name); });
+  var img = files.find(function(f){ return /\.(jpe?g|png)$/i.test(f.name); });
+  var wld = files.find(function(f){ return /\.(tfw|jgw|wld)$/i.test(f.name); });
+  var noSoportado = files.find(function(f){ return /\.(ecw|jp2|j2k|jpf|jpx)$/i.test(f.name); });
+
+  if(noSoportado){
+    ortoSetStatus('⚠️ El formato <b>'+noSoportado.name.split('.').pop().toUpperCase()+'</b> no se puede decodificar en el navegador (ECW es un formato propietario sin decodificador seguro para web; JPEG2000 requeriría una librería adicional). Conviértela a GeoTIFF con QGIS/GDAL (gratuito) y vuelve a cargarla aquí.', true);
+    return;
+  }
+
+  try{
+    if(tif){
+      ortoSetStatus('⏳ Leyendo GeoTIFF…');
+      await ortoCargarGeoTIFF(tif);
+    } else if(img && wld){
+      ortoSetStatus('⏳ Leyendo imagen y archivo de mundo…');
+      await ortoCargarImagenConWorldFile(img, wld);
+    } else if(img && !wld){
+      ortoSetStatus('⚠️ Falta el archivo de referenciación (.jgw para JPG o .tfw para TIFF) junto con la imagen — sin él no se puede ubicar la ortofoto en el mapa.', true);
+      return;
+    } else {
+      ortoSetStatus('⚠️ Carga un GeoTIFF, o una imagen JPG/PNG junto con su archivo de mundo (.jgw/.tfw/.wld).', true);
+      return;
+    }
+    ortoSetStatus('✅ Ortofoto cargada: '+ORTO.filename);
+    document.getElementById('orto-crs-wrap').style.display='block';
+    document.getElementById('orto-datos-card').style.display='block';
+    ortoRecalcular();
+  } catch(err){
+    console.error('Error cargando ortofoto:', err);
+    ortoSetStatus('❌ Error: '+err.message, true);
+  }
+}
+
+// ── GeoTIFF (vía geotiff.js, pura JS, sin eval/wasm) ──
+async function ortoCargarGeoTIFF(file){
+  if(!window.GeoTIFF){
+    await new Promise(function(res,rej){
+      var s=document.createElement('script');
+      s.src='https://unpkg.com/geotiff/dist-browser/geotiff.js';
+      s.onload=res; s.onerror=function(){rej(new Error('No se pudo cargar la librería GeoTIFF'));};
+      document.head.appendChild(s);
+    });
+  }
+  var buf = await file.arrayBuffer();
+  var tiff = await GeoTIFF.fromArrayBuffer(buf);
+  var image = await tiff.getImage();
+  var w = image.getWidth(), h = image.getHeight();
+  var origin = image.getOrigin();   // [x0, y0] del pixel (0,0) esquina superior-izquierda
+  var res = image.getResolution();  // [resX, resY] (resY normalmente negativo)
+
+  // Límite de resolución de vista (no de precisión del archivo original): para que el
+  // navegador no se quede sin memoria con ortofotos de decenas de millones de píxeles.
+  var MAXDIM = 2500;
+  var scale = Math.min(1, MAXDIM/w, MAXDIM/h);
+  var outW = Math.max(1, Math.round(w*scale)), outH = Math.max(1, Math.round(h*scale));
+
+  var rasters = await image.readRasters(scale<1 ? {width:outW, height:outH} : undefined);
+  var nBands = rasters.length;
+  var canvas = document.createElement('canvas');
+  canvas.width = outW; canvas.height = outH;
+  var ctx = canvas.getContext('2d');
+  var imgData = ctx.createImageData(outW, outH);
+  var n = outW*outH;
+  for(var i=0;i<n;i++){
+    var r,g,b,a=255;
+    if(nBands>=3){ r=rasters[0][i]; g=rasters[1][i]; b=rasters[2][i]; if(nBands>=4) a=rasters[3][i]; }
+    else { r=g=b=rasters[0][i]; }
+    imgData.data[i*4]=r; imgData.data[i*4+1]=g; imgData.data[i*4+2]=b; imgData.data[i*4+3]=a;
+  }
+  ctx.putImageData(imgData, 0, 0);
+
+  ORTO = {
+    dataUrl: canvas.toDataURL('image/png'),
+    w: w, h: h,
+    e0: origin[0], n0: origin[1],
+    e1: origin[0] + w*res[0], n1: origin[1] + h*res[1],
+    resX: Math.abs(res[0]), resY: Math.abs(res[1]),
+    filename: file.name,
+    vistaPrevia: scale<1
+  };
+}
+
+// ── Imagen (JPG/PNG) + archivo de mundo (.jgw/.tfw/.wld) ──
+function ortoCargarImagenConWorldFile(imgFile, wldFile){
+  return new Promise(function(resolve, reject){
+    var fr = new FileReader();
+    fr.onload = function(){
+      var lines = fr.result.split(/\r?\n/).map(function(s){return parseFloat(s.trim());}).filter(function(v){return !isNaN(v);});
+      if(lines.length<6){ reject(new Error('El archivo de mundo no tiene el formato esperado (6 líneas numéricas)')); return; }
+      var A=lines[0], D=lines[1], B=lines[2], E=lines[3], C=lines[4], F=lines[5];
+      if(D!==0 || B!==0){
+        ortoSetStatus('⚠️ El archivo de mundo tiene rotación — el visor solo soporta ortofotos orientadas al norte; la ubicación puede no ser exacta.', true);
+      }
+      var imgReader = new FileReader();
+      imgReader.onload = function(){
+        var im = new Image();
+        im.onload = function(){
+          var w=im.naturalWidth, h=im.naturalHeight;
+          ORTO = {
+            dataUrl: imgReader.result,
+            w:w, h:h,
+            e0: C, n0: F,
+            e1: C + w*A, n1: F + h*E,
+            resX: Math.abs(A), resY: Math.abs(E),
+            filename: imgFile.name,
+            vistaPrevia:false
+          };
+          resolve();
+        };
+        im.onerror = function(){ reject(new Error('No se pudo leer la imagen')); };
+        im.src = imgReader.result;
+      };
+      imgReader.onerror = function(){ reject(new Error('No se pudo leer el archivo de imagen')); };
+      imgReader.readAsDataURL(imgFile);
+    };
+    fr.onerror = function(){ reject(new Error('No se pudo leer el archivo de mundo')); };
+    fr.readAsText(wldFile);
+  });
+}
+
+// ── Parámetros de proyección (Res. IGAC 529/2020 — EPSG:9377) ──
+// Nota: la var global CTM12 de este archivo guarda lon0/lat0 ya en radianes y
+// no es compatible con geoToTM/tmToGeo (que esperan grados); por eso el visor
+// de ortofotos usa su propia constante, verificada con un punto de control real
+// (round-trip y comparación contra coordenadas conocidas de Bogotá).
+var ORTO_CTM12 = {a:6378137, f:1/298.257222101, lon0:-73, lat0:4, k0:0.9992, FE:5000000, FN:2000000};
+function ortoParamsCRS(key){
+  if(key==='ctm12') return ORTO_CTM12;
+  return ZONAS_COL[key];
+}
+
+function ortoEsquinaALatLon(e,n,key){
+  if(key==='wgs84') return {lat:n, lon:e};
+  return tmToGeo(n, e, ortoParamsCRS(key));
+}
+
+function ortoRecalcular(){
+  if(!ORTO) return;
+  var key = document.getElementById('orto-crs').value;
+  var p1 = ortoEsquinaALatLon(ORTO.e0, ORTO.n0, key); // esquina superior-izquierda
+  var p2 = ortoEsquinaALatLon(ORTO.e1, ORTO.n1, key); // esquina inferior-derecha
+  var latMin=Math.min(p1.lat,p2.lat), latMax=Math.max(p1.lat,p2.lat);
+  var lonMin=Math.min(p1.lon,p2.lon), lonMax=Math.max(p1.lon,p2.lon);
+  ORTO.bounds = [[latMin,lonMin],[latMax,lonMax]];
+  ORTO.crsKey = key;
+  ortoRenderInfo();
+  ortoInitMapaSiNecesario(ortoActualizarOverlay);
+}
+
+function ortoNombreCRS(key){
+  var map={ctm12:'Origen Nacional (CTM12 · EPSG:9377)',bogota:'Bogotá (zona clásica)',oeste:'Oeste (zona clásica)',centro:'Centro (zona clásica)',este:'Este (zona clásica)',este_llanos:'Este Llanos (zona clásica)',wgs84:'WGS84 (grados)'};
+  return map[key]||key;
+}
+
+function ortoRenderInfo(){
+  var el = document.getElementById('orto-datos-html');
+  if(!el || !ORTO) return;
+  var cmPx = (ORTO.resX*100).toFixed(1);
+  var b = ORTO.bounds;
+  el.innerHTML =
+    '<div><b>Archivo:</b> '+ORTO.filename+'</div>'+
+    '<div><b>Dimensiones:</b> '+ORTO.w+' × '+ORTO.h+' px'+(ORTO.vistaPrevia?' <span style="color:var(--tx3)">(vista previa reducida para visualización web)</span>':'')+'</div>'+
+    '<div><b>Resolución:</b> '+cmPx+' cm/píxel</div>'+
+    '<div><b>Sistema origen:</b> '+ortoNombreCRS(ORTO.crsKey)+'</div>'+
+    '<div style="margin-top:6px"><b>Esquina NW:</b> '+b[1][0].toFixed(6)+'°, '+b[1][1].toFixed(6)+'°</div>'+
+    '<div><b>Esquina SE:</b> '+b[0][0].toFixed(6)+'°, '+b[0][1].toFixed(6)+'°</div>'+
+    (ORTO.crsKey!=='wgs84' ? '<div style="margin-top:6px;color:var(--tx3)">Coordenadas origen: E '+ORTO.e0.toFixed(2)+' / N '+ORTO.n0.toFixed(2)+' m</div>' : '');
+}
+
+// ── Mapa Leaflet ──
+function ortoInitMapaSiNecesario(cb){
+  if(ortoMap){ if(cb) cb(); return; }
+  function crear(){
+    ortoMap = L.map('orto-map', {zoomControl:true});
+    ortoBaseSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {maxZoom:20, attribution:'© Esri'});
+    ortoBaseOsm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'© OpenStreetMap contributors'});
+    ortoBaseSat.addTo(ortoMap);
+    ortoMap.setView([4.6,-74.1], 12);
+    setTimeout(function(){ ortoMap.invalidateSize(); if(cb) cb(); }, 200);
+  }
+  if(!window.L){
+    if(!document.getElementById('lcss')){
+      var lc=document.createElement('link'); lc.id='lcss'; lc.rel='stylesheet';
+      lc.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(lc);
+    }
+    var ls=document.createElement('script');
+    ls.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    ls.onload=crear;
+    document.head.appendChild(ls);
+  } else crear();
+}
+
+function ortoActualizarOverlay(){
+  if(!ortoMap || !ORTO || !ORTO.bounds) return;
+  if(ortoOverlay){ ortoMap.removeLayer(ortoOverlay); }
+  var op = parseInt(document.getElementById('orto-opacity').value,10)/100;
+  ortoOverlay = L.imageOverlay(ORTO.dataUrl, ORTO.bounds, {opacity:op}).addTo(ortoMap);
+  ortoMap.fitBounds(ORTO.bounds, {maxZoom:19});
+}
+
+function ortoFitBounds(){ if(ortoMap && ORTO && ORTO.bounds) ortoMap.fitBounds(ORTO.bounds, {maxZoom:19}); }
+
+function ortoSetOpacity(v){
+  document.getElementById('orto-op-val').textContent = v+'%';
+  if(ortoOverlay) ortoOverlay.setOpacity(v/100);
+}
+
+function ortoSetBase(tipo){
+  if(!ortoMap) return;
+  document.getElementById('orto-b-sat').classList.toggle('on', tipo==='sat');
+  document.getElementById('orto-b-osm').classList.toggle('on', tipo==='osm');
+  if(tipo==='sat'){ ortoMap.removeLayer(ortoBaseOsm); ortoBaseSat.addTo(ortoMap); }
+  else { ortoMap.removeLayer(ortoBaseSat); ortoBaseOsm.addTo(ortoMap); }
+}
+
+// ── Planito en PDF (reutiliza el mismo patrón de ventana-imprimible del resto del sitio) ──
+async function generarPlanitoOrto(){
+  if(!ORTO || !ortoMap){ alert('Carga primero una ortofoto.'); return; }
+  var btn = document.getElementById('orto-btn-planito');
+  var orig = btn.innerHTML;
+  btn.innerHTML = '⏳ Generando…'; btn.disabled = true;
+  try{
+    if(!window.html2canvas){
+      await new Promise(function(res){
+        var s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        s.onload=res; document.head.appendChild(s);
+      });
+    }
+    var mapEl = document.getElementById('orto-map');
+    var canvas = await html2canvas(mapEl, {useCORS:true, allowTaint:true, logging:false, imageTimeout:8000});
+    var mapImgDataUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+    var today = new Date().toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'});
+    var b = ORTO.bounds;
+    var html = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">'+
+      '<title>Planito Ortofoto — '+ORTO.filename+'</title>'+
+      '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;font-size:12px;color:#111;background:#fff;padding:20px}'+
+      '.header{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:18px 24px;border-radius:8px;margin-bottom:16px}'+
+      '.logo-line{font-size:19px;font-weight:900;letter-spacing:.5px}.logo-line span{color:#a5d6a7}'+
+      '.sub-line{font-size:11px;opacity:.8;letter-spacing:1px;text-transform:uppercase;margin-top:2px}'+
+      '.titulo{font-size:17px;font-weight:800;margin-top:8px}.subtitulo{font-size:12px;opacity:.85;margin-top:2px}'+
+      '.meta{border:1px solid #c8e6c9;border-radius:6px;padding:10px 14px;margin-bottom:14px;background:#f9fbe7}'+
+      '.meta table{width:100%;border-collapse:collapse}.meta td{padding:3px 10px;font-size:12px;border-right:1px solid #e8f5e9}.meta td b{color:#1b5e20}'+
+      '.mapimg{width:100%;border:1px solid #c8e6c9;border-radius:6px;margin-bottom:14px}'+
+      '.footer{margin-top:20px;padding:12px;border-top:2px solid #1b5e20;font-size:10px;color:#555;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}'+
+      '@media print{body{padding:8px}.header{border-radius:0}button{display:none}}'+
+      '</style></head><body>'+
+      '<div class="header"><div class="logo-line">DGeo<span>Map</span> Ingeniería S.A.S.</div>'+
+      '<div class="sub-line">Topografía · Geomática · Geodesia · Colombia</div>'+
+      '<div class="titulo">Planito de Localización — Ortofoto</div>'+
+      '<div class="subtitulo">'+ORTO.filename+'</div></div>'+
+      '<div class="meta"><table>'+
+      '<tr><td><b>Archivo:</b> '+ORTO.filename+'</td><td><b>Dimensiones:</b> '+ORTO.w+' × '+ORTO.h+' px</td></tr>'+
+      '<tr><td><b>Resolución:</b> '+(ORTO.resX*100).toFixed(1)+' cm/píxel</td><td><b>Sistema origen:</b> '+ortoNombreCRS(ORTO.crsKey)+'</td></tr>'+
+      '<tr><td><b>Esquina NW:</b> '+b[1][0].toFixed(6)+'°, '+b[1][1].toFixed(6)+'°</td><td><b>Esquina SE:</b> '+b[0][0].toFixed(6)+'°, '+b[0][1].toFixed(6)+'°</td></tr>'+
+      '<tr><td colspan="2"><b>Fecha de generación:</b> '+today+'</td></tr>'+
+      '</table></div>'+
+      '<img class="mapimg" src="'+mapImgDataUrl+'"/>'+
+      '<div class="footer"><div>Generado con DGeoMap Ingeniería S.A.S. · '+today+'<br>Este documento es de carácter técnico y profesional. Las coordenadas corresponden a la georreferenciación declarada del archivo original.</div></div>'+
+      '<div style="text-align:center;margin-top:14px"><button onclick="window.print()" style="background:#1b5e20;color:#fff;border:none;padding:10px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">🖨️ Imprimir / Guardar PDF</button></div>'+
+      '</body></html>';
+    _abrirReporte(html, 'Planito_Ortofoto');
+  } catch(err){
+    console.error('Error generando planito:', err);
+    alert('Error al generar el planito: '+err.message);
+  }
+  btn.innerHTML = orig; btn.disabled = false;
+}
+
 
 // ── Geo → ECEF ────────────────────────────────────────────
 function geoToECEF(lat, lon, h){
