@@ -2858,7 +2858,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
                 onclick="document.getElementById('orto-file').click()">
                 <div style="font-size:30px;margin-bottom:6px">📂</div>
                 <div style="font-size:14px;font-weight:700;color:var(--dk1);margin-bottom:4px">Arrastra tus ortofotos al mapa</div>
-                <div style="font-size:11px;color:var(--tx3)">GeoTIFF (.tif/.tiff) &nbsp;·&nbsp; o imagen (.jpg/.png) + archivo de mundo (.jgw/.tfw/.wld)</div>
+                <div style="font-size:11px;color:var(--tx3)">Imagen (.jpg/.png) + archivo de mundo (.jgw/.tfw/.wld)</div>
                 <input type="file" id="orto-file" multiple style="display:none" onchange="ortoFileSelected(event)"/>
               </div>
               <div id="orto-status" style="margin-top:8px;font-size:12.5px;color:var(--tx3);line-height:1.5"></div>
@@ -2875,7 +2875,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
                 <option value="este_llanos">Este Llanos (zona clásica)</option>
                 <option value="wgs84">Ya está en grados (WGS84)</option>
               </select>
-              <div style="font-size:11px;color:var(--tx3);margin-top:6px">El sistema de las coordenadas del archivo cargado (world file o GeoTIFF) — por defecto se asume CTM12, el oficial de Colombia (Res. IGAC 529/2020).</div>
+              <div style="font-size:11px;color:var(--tx3);margin-top:6px">El sistema de las coordenadas del archivo de mundo cargado — por defecto se asume CTM12, el oficial de Colombia (Res. IGAC 529/2020).</div>
             </div>
 
             <div class="mvc" style="padding:16px;display:none" id="orto-datos-card">
@@ -11414,7 +11414,7 @@ function tmToGeo(N, E, params){
 
 // ════════════════════════════════════════════════════════════
 // VISOR DE ORTOFOTOS — DGeoMap Ingeniería S.A.S.
-// Carga GeoTIFF o imagen+world-file, reconoce la georreferenciación
+// Carga imagen (JPG/PNG) + world-file, reconoce la georreferenciación
 // (CTM12 por defecto) y compara contra la imagen satelital.
 // ════════════════════════════════════════════════════════════
 var ORTO = null; // {dataUrl,w,h,e0,n0,e1,n1,filename,resX,resY,crsKey}
@@ -11439,22 +11439,23 @@ async function ortoHandleFiles(fileList){
   var noSoportado = files.find(function(f){ return /\.(ecw|jp2|j2k|jpf|jpx)$/i.test(f.name); });
 
   if(noSoportado){
-    ortoSetStatus('⚠️ El formato <b>'+noSoportado.name.split('.').pop().toUpperCase()+'</b> no se puede decodificar en el navegador (ECW es un formato propietario sin decodificador seguro para web; JPEG2000 requeriría una librería adicional). Conviértela a GeoTIFF con QGIS/GDAL (gratuito) y vuelve a cargarla aquí.', true);
+    ortoSetStatus('⚠️ El formato <b>'+noSoportado.name.split('.').pop().toUpperCase()+'</b> no se puede decodificar en el navegador (ECW es un formato propietario sin decodificador seguro para web; JPEG2000 requeriría una librería adicional). Conviértela a JPG + archivo de mundo (.jgw) con QGIS/GDAL (gratuito) y vuelve a cargarla aquí.', true);
+    return;
+  }
+  if(tif){
+    ortoSetStatus('⚠️ El visor aún no soporta GeoTIFF directamente: los archivos reales de ortofotos son demasiado pesados para decodificarlos en el navegador sin colgar la pestaña. En QGIS: clic derecho en la capa → Exportar → Guardar como... → formato JPEG (genera el .jgw automáticamente) → carga aquí la pareja .jpg + .jgw.', true);
     return;
   }
 
   try{
-    if(tif){
-      ortoSetStatus('⏳ Leyendo GeoTIFF…');
-      await ortoCargarGeoTIFF(tif);
-    } else if(img && wld){
+    if(img && wld){
       ortoSetStatus('⏳ Leyendo imagen y archivo de mundo…');
       await ortoCargarImagenConWorldFile(img, wld);
     } else if(img && !wld){
       ortoSetStatus('⚠️ Falta el archivo de referenciación (.jgw para JPG o .tfw para TIFF) junto con la imagen — sin él no se puede ubicar la ortofoto en el mapa.', true);
       return;
     } else {
-      ortoSetStatus('⚠️ Carga un GeoTIFF, o una imagen JPG/PNG junto con su archivo de mundo (.jgw/.tfw/.wld).', true);
+      ortoSetStatus('⚠️ Carga una imagen JPG/PNG junto con su archivo de mundo (.jgw/.tfw/.wld).', true);
       return;
     }
     ortoSetStatus('✅ Ortofoto cargada: '+ORTO.filename);
@@ -11465,55 +11466,6 @@ async function ortoHandleFiles(fileList){
     console.error('Error cargando ortofoto:', err);
     ortoSetStatus('❌ Error: '+err.message, true);
   }
-}
-
-// ── GeoTIFF (vía geotiff.js, pura JS, sin eval/wasm) ──
-async function ortoCargarGeoTIFF(file){
-  if(!window.GeoTIFF){
-    await new Promise(function(res,rej){
-      var s=document.createElement('script');
-      s.src='https://unpkg.com/geotiff/dist-browser/geotiff.js';
-      s.onload=res; s.onerror=function(){rej(new Error('No se pudo cargar la librería GeoTIFF'));};
-      document.head.appendChild(s);
-    });
-  }
-  var buf = await file.arrayBuffer();
-  var tiff = await GeoTIFF.fromArrayBuffer(buf);
-  var image = await tiff.getImage();
-  var w = image.getWidth(), h = image.getHeight();
-  var origin = image.getOrigin();   // [x0, y0] del pixel (0,0) esquina superior-izquierda
-  var res = image.getResolution();  // [resX, resY] (resY normalmente negativo)
-
-  // Límite de resolución de vista (no de precisión del archivo original): para que el
-  // navegador no se quede sin memoria con ortofotos de decenas de millones de píxeles.
-  var MAXDIM = 2500;
-  var scale = Math.min(1, MAXDIM/w, MAXDIM/h);
-  var outW = Math.max(1, Math.round(w*scale)), outH = Math.max(1, Math.round(h*scale));
-
-  var rasters = await image.readRasters(scale<1 ? {width:outW, height:outH} : undefined);
-  var nBands = rasters.length;
-  var canvas = document.createElement('canvas');
-  canvas.width = outW; canvas.height = outH;
-  var ctx = canvas.getContext('2d');
-  var imgData = ctx.createImageData(outW, outH);
-  var n = outW*outH;
-  for(var i=0;i<n;i++){
-    var r,g,b,a=255;
-    if(nBands>=3){ r=rasters[0][i]; g=rasters[1][i]; b=rasters[2][i]; if(nBands>=4) a=rasters[3][i]; }
-    else { r=g=b=rasters[0][i]; }
-    imgData.data[i*4]=r; imgData.data[i*4+1]=g; imgData.data[i*4+2]=b; imgData.data[i*4+3]=a;
-  }
-  ctx.putImageData(imgData, 0, 0);
-
-  ORTO = {
-    dataUrl: canvas.toDataURL('image/png'),
-    w: w, h: h,
-    e0: origin[0], n0: origin[1],
-    e1: origin[0] + w*res[0], n1: origin[1] + h*res[1],
-    resX: Math.abs(res[0]), resY: Math.abs(res[1]),
-    filename: file.name,
-    vistaPrevia: scale<1
-  };
 }
 
 // ── Imagen (JPG/PNG) + archivo de mundo (.jgw/.tfw/.wld) ──
