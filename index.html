@@ -361,9 +361,16 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .sf-links a:hover{color:#fff;transform:translateX(3px)}
 .sf-cta{display:inline-flex;align-items:center;gap:8px;background:var(--ac2);color:#fff;font-weight:700;font-size:13.5px;padding:10px 16px;border-radius:8px;text-decoration:none;margin-top:6px;transition:background .15s;width:fit-content}
 .sf-cta:hover{background:var(--ac3)}
-.sf-bottom{border-top:1px solid rgba(255,255,255,.12);padding:16px 0;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-size:12px;color:rgba(255,255,255,.5);text-align:center}
 @media(max-width:860px){.sf-grid{grid-template-columns:1fr 1fr;row-gap:30px}}
 @media(max-width:520px){.sf-grid{grid-template-columns:1fr}.site-footer{padding:36px 20px 0}}
+
+/* BARRA DE DERECHOS DE AUTOR — fija siempre al pie de la pantalla */
+#site-copyright-bar{position:fixed;left:0;right:0;bottom:0;z-index:45;
+  background:linear-gradient(160deg,#152a0f,#1e3318 55%,#16240f);
+  border-top:1px solid rgba(255,255,255,.12);box-shadow:0 -2px 10px rgba(0,0,0,.2);
+  color:rgba(255,255,255,.55);font-size:11px;line-height:1.5;text-align:center;padding:9px 14px}
+.page{padding-bottom:58px}
+@media(max-width:420px){#site-copyright-bar{font-size:9.5px;padding:8px 10px}.page{padding-bottom:70px}}
 .d7{animation-delay:.83s}.d8{animation-delay:.96s}
 .mvc{transition:all .25s cubic-bezier(.34,1.3,.64,1)}
 .mvc:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 16px 36px rgba(30,90,15,.18)}
@@ -1014,6 +1021,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   <button class="mmitem" onclick="goPage('portafolio');closeMenu()">🗂 Galería</button>
   <button class="mmitem cta" onclick="goPage('contacto');closeMenu()">💬 Cotizar</button>
 </div>
+
+<div id="site-copyright-bar">© <span class="ft-year">2026</span> DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · Todos los derechos reservados · www.dgeomaping.com</div>
 
 <div class="pages">
 
@@ -5586,15 +5595,6 @@ function dgFooterHTML() {
           </div>
           <a class="sf-cta" href="https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener">💬 Cotizar por WhatsApp</a>
         </div>
-      </div>
-      <div class="sf-bottom">
-        <span>© <span class="ft-year">2026</span> DGeoMap Ingeniería S.A.S.</span>
-        <span style="opacity:.5">·</span>
-        <span>NIT 902.108.012-6</span>
-        <span style="opacity:.5">·</span>
-        <span>Todos los derechos reservados</span>
-        <span style="opacity:.5">·</span>
-        <span>www.dgeomaping.com</span>
       </div>
     </div>
   </footer>`;
