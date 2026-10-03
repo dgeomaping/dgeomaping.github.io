@@ -379,6 +379,16 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   background:rgba(20,30,15,.55);border:1.5px solid rgba(255,255,255,.5);color:#fff;font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);transition:background .2s}
 #hero-mute-btn:hover{background:rgba(46,125,26,.85)}
+#hero-dron-caption{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:26px 90px 20px 26px;
+  background:linear-gradient(to top, rgba(8,18,8,.75) 0%, rgba(8,18,8,.4) 55%, rgba(8,18,8,0) 100%);
+  color:#fff;font-family:var(--fb);font-size:13.5px;line-height:1.65;max-width:620px;pointer-events:none}
+#hero-dron-caption-short{display:none}
+@media(max-width:700px){
+  #hero-dron-caption{display:none}
+  #hero-dron-caption-short{display:block;position:absolute;left:0;right:0;bottom:0;z-index:4;padding:10px 46px 9px 14px;
+    background:linear-gradient(to top, rgba(8,18,8,.75) 0%, rgba(8,18,8,.35) 60%, rgba(8,18,8,0) 100%);
+    color:#fff;font-family:var(--fb);font-size:10.5px;line-height:1.4;pointer-events:none}
+}
 .slider-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
 .sdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.6)}
 .sdot.active{background:#5aaa25;border-color:#5aaa25;width:22px;border-radius:4px}
@@ -1026,6 +1036,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <div class="slider-wrap">
         <div class="slide active" data-duration="19100">
           <video id="hero-video" src="img/DGeoMap_Hero_Dron.mp4" muted playsinline loop="false"></video>
+          <p id="hero-dron-caption">Nuestro dron de ala fija WingtraOne GEN II opera con sensor MicaSense RedEdge-P, una cámara pancromática y multiespectral de alta resolución que registra simultáneamente banda visible e infrarroja, lo que permite calcular índices de vegetación (NDVI) y entregar ortomosaicos de mayor detalle para agricultura de precisión y monitoreo ambiental.</p>
+          <p id="hero-dron-caption-short">WingtraOne GEN II con sensor MicaSense RedEdge-P: cámara multiespectral y pancromática para agricultura de precisión y monitoreo ambiental.</p>
           <button id="hero-mute-btn" onclick="heroToggleMute(event)" aria-label="Activar sonido">🔇</button>
         </div>
         <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-01.jpg')"></div>
