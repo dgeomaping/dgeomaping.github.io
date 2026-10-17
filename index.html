@@ -66,25 +66,27 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:var(--fb);background:var(--bg1);color:var(--tx1);overflow:hidden;font-size:18px}
+.ico{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;flex-shrink:0}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--ac2);border-radius:3px}
 .app{width:100vw;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 
 /* NAV */
-nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-shrink:0;padding:0 28px;height:68px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(30,80,15,.35)}
+nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-shrink:0;padding:0 34px;height:78px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 20px rgba(30,80,15,.35)}
 .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
 .logo img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:9px;padding:4px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 .logo-txt .ln{font-family:var(--fd);font-size:23px;font-weight:800;color:#fff;letter-spacing:.3px}
 .logo-txt .ln em{color:var(--ac4);font-style:normal}
 .logo-txt .ls{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:2.5px;text-transform:uppercase}
-.nav-tabs{display:flex;gap:4px}
-.ntab{font-family:var(--fb);font-size:13.5px;font-weight:600;color:rgba(255,255,255,.8);padding:8px 16px;border-radius:20px;cursor:pointer;background:transparent;transition:all .2s;border:1.5px solid rgba(255,255,255,.22)}
+.nav-tabs{display:flex;gap:10px;align-items:center}
+.ntab{font-family:var(--fb);font-size:14px;font-weight:600;letter-spacing:.2px;color:rgba(255,255,255,.8);padding:10px 20px;border-radius:20px;cursor:pointer;background:transparent;transition:all .2s;border:1.5px solid rgba(255,255,255,.22);display:inline-flex;align-items:center;gap:7px}
 .ntab:hover{color:#fff;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4)}
 .ntab.on{color:var(--ac1);background:#fff;border-color:#fff;font-weight:700;box-shadow:0 2px 10px rgba(0,0,0,.2)}
 .ntab.cta{background:var(--ac1);color:#fff!important;font-weight:700;margin-left:6px;border-color:var(--ac1)}
 .ntab.cta:hover{background:var(--ac2);border-color:var(--ac2)}.nav-dropdown{position:relative;display:inline-block}
 .nav-dropdown:hover .nav-drop-menu{display:flex}
 .nav-drop-menu{display:none;position:absolute;top:100%;left:0;flex-direction:column;background:#1a3a0e;border-radius:8px;overflow:hidden;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:999}
-.nav-drop-menu a{font-family:var(--fb);font-size:13.5px;font-weight:500;color:rgba(255,255,255,.6);padding:10px 16px;cursor:pointer;border:none;background:transparent;text-align:left;white-space:nowrap;text-decoration:none}
+.nav-drop-menu a{font-family:var(--fb);font-size:13.5px;font-weight:500;color:rgba(255,255,255,.75);padding:11px 18px;cursor:pointer;border:none;background:transparent;text-align:left;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:9px}
+.nav-drop-menu a:hover{background:rgba(255,255,255,.08);color:#fff}
 .nav-drop-menu a:hover{color:#fff;background:rgba(255,255,255,.08)}
 
 /* PAGES */
@@ -132,11 +134,11 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .mbi::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ac1);flex-shrink:0}
 
 /* NOSOTROS */
-.mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:30px}
+.mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
 .mvc{background:#fff;border-radius:var(--rl);padding:28px;border:1px solid rgba(46,125,26,.15);border-top:3px solid var(--ac2);box-shadow:0 4px 18px rgba(30,80,15,.07);position:relative;overflow:hidden;transition:all .3s cubic-bezier(.34,1.3,.64,1)}
 .mvc h3{font-family:var(--fd);font-size:19px;font-weight:800;color:var(--dk1);margin-bottom:13px;display:flex;align-items:center;gap:10px}
 .mvc p{font-size:14.5px;color:var(--tx2);line-height:1.9}
-.vals{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:24px}
+.vals{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:38px}
 .vpill{background:rgba(61,122,42,.07);border:1px solid rgba(61,122,42,.18);color:var(--ac1);font-size:13px;font-weight:600;padding:5px 14px;border-radius:20px}
 .team-card{background:#f8fdf6;border:1px solid rgba(61,122,42,.2);border-radius:var(--rl);padding:22px 26px;display:flex;align-items:center;gap:18px;box-shadow:var(--shadow)}
 .team-ico{width:52px;height:52px;background:rgba(61,122,42,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0;border:1px solid rgba(61,122,42,.2)}
@@ -144,7 +146,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .team-card p{font-size:13.5px;color:var(--tx2);line-height:1.6}
 .team-badge{display:inline-block;background:rgba(61,122,42,.12);color:var(--ac1);font-size:11px;font-weight:700;padding:4px 12px;border-radius:4px;margin-top:5px;text-transform:uppercase;letter-spacing:.5px;border:1px solid rgba(61,122,42,.22)}
 /* CARRUSEL FOTOS */
-.foto-carousel{position:relative;overflow:hidden;border-radius:14px;margin-bottom:28px;box-shadow:0 6px 24px rgba(30,80,15,.15)}
+.foto-carousel{position:relative;overflow:hidden;border-radius:14px;margin-bottom:40px;box-shadow:0 6px 24px rgba(30,80,15,.15)}
 .foto-carousel .fc-track{display:flex;transition:transform .6s cubic-bezier(.37,0,.63,1)}
 .foto-carousel .fc-slide{min-width:100%;position:relative}
 .foto-carousel .fc-slide img{width:100%;height:320px;object-fit:cover;display:block}
@@ -153,7 +155,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .fc-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.7)}
 .fc-dot.on{background:#fff;width:20px;border-radius:4px}
 /* PERFIL PROFESIONAL */
-.prof-card{background:#fff;border:1px solid rgba(46,125,26,.15);border-radius:var(--rl);padding:26px;box-shadow:0 4px 18px rgba(30,80,15,.07);display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-bottom:24px}
+.prof-card{background:#fff;border:1px solid rgba(46,125,26,.15);border-radius:var(--rl);padding:32px;box-shadow:0 4px 18px rgba(30,80,15,.07);display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-bottom:24px}
 .prof-left h4{font-family:var(--fd);font-size:21px;font-weight:900;color:var(--dk1);margin-bottom:4px}
 .prof-left .cargo{font-size:14px;color:var(--ac1);font-weight:600;margin-bottom:12px;letter-spacing:.4px}
 .prof-left .resumen{font-size:14.5px;color:var(--tx2);line-height:1.8;margin-bottom:14px}
@@ -223,7 +225,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .ctc-info{display:flex;flex-direction:column;gap:11px}
 .ctc-it{background:var(--bg4);border:1px solid var(--bg3);border-radius:var(--rl);padding:14px 18px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;box-shadow:var(--shadow)}
 .ctc-it:hover{border-color:rgba(61,122,42,.22)}
-.ctc-ico{width:40px;height:40px;background:rgba(61,122,42,.07);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1px solid rgba(61,122,42,.13)}
+.ctc-ico{width:40px;height:40px;background:rgba(61,122,42,.07);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ac1);flex-shrink:0;border:1px solid rgba(61,122,42,.13)}
 .ctc-it h5{font-family:var(--fd);font-size:11px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px}
 .ctc-it p{font-size:14px;color:var(--tx1);font-weight:500}
 .ctc-form{background:var(--bg4);border-radius:var(--rxl);padding:28px;border:1px solid var(--bg3);box-shadow:var(--shadow2)}
@@ -319,7 +321,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 .mobile-menu{display:none;position:fixed;top:62px;left:0;right:0;background:var(--dk1);z-index:99;padding:10px 12px 14px;border-bottom:2px solid rgba(107,184,74,.25);box-shadow:0 8px 24px rgba(0,0,0,.4)}
 .mobile-menu.open{display:block}
-.mobile-menu .mmitem{display:block;width:100%;text-align:left;padding:12px 18px;color:rgba(255,255,255,.8);font-family:var(--fb);font-size:16px;font-weight:500;background:transparent;border:none;cursor:pointer;border-radius:8px;transition:all .15s;margin-bottom:2px}
+.mobile-menu .mmitem{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:13px 18px;color:rgba(255,255,255,.8);font-family:var(--fb);font-size:16px;font-weight:500;background:transparent;border:none;cursor:pointer;border-radius:8px;transition:all .15s;margin-bottom:2px}
 .mobile-menu .mmitem:active{background:rgba(107,184,74,.2);color:var(--ac4)}
 .mobile-menu .mmitem.cta{background:var(--ac1);color:#fff !important;margin-top:8px;font-weight:700;text-align:center;border-radius:8px}
 
@@ -423,7 +425,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 }
 
 /* ── TOPOGRAFÍA ── */
-.topo-st{font-family:var(--fb);font-size:14px;font-weight:600;padding:8px 18px;border-radius:20px;cursor:pointer;border:1.5px solid var(--bg3);color:var(--tx3);background:var(--bg4);transition:all .15s}
+.topo-st{font-family:var(--fb);font-size:14px;font-weight:600;padding:9px 20px;border-radius:20px;cursor:pointer;border:1.5px solid var(--bg3);color:var(--tx3);background:var(--bg4);transition:all .15s;display:inline-flex;align-items:center;gap:8px}
 .topo-st:hover{border-color:var(--ac2);color:var(--ac1)}
 .topo-st.on{background:var(--ac1);color:#fff;border-color:var(--ac1)}
 .topo-hw{display:none !important}.topo-hw.on{display:block !important}
@@ -838,7 +840,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 @media(max-width:600px){#hw-vias .g2,#hw-vias .g3,#hw-vias .g4,#hw-vias .g5{grid-template-columns:1fr}}
 
 /* ── GNSS SUB-TABS ────────────────────────────────── */
-.gnss-stab{font-family:var(--fb);font-size:13px;font-weight:600;padding:7px 16px;border-radius:18px;cursor:pointer;border:1.5px solid var(--bg3);color:var(--tx3);background:var(--bg4);transition:all .15s}
+.gnss-stab{font-family:var(--fb);font-size:13px;font-weight:600;padding:8px 17px;border-radius:18px;cursor:pointer;border:1.5px solid var(--bg3);color:var(--tx3);background:var(--bg4);transition:all .15s;display:inline-flex;align-items:center;gap:7px}
 .gnss-stab:hover{border-color:var(--ac2);color:var(--ac1)}
 .gnss-stab.on{background:var(--ac1);color:#fff;border-color:var(--ac1)}
 .gnss-subpanel{display:none}
@@ -893,12 +895,52 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 </style>
 </head>
 <body>
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="ic-home" viewBox="0 0 24 24"><path d="M4 11 L12 4 L20 11 M6 10 V20 H18 V10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="ic-team" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c0-4 3-6.2 7-6.2s7 2.2 7 6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="ic-ruler" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="1" transform="rotate(-20 12 12)" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 9.8 L8.6 12 M10.8 8.6 L11.9 10.8 M14.1 7.3 L15.2 9.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" transform="rotate(-20 12 12)"/></symbol>
+<symbol id="ic-laptop" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="10.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M2.5 19 H21.5 L19.5 15.5 H4.5 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+<symbol id="ic-cap" viewBox="0 0 24 24"><path d="M12 5 L22 9.5 L12 14 L2 9.5 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M6 11.3 V16 C6 17.5 8.7 19 12 19 C15.3 19 18 17.5 18 16 V11.3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M21 10.2 V16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="ic-cart" viewBox="0 0 24 24"><path d="M3 4 H5.5 L8 15 H18 L20.5 7 H6.3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="9.5" cy="19" r="1.4" fill="currentColor"/><circle cx="17" cy="19" r="1.4" fill="currentColor"/></symbol>
+<symbol id="ic-satellite" viewBox="0 0 24 24"><rect x="9.3" y="9.3" width="5.4" height="5.4" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="1.8" y="10.4" width="5.6" height="3.2" rx="0.6" transform="rotate(-38 4.6 12)" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="16.6" y="10.4" width="5.6" height="3.2" rx="0.6" transform="rotate(-38 19.4 12)" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M14.7 9.3 L18 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="18.7" cy="5.3" r="1" fill="currentColor"/></symbol>
+<symbol id="ic-folder" viewBox="0 0 24 24"><path d="M3 7 H9 L11 9.3 H21 V18 C21 18.8 20.3 19.5 19.5 19.5 H4.5 C3.7 19.5 3 18.8 3 18 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+<symbol id="ic-chat" viewBox="0 0 24 24"><path d="M4 5 H20 V15.5 H9 L5 19 V15.5 H4 Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+<symbol id="ic-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="0.9" fill="currentColor"/></symbol>
+<symbol id="ic-telescope" viewBox="0 0 24 24"><path d="M3 15 L15 8 L17 11.5 L5 18.5 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M13.5 10.2 L19.5 6.8 L21 9.3 L15 12.7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="6" cy="17" r="2.1" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+<symbol id="ic-dish" viewBox="0 0 24 24"><path d="M4 13.5 A8 8 0 0 1 14.5 4 L4 13.5Z M4 13.5 L12 21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 21 L16 17 M18.5 9 L20.5 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="9" r="1" fill="currentColor"/></symbol>
+<symbol id="ic-drone" viewBox="0 0 24 24"><rect x="9.5" y="9.5" width="5" height="5" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 9.5 L4.5 4.5 M14.5 9.5 L19.5 4.5 M9.5 14.5 L4.5 19.5 M14.5 14.5 L19.5 19.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="4.5" cy="4.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="19.5" cy="4.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="4.5" cy="19.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="19.5" cy="19.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+<symbol id="ic-map" viewBox="0 0 24 24"><path d="M9 4 L3 6.3 V20 L9 17.7 L15 20 L21 17.7 V4 L15 6.3 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 4 V17.7 M15 6.3 V20" stroke="currentColor" stroke-width="1.4"/></symbol>
+<symbol id="ic-building" viewBox="0 0 24 24"><rect x="5" y="3.5" width="10" height="17" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 9 L19.5 10.5 V20.5 H15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 7.5 H12 M8 11 H12 M8 14.5 H12" stroke="currentColor" stroke-width="1.4"/></symbol>
+<symbol id="ic-camera" viewBox="0 0 24 24"><path d="M4 8 H8 L9.5 5.5 H14.5 L16 8 H20 V18 H4 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+<symbol id="ic-phone" viewBox="0 0 24 24"><path d="M5 4 H9 L10.5 8 L8 10 C9 13 11 15 14 16 L16 13.5 L20 15 V19 C20 20 19 21 18 21 C10 21 3 14 3 6 C3 5 4 4 5 4 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+<symbol id="ic-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 6 L12 13 L21 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+<symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 12 H21 M12 3 C15 7 15 17 12 21 C9 17 9 7 12 3 Z" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+<symbol id="ic-pin" viewBox="0 0 24 24"><path d="M12 21 C8 16 5 12.5 5 9 A7 7 0 0 1 19 9 C19 12.5 16 16 12 21 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.3" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+<symbol id="ic-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7 V12 L15.5 14.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 12.5 L10.3 15.3 L16.5 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="ic-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 9 L15 15 M15 9 L9 15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="ic-close" viewBox="0 0 24 24"><path d="M6 6 L18 18 M18 6 L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+<symbol id="ic-send" viewBox="0 0 24 24"><path d="M3 11 L21 4 L14 21 L11 13 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 13 L21 4" stroke="currentColor" stroke-width="1.6"/></symbol>
+<symbol id="ic-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 8.5 L16 12 L10 15.5 Z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="ic-doc" viewBox="0 0 24 24"><path d="M6 3 H14 L18 7 V21 H6 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 3 V7 H18 M8.5 12 H15.5 M8.5 16 H13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+<symbol id="ic-trophy" viewBox="0 0 24 24"><path d="M7 4 H17 V9 C17 12.3 14.8 14.5 12 14.5 C9.2 14.5 7 12.3 7 9 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 6 H4 V8 C4 9.5 5.3 10.7 7 11 M17 6 H20 V8 C20 9.5 18.7 10.7 17 11" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 14.5 V18 M9 20.5 H15 M9 20.5 L9.8 18 H14.2 L15 20.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="ic-star" viewBox="0 0 24 24"><path d="M12 2.5 L14.6 9 L21.5 9.4 L16 13.7 L17.9 20.5 L12 16.7 L6.1 20.5 L8 13.7 L2.5 9.4 L9.4 9 Z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="ic-arrow-left" viewBox="0 0 24 24"><path d="M19 12 H5 M5 12 L11 6 M5 12 L11 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 9.5 H20.5 M8 3 V6.5 M16 3 V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+<symbol id="ic-calculator" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7.5 7 H16.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="12" r="0.9" fill="currentColor"/><circle cx="12" cy="12" r="0.9" fill="currentColor"/><circle cx="16" cy="12" r="0.9" fill="currentColor"/><circle cx="8" cy="16" r="0.9" fill="currentColor"/><circle cx="12" cy="16" r="0.9" fill="currentColor"/><circle cx="16" cy="16" r="0.9" fill="currentColor"/></symbol>
+<symbol id="ic-refresh" viewBox="0 0 24 24"><path d="M4 12 A8 8 0 0 1 19 8.5 M20 12 A8 8 0 0 1 5 15.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M19 5 V9 H15 M5 19 V15 H9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="ic-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15 9 L10.8 10.8 L9 15 L13.2 13.2 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+<symbol id="ic-notebook" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 7.5 H16 M8 11.5 H16 M8 15.5 H13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M5 6 H3.5 M5 10 H3.5 M5 14 H3.5 M5 18 H3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></symbol>
+<symbol id="ic-road" viewBox="0 0 24 24"><path d="M9.5 3 L4 21 M14.5 3 L20 21" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M12 5.5 V8 M12 10.5 V13 M12 15.5 V18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="ic-mute" viewBox="0 0 24 24"><path d="M4 9.5 V14.5 H8 L13 18.5 V5.5 L8 9.5 Z" fill="currentColor" stroke="none"/><path d="M16.5 8.5 L20.5 12.5 M20.5 8.5 L16.5 12.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+<symbol id="ic-sound" viewBox="0 0 24 24"><path d="M4 9.5 V14.5 H8 L13 18.5 V5.5 L8 9.5 Z" fill="currentColor" stroke="none"/><path d="M16.5 9 C17.8 10.2 17.8 13.8 16.5 15 M18.8 7 C21.3 9.5 21.3 14.5 18.8 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></symbol>
+</defs></svg>
 <div class="app">
 
 <!-- MODAL -->
 <div class="modal-ov" id="modal" onclick="closeModal(event)">
   <div class="modal-w">
-    <button class="modal-x" onclick="closeModal()">✕</button>
+    <button class="modal-x" onclick="closeModal()"><svg class="ico"><use href="#ic-close"/></svg></button>
     <img id="modal-img" src="" alt=""/>
     <div class="modal-cap" id="modal-cap"></div>
   </div>
@@ -1002,12 +1044,12 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     </div>
   </div>
   <div class="nav-tabs">
-    <button class="ntab on"  id="tab-inicio"     onclick="goPage('inicio')">Inicio</button>
-    <button class="ntab"     id="tab-nosotros"   onclick="goPage('nosotros')">Nosotros</button>
-    <button class="ntab"     id="tab-servicios"  onclick="goPage('servicios')">📐 Servicios</button>
-    <div class="nav-dropdown"><button class="ntab" id="tab-digital-menu">💻 DGeoMap Digital ▾</button><div class="nav-drop-menu"><a onclick="goPage('digital')">💻 Servicios Digitales</a><a onclick="goPage('cursos')">🎓 Cursos Online</a><a onclick="goPage('tienda')">🛒 Tienda</a><a onclick="goPage('topografia')">🛰️ Aplicaciones</a></div></div>
-    <button class="ntab"     id="tab-portafolio" onclick="goPage('portafolio')">Galería</button>
-    <button class="ntab cta" id="tab-contacto"   onclick="goPage('contacto')">Cotizar</button>
+    <button class="ntab on"  id="tab-inicio"     onclick="goPage('inicio')"><svg class="ico"><use href="#ic-home"/></svg>Inicio</button>
+    <button class="ntab"     id="tab-nosotros"   onclick="goPage('nosotros')"><svg class="ico"><use href="#ic-team"/></svg>Nosotros</button>
+    <button class="ntab"     id="tab-servicios"  onclick="goPage('servicios')"><svg class="ico"><use href="#ic-ruler"/></svg>Servicios</button>
+    <div class="nav-dropdown"><button class="ntab" id="tab-digital-menu"><svg class="ico"><use href="#ic-laptop"/></svg>DGeoMap Digital ▾</button><div class="nav-drop-menu"><a onclick="goPage('digital')"><svg class="ico"><use href="#ic-laptop"/></svg>Servicios Digitales</a><a onclick="goPage('cursos')"><svg class="ico"><use href="#ic-cap"/></svg>Cursos Online</a><a onclick="goPage('tienda')"><svg class="ico"><use href="#ic-cart"/></svg>Tienda</a><a onclick="goPage('topografia')"><svg class="ico"><use href="#ic-satellite"/></svg>Aplicaciones</a></div></div>
+    <button class="ntab"     id="tab-portafolio" onclick="goPage('portafolio')"><svg class="ico"><use href="#ic-folder"/></svg>Galería</button>
+    <button class="ntab cta" id="tab-contacto"   onclick="goPage('contacto')"><svg class="ico"><use href="#ic-chat"/></svg>Cotizar</button>
   </div>
   <button class="hamburger" id="ham-btn" onclick="toggleMenu()" aria-label="Menú">
     <span></span><span></span><span></span>
@@ -1015,16 +1057,16 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 </nav>
 <!-- MENÚ MÓVIL -->
 <div class="mobile-menu" id="mobile-menu">
-  <button class="mmitem" onclick="goPage('inicio');closeMenu()">🏠 Inicio</button>
-  <button class="mmitem" onclick="goPage('nosotros');closeMenu()">👷 Nosotros</button>
-  <button class="mmitem" onclick="goPage('servicios');closeMenu()">📐 Servicios</button>
-  <button class="mmitem" onclick="goPage('digital');closeMenu()">💻 DGeoMap Digital</button>
-  <button class="mmitem" onclick="goPage('digital');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">💻 Servicios Digitales</button>
-  <button class="mmitem" onclick="goPage('cursos');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🎓 Cursos Online</button>
-  <button class="mmitem" onclick="goPage('tienda');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🛒 Tienda</button>
-  <button class="mmitem" id="mm-topografia" onclick="goPage('topografia');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px">🛰️ Aplicaciones</button>
-  <button class="mmitem" onclick="goPage('portafolio');closeMenu()">🗂 Galería</button>
-  <button class="mmitem cta" onclick="goPage('contacto');closeMenu()">💬 Cotizar</button>
+  <button class="mmitem" onclick="goPage('inicio');closeMenu()"><svg class="ico"><use href="#ic-home"/></svg>Inicio</button>
+  <button class="mmitem" onclick="goPage('nosotros');closeMenu()"><svg class="ico"><use href="#ic-team"/></svg>Nosotros</button>
+  <button class="mmitem" onclick="goPage('servicios');closeMenu()"><svg class="ico"><use href="#ic-ruler"/></svg>Servicios</button>
+  <button class="mmitem" onclick="goPage('digital');closeMenu()"><svg class="ico"><use href="#ic-laptop"/></svg>DGeoMap Digital</button>
+  <button class="mmitem" onclick="goPage('digital');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px"><svg class="ico"><use href="#ic-laptop"/></svg>Servicios Digitales</button>
+  <button class="mmitem" onclick="goPage('cursos');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px"><svg class="ico"><use href="#ic-cap"/></svg>Cursos Online</button>
+  <button class="mmitem" onclick="goPage('tienda');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px"><svg class="ico"><use href="#ic-cart"/></svg>Tienda</button>
+  <button class="mmitem" id="mm-topografia" onclick="goPage('topografia');closeMenu()" style="padding-left:40px;font-size:14px;opacity:0.85;border-left:3px solid var(--ac1);margin-left:16px"><svg class="ico"><use href="#ic-satellite"/></svg>Aplicaciones</button>
+  <button class="mmitem" onclick="goPage('portafolio');closeMenu()"><svg class="ico"><use href="#ic-folder"/></svg>Galería</button>
+  <button class="mmitem cta" onclick="goPage('contacto');closeMenu()"><svg class="ico"><use href="#ic-chat"/></svg>Cotizar</button>
 </div>
 
 <div id="site-copyright-bar">© <span class="ft-year">2026</span> DGeoMap Ingeniería S.A.S. · NIT 902.108.012-6 · Todos los derechos reservados · www.dgeomaping.com</div>
@@ -1038,8 +1080,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <h1 id="h-h1">Precisión Digital<span class="acc" id="h-l2">en el Territorio Colombiano</span><span class="sm" id="h-sub">Topografía · Geomática · Cartografía · Ingeniería</span><span id="h-brand" style="display:block;margin-top:10px;font-size:.32em;font-weight:700;letter-spacing:1.5px;color:#2e7d1a;text-transform:uppercase">DGeoMap Ingeniería</span></h1>
       <p class="hero-desc" id="h-desc">Soluciones integrales de topografía, geomática, geodesia, cartografía y gestión ambiental, referenciadas en el sistema MAGNA-SIRGAS CTM-12 de Colombia.</p>
       <div class="hero-btns" id="hero-btns">
-        <button class="hbtn p" onclick="goPage('servicios')">📐 Ver servicios</button>
-        <button class="hbtn g" onclick="goPage('contacto')">💬 Solicitar cotización</button>
+        <button class="hbtn p" onclick="goPage('servicios')"><svg class="ico"><use href="#ic-ruler"/></svg>Ver servicios</button>
+        <button class="hbtn g" onclick="goPage('contacto')"><svg class="ico"><use href="#ic-chat"/></svg>Solicitar cotización</button>
       </div>
       <div class="hero-stats" id="hero-stats">
         <div class="hstat"><div class="hstat-n" id="s1">50+</div><div class="hstat-l">Proyectos</div></div>
@@ -1054,7 +1096,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           <video id="hero-video" src="img/DGeoMap_Hero_Dron.mp4" muted playsinline loop="false"></video>
           <p id="hero-dron-caption">Nuestro dron de ala fija WingtraOne GEN II opera con sensor MicaSense RedEdge-P, una cámara pancromática y multiespectral de alta resolución que registra simultáneamente banda visible e infrarroja, lo que permite calcular índices de vegetación (NDVI) y entregar ortomosaicos de mayor detalle para agricultura de precisión y monitoreo ambiental.</p>
           <p id="hero-dron-caption-short">WingtraOne GEN II con sensor MicaSense RedEdge-P: cámara multiespectral y pancromática para agricultura de precisión y monitoreo ambiental.</p>
-          <button id="hero-mute-btn" onclick="heroToggleMute(event)" aria-label="Activar sonido">🔇</button>
+          <button id="hero-mute-btn" onclick="heroToggleMute(event)" aria-label="Activar sonido"><svg class="ico"><use href="#ic-mute"/></svg></button>
         </div>
         <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-01.jpg')"></div>
         <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-02.jpg')"></div>
@@ -1107,8 +1149,8 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 
     <!-- MISIÓN & VISIÓN -->
     <div class="mv-grid">
-      <div class="mvc anim-left d3"><h3>🎯 Nuestra Misión</h3><p id="txt-mis">Brindar soluciones geoespaciales de alta precisión e ingeniería de calidad, integrando topografía, geomática, cartografía y gestión ambiental bajo estándares de calidad y cumplimiento normativo vigente. Apoyamos el desarrollo sostenible del territorio con tecnología de vanguardia y responsabilidad ambiental.</p></div>
-      <div class="mvc anim-right d3"><h3>🔭 Nuestra Visión</h3><p id="txt-vis">Ser reconocidos en 2030 como empresa líder en ingeniería geoespacial y ambiental de Colombia, destacados por innovación tecnológica, precisión geodésica y compromiso con el ordenamiento territorial sostenible.</p></div>
+      <div class="mvc anim-left d3"><h3><svg class="ico" style="width:1.05em;height:1.05em"><use href="#ic-target"/></svg>Nuestra Misión</h3><p id="txt-mis">Brindar soluciones geoespaciales de alta precisión e ingeniería de calidad, integrando topografía, geomática, cartografía y gestión ambiental bajo estándares de calidad y cumplimiento normativo vigente. Apoyamos el desarrollo sostenible del territorio con tecnología de vanguardia y responsabilidad ambiental.</p></div>
+      <div class="mvc anim-right d3"><h3><svg class="ico" style="width:1.05em;height:1.05em"><use href="#ic-telescope"/></svg>Nuestra Visión</h3><p id="txt-vis">Ser reconocidos en 2030 como empresa líder en ingeniería geoespacial y ambiental de Colombia, destacados por innovación tecnológica, precisión geodésica y compromiso con el ordenamiento territorial sostenible.</p></div>
     </div>
 
     <!-- VALORES -->
@@ -1149,28 +1191,28 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <div class="prof-right">
         <h5>Trayectoria profesional</h5>
         <div class="exp-item">
-          <span class="exp-ico">📡</span>
+          <span class="exp-ico"><svg class="ico"><use href="#ic-dish"/></svg></span>
           <div class="exp-txt">
             <strong>Diagnósticos GNSS y geodesia</strong>
             <span>Más de 15 años · Proyectos de infraestructura vial y urbana</span>
           </div>
         </div>
         <div class="exp-item">
-          <span class="exp-ico">🚁</span>
+          <span class="exp-ico"><svg class="ico"><use href="#ic-drone"/></svg></span>
           <div class="exp-txt">
             <strong>Fotogrametría con drones</strong>
             <span>Vuelos con WingtraOne y multirotor · Ortofotomosaicos y MDE</span>
           </div>
         </div>
         <div class="exp-item">
-          <span class="exp-ico">🗺️</span>
+          <span class="exp-ico"><svg class="ico"><use href="#ic-map"/></svg></span>
           <div class="exp-txt">
             <strong>Cartografía y catastro predial</strong>
             <span>Levantamientos planimétricos y altimétricos · Normativa IGAC</span>
           </div>
         </div>
         <div class="exp-item">
-          <span class="exp-ico">🏢</span>
+          <span class="exp-ico"><svg class="ico"><use href="#ic-building"/></svg></span>
           <div class="exp-txt">
             <strong>Consultoría técnica</strong>
             <span>Entidades públicas y privadas · Cobertura nacional</span>
@@ -1200,7 +1242,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <div class="pg-title anim-up d2">Galería</div>
     <p class="pg-sub">Proyectos reales ejecutados en Colombia. Haz clic en cualquier imagen para ampliarla.</p>
     <div class="port-label anim-up d4">
-      <span class="port-label-pill">📷 Imágenes de DGeoMap Ingeniería</span>
+      <span class="port-label-pill"><svg class="ico"><use href="#ic-camera"/></svg>Imágenes de DGeoMap Ingeniería</span>
       <p class="port-label-desc">Fotografías reales tomadas en campo por nuestro equipo, que documentan proyectos de topografía, geodesia, cartografía y fotogrametría con drones ejecutados en distintas regiones de Colombia.</p>
     </div>
     <div class="port-grid" id="port-cont"></div>
@@ -1215,13 +1257,13 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <p class="pg-sub">Cuéntenos su proyecto y le enviamos propuesta técnica y económica sin costo.</p>
     <div class="ctc-g">
       <div class="ctc-info anim-left d4">
-        <div class="ctc-it"><div class="ctc-ico">📱</div><div><h5>WhatsApp / Teléfono</h5><p id="c-tel">322 213 9210</p></div></div>
-        <div class="ctc-it"><div class="ctc-ico">✉️</div><div><h5>Correo electrónico</h5><p id="c-mail">topografia@dgeomaping.com</p></div></div>
-        <div class="ctc-it"><div class="ctc-ico">🌐</div><div><h5>Sitio web</h5><p>www.dgeomaping.com</p></div></div>
-        <div class="ctc-it"><div class="ctc-ico">🏢</div><div><h5>NIT</h5><p>902.108.012-6</p></div></div>
-        <div class="ctc-it"><div class="ctc-ico">📍</div><div><h5>Ubicación</h5><p id="c-dir">Bogotá D.C., Colombia</p></div></div>
-        <div class="ctc-it"><div class="ctc-ico">🕐</div><div><h5>Horario de atención</h5><p id="c-hor">Lun–Vie: 8:00 a.m.–6:00 p.m.</p></div></div>
-        <div class="ctc-it"><div class="ctc-ico">🗺️</div><div><h5>Cobertura</h5><p id="c-cob">Cobertura nacional — Todo Colombia</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-phone"/></svg></div><div><h5>WhatsApp / Teléfono</h5><p id="c-tel">322 213 9210</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-mail"/></svg></div><div><h5>Correo electrónico</h5><p id="c-mail">topografia@dgeomaping.com</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-globe"/></svg></div><div><h5>Sitio web</h5><p>www.dgeomaping.com</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-building"/></svg></div><div><h5>NIT</h5><p>902.108.012-6</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-pin"/></svg></div><div><h5>Ubicación</h5><p id="c-dir">Bogotá D.C., Colombia</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-clock"/></svg></div><div><h5>Horario de atención</h5><p id="c-hor">Lun–Vie: 8:00 a.m.–6:00 p.m.</p></div></div>
+        <div class="ctc-it"><div class="ctc-ico"><svg class="ico"><use href="#ic-map"/></svg></div><div><h5>Cobertura</h5><p id="c-cob">Cobertura nacional — Todo Colombia</p></div></div>
       </div>
       <div class="ctc-form anim-right d4">
         <h3>Solicite una cotización</h3>
@@ -1299,7 +1341,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
           </select>
         </div>
         <div class="ff"><label>Información adicional (opcional)</label><textarea id="f-msg" placeholder="Cualquier detalle adicional que quiera agregar..."></textarea></div>
-        <button class="bwa" onclick="enviarWA()">📲 Enviar por WhatsApp</button>
+        <button class="bwa" onclick="enviarWA()"><svg class="ico"><use href="#ic-send"/></svg>Enviar por WhatsApp</button>
       </div>
     </div>
   </div>
@@ -1308,10 +1350,10 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 <!-- SERVICIOS DIGITALES -->
 <div class="page" id="page-digital">
   <div class="wrap" style="max-width:1200px;padding:24px 22px">
-    <div class="pg-eye anim-left d1">💻 DGeoMap — Transformación Digital</div>
+    <div class="pg-eye anim-left d1"><svg class="ico"><use href="#ic-laptop"/></svg>DGeoMap — Transformación Digital</div>
     <div class="pg-title anim-up d2" style="margin-bottom:10px">Servicios Digitales</div>
     <div class="anim-up d2" style="background:linear-gradient(135deg,rgba(30,51,24,0.06),rgba(46,125,26,0.04));border:1px solid rgba(46,125,26,0.18);border-left:4px solid var(--ac1);border-radius:10px;padding:14px 18px;margin-bottom:28px;font-size:13.5px;color:var(--tx2);line-height:1.75">
-      <div style="font-size:12px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">💻 Presencia Digital Profesional — DGeoMap Ingeniería S.A.S.</div>
+      <div style="font-size:12px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px"><svg class="ico" style="margin-right:5px"><use href="#ic-laptop"/></svg>Presencia Digital Profesional — DGeoMap Ingeniería S.A.S.</div>
       Llevamos tu negocio o empresa al mundo digital con páginas web profesionales, dominio propio y correo corporativo. Diseños modernos, funcionales y adaptados a celular, desarrollados con tecnología de vanguardia y entregados en pocos días.
     </div>
 
@@ -1330,19 +1372,19 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         </div>
         <div style="padding:20px">
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Página web profesional en HTML</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Dominio personalizado .com (1 año)</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Publicación en servidor profesional</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Diseño responsive para celular</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Botón WhatsApp integrado</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3)"><span style="color:var(--tx4)">❌</span> Correo corporativo</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3)"><span style="color:var(--tx4)">❌</span> Mantenimiento incluido</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Página web profesional en HTML</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Dominio personalizado .com (1 año)</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Publicación en servidor profesional</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Diseño responsive para celular</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Botón WhatsApp integrado</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3)"><span style="color:var(--tx4)"><svg class="ico"><use href="#ic-x"/></svg></span> Correo corporativo</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3)"><span style="color:var(--tx4)"><svg class="ico"><use href="#ic-x"/></svg></span> Mantenimiento incluido</div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
             <div style="font-size:27px;font-weight:800;color:var(--dk1)">$950.000</div>
             <div style="font-size:12px;color:var(--tx3)">COP · Pago único</div>
           </div>
-          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20Paquete%20Básico%20de%20página%20web.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:var(--ac1);color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#3d9424'" onmouseout="this.style.background='var(--ac1)'">📩 Solicitar información</button>
+          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20Paquete%20Básico%20de%20página%20web.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:var(--ac1);color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#3d9424'" onmouseout="this.style.background='var(--ac1)'"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Solicitar información</button>
         </div>
       </div>
 
@@ -1359,19 +1401,19 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         </div>
         <div style="padding:20px">
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Página web profesional en HTML</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Dominio personalizado .com (1 año)</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Publicación en servidor profesional</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Diseño responsive para celular</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Botón WhatsApp integrado</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Correo corporativo Google Workspace</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3)"><span style="color:var(--tx4)">❌</span> Mantenimiento incluido</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Página web profesional en HTML</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Dominio personalizado .com (1 año)</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Publicación en servidor profesional</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Diseño responsive para celular</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Botón WhatsApp integrado</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Correo corporativo Google Workspace</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx3)"><span style="color:var(--tx4)"><svg class="ico"><use href="#ic-x"/></svg></span> Mantenimiento incluido</div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
             <div style="font-size:27px;font-weight:800;color:var(--dk1)">$1.590.000</div>
             <div style="font-size:12px;color:var(--tx3)">COP · Pago único</div>
           </div>
-          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20Paquete%20Profesional%20de%20página%20web.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#1F4E79;color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#2E75B6'" onmouseout="this.style.background='#1F4E79'">📩 Solicitar información</button>
+          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20Paquete%20Profesional%20de%20página%20web.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#1F4E79;color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#2E75B6'" onmouseout="this.style.background='#1F4E79'"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Solicitar información</button>
         </div>
       </div>
 
@@ -1387,19 +1429,19 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         </div>
         <div style="padding:20px">
           <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Página web profesional en HTML</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Dominio personalizado .com (1 año)</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Publicación en servidor profesional</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Diseño responsive para celular</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Botón WhatsApp integrado</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Correo corporativo Google Workspace</div>
-            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700">✅</span> Mantenimiento 6 meses incluido</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Página web profesional en HTML</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Dominio personalizado .com (1 año)</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Publicación en servidor profesional</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Diseño responsive para celular</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Botón WhatsApp integrado</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Correo corporativo Google Workspace</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2)"><span style="color:var(--ac1);font-weight:700"><svg class="ico"><use href="#ic-check"/></svg></span> Mantenimiento 6 meses incluido</div>
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
             <div style="font-size:27px;font-weight:800;color:var(--dk1)">$2.690.000</div>
             <div style="font-size:12px;color:var(--tx3)">COP · Pago único</div>
           </div>
-          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20Paquete%20Premium%20de%20página%20web.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#c14a00;color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#e05a00'" onmouseout="this.style.background='#c14a00'">📩 Solicitar información</button>
+          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20Paquete%20Premium%20de%20página%20web.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#c14a00;color:#fff;border:none;padding:11px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#e05a00'" onmouseout="this.style.background='#c14a00'"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Solicitar información</button>
         </div>
       </div>
 
@@ -1407,10 +1449,10 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 
     <!-- BANNER INFERIOR -->
     <div style="background:linear-gradient(135deg,#1e3318,#2e7d1a);border-radius:14px;padding:28px 32px;text-align:center;color:#fff">
-      <div style="font-size:29px;margin-bottom:8px">💻</div>
+      <div style="margin-bottom:8px"><svg class="ico" style="width:29px;height:29px"><use href="#ic-laptop"/></svg></div>
       <div style="font-family:var(--fd);font-size:21px;letter-spacing:.5px;margin-bottom:8px">¿Tienes un proyecto especial?</div>
       <div style="font-size:14px;color:rgba(255,255,255,.75);margin-bottom:16px;max-width:500px;margin-left:auto;margin-right:auto">Si necesitas funcionalidades adicionales como formularios, tiendas online, portafolios o aplicaciones web personalizadas, contáctanos y diseñamos una solución a tu medida.</div>
-      <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20quiero%20cotizar%20un%20proyecto%20web%20personalizado.','_blank')" style="background:#fff;color:var(--dk1);border:none;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">📩 Cotizar proyecto personalizado</button>
+      <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20quiero%20cotizar%20un%20proyecto%20web%20personalizado.','_blank')" style="background:#fff;color:var(--dk1);border:none;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Cotizar proyecto personalizado</button>
     </div>
 
   </div>
@@ -1432,16 +1474,16 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   .curso-temario div{padding-left:4px}
   </style>
   <div class="wrap" style="max-width:1200px;padding:24px 22px">
-    <div class="pg-eye anim-left d1">🎓 DGeoMap — Formación Profesional</div>
+    <div class="pg-eye anim-left d1"><svg class="ico"><use href="#ic-cap"/></svg>DGeoMap — Formación Profesional</div>
     <div class="pg-title anim-up d2" style="margin-bottom:10px">Cursos Online</div>
     <div class="anim-up d2" style="background:linear-gradient(135deg,rgba(30,51,24,0.06),rgba(46,125,26,0.04));border:1px solid rgba(46,125,26,0.18);border-left:4px solid var(--ac1);border-radius:10px;padding:14px 18px;margin-bottom:20px;font-size:13.5px;color:var(--tx2);line-height:1.75">
-      <div style="font-size:12px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">🎓 Formación Técnica Especializada — DGeoMap Ingeniería S.A.S.</div>
+      <div style="font-size:12px;font-weight:700;color:var(--ac1);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px"><svg class="ico" style="margin-right:5px"><use href="#ic-cap"/></svg>Formación Técnica Especializada — DGeoMap Ingeniería S.A.S.</div>
       Capacítate con cursos de geomática y topografía diseñados por profesionales colombianos. Contenido práctico, actualizado y enfocado en la normativa colombiana vigente. Todos incluyen certificado digital emitido por <strong style="color:var(--dk1)">DGeoMap Ingeniería S.A.S.</strong>
     </div>
 
     <!-- INSTRUCTOR -->
     <div class="anim-up d2" style="display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--bg3);border-radius:12px;padding:14px 18px;margin-bottom:24px;box-shadow:var(--shadow)">
-      <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#1e3318,#2e7d1a);display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0">👷</div>
+      <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#1e3318,#2e7d1a);display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0"><svg class="ico" style="width:21px;height:21px"><use href="#ic-team"/></svg></div>
       <div>
         <div style="font-size:14px;font-weight:800;color:var(--dk1)">Dictados por Diego Gutiérrez</div>
         <div style="font-size:12.5px;color:var(--tx3);line-height:1.5">Topógrafo · +15 años de experiencia · Piloto UAS certificado · Fundador de DGeoMap Ingeniería S.A.S.</div>
@@ -1468,13 +1510,13 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <div style="padding:20px">
           <p style="font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Procesa observaciones GNSS diferenciales con los softwares más usados en Colombia: cálculo de vectores, ajuste de red y generación de informes bajo normas técnicas colombianas.</p>
           <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
-            <div class="curso-feat">🎥 Clases grabadas HD</div>
-            <div class="curso-feat">💬 Soporte por WhatsApp</div>
-            <div class="curso-feat">📄 Plantillas incluidas</div>
-            <div class="curso-feat">🏆 Certificado digital</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-play"/></svg>Clases grabadas HD</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-chat"/></svg>Soporte por WhatsApp</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-doc"/></svg>Plantillas incluidas</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-trophy"/></svg>Certificado digital</div>
           </div>
           <button class="curso-temario-btn" onclick="toggleTemario('gnss')">
-            <span>📋 Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-gnss">▾</span>
+            <span><svg class="ico" style="margin-right:5px"><use href="#ic-doc"/></svg>Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-gnss">▾</span>
           </button>
           <div class="curso-temario" id="temario-gnss">
             <div>1. Fundamentos GNSS y sistema MAGNA-SIRGAS</div>
@@ -1490,9 +1532,9 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <div style="font-size:25px;font-weight:800;color:var(--dk1)">$280.000</div>
               <div style="font-size:11.5px;color:var(--tx3)">COP · Pago único</div>
             </div>
-            <div style="font-size:11px;color:var(--ac1);font-weight:700;background:rgba(46,125,26,.08);padding:5px 11px;border-radius:20px;white-space:nowrap">⭐ Recomendado</div>
+            <div style="font-size:11px;color:var(--ac1);font-weight:700;background:rgba(46,125,26,.08);padding:5px 11px;border-radius:20px;white-space:nowrap"><svg class="ico" style="margin-right:4px"><use href="#ic-star"/></svg>Recomendado</div>
           </div>
-          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Datos%20GNSS.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:var(--ac1);color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#3d9424'" onmouseout="this.style.background='var(--ac1)'">📲 Inscribirme por WhatsApp</button>
+          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Datos%20GNSS.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:var(--ac1);color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#3d9424'" onmouseout="this.style.background='var(--ac1)'"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Inscribirme por WhatsApp</button>
         </div>
       </div>
 
@@ -1511,13 +1553,13 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <div style="padding:20px">
           <p style="font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Domina el diseño vial en Civil 3D aplicando el Manual de Diseño Geométrico INVIAS MDG-2025: alineamientos, secciones transversales y volúmenes de movimiento de tierra.</p>
           <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
-            <div class="curso-feat">🎥 Clases grabadas HD</div>
-            <div class="curso-feat">💬 Soporte por WhatsApp</div>
-            <div class="curso-feat">📄 Plantillas incluidas</div>
-            <div class="curso-feat">🏆 Certificado digital</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-play"/></svg>Clases grabadas HD</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-chat"/></svg>Soporte por WhatsApp</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-doc"/></svg>Plantillas incluidas</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-trophy"/></svg>Certificado digital</div>
           </div>
           <button class="curso-temario-btn" onclick="toggleTemario('vias')">
-            <span>📋 Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-vias">▾</span>
+            <span><svg class="ico" style="margin-right:5px"><use href="#ic-doc"/></svg>Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-vias">▾</span>
           </button>
           <div class="curso-temario" id="temario-vias">
             <div>1. Superficies y alineamientos en Civil 3D</div>
@@ -1534,7 +1576,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <div style="font-size:11.5px;color:var(--tx3)">COP · Pago único</div>
             </div>
           </div>
-          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Diseño%20Geométrico%20de%20Carreteras%20en%20Civil%203D.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#1F4E79;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#2E75B6'" onmouseout="this.style.background='#1F4E79'">📲 Inscribirme por WhatsApp</button>
+          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Diseño%20Geométrico%20de%20Carreteras%20en%20Civil%203D.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#1F4E79;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#2E75B6'" onmouseout="this.style.background='#1F4E79'"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Inscribirme por WhatsApp</button>
         </div>
       </div>
 
@@ -1553,13 +1595,13 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
         <div style="padding:20px">
           <p style="font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:14px">Procesa vuelos fotogramétricos con Agisoft Metashape y Pix4D Mapper: nubes de puntos densas, ortomosaicos de alta resolución y reportes de precisión.</p>
           <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px">
-            <div class="curso-feat">🎥 Clases grabadas HD</div>
-            <div class="curso-feat">💬 Soporte por WhatsApp</div>
-            <div class="curso-feat">📄 Plantillas incluidas</div>
-            <div class="curso-feat">🏆 Certificado digital</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-play"/></svg>Clases grabadas HD</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-chat"/></svg>Soporte por WhatsApp</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-doc"/></svg>Plantillas incluidas</div>
+            <div class="curso-feat"><svg class="ico"><use href="#ic-trophy"/></svg>Certificado digital</div>
           </div>
           <button class="curso-temario-btn" onclick="toggleTemario('dron')">
-            <span>📋 Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-dron">▾</span>
+            <span><svg class="ico" style="margin-right:5px"><use href="#ic-doc"/></svg>Ver temario completo</span><span class="curso-temario-ic" id="temario-ic-dron">▾</span>
           </button>
           <div class="curso-temario" id="temario-dron">
             <div>1. Planeación de vuelo fotogramétrico y traslapes</div>
@@ -1576,7 +1618,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
               <div style="font-size:11.5px;color:var(--tx3)">COP · Pago único</div>
             </div>
           </div>
-          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Imágenes%20de%20Dron.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#c14a00;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#e05a00'" onmouseout="this.style.background='#c14a00'">📲 Inscribirme por WhatsApp</button>
+          <button onclick="window.open('https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20estoy%20interesado%20en%20el%20curso%20de%20Procesamiento%20de%20Imágenes%20de%20Dron.%20Por%20favor%20envíame%20más%20información.','_blank')" style="width:100%;background:#c14a00;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s" onmouseover="this.style.background='#e05a00'" onmouseout="this.style.background='#c14a00'"><svg class="ico" style="margin-right:6px"><use href="#ic-send"/></svg>Inscribirme por WhatsApp</button>
         </div>
       </div>
 
@@ -1584,10 +1626,10 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 
     <!-- BANNER INFERIOR -->
     <div style="background:linear-gradient(135deg,#1e3318,#2e7d1a);border-radius:14px;padding:28px 32px;text-align:center;color:#fff">
-      <div style="font-size:29px;margin-bottom:8px">🎓</div>
+      <div style="margin-bottom:8px"><svg class="ico" style="width:29px;height:29px"><use href="#ic-cap"/></svg></div>
       <div style="font-family:var(--fd);font-size:21px;letter-spacing:.5px;margin-bottom:8px">¿Quieres capacitar a tu equipo?</div>
       <div style="font-size:14px;color:rgba(255,255,255,.75);margin-bottom:16px;max-width:500px;margin-left:auto;margin-right:auto">Ofrecemos capacitaciones empresariales personalizadas para grupos. Contáctanos y diseñamos un programa a la medida de tu organización.</div>
-      <button onclick="goPage('contacto')" style="background:#fff;color:var(--dk1);border:none;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">📩 Contáctanos</button>
+      <button onclick="goPage('contacto')" style="background:#fff;color:var(--dk1);border:none;padding:11px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><svg class="ico" style="margin-right:6px"><use href="#ic-mail"/></svg>Contáctanos</button>
     </div>
 
   </div>
@@ -1627,22 +1669,22 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       </div>
       <div class="td-title">Próximamente</div>
       <div class="td-sub">Estamos preparando una tienda online con equipos, accesorios y servicios de topografía y geomática. Muy pronto podrás comprar directamente desde aquí.</div>
-      <button onclick="goPage('inicio')" style="background:#fff;color:var(--dk1);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2">⬅ Regresar</button>
+      <button onclick="goPage('inicio')" style="background:#fff;color:var(--dk1);border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;z-index:2"><svg class="ico" style="margin-right:5px"><use href="#ic-arrow-left"/></svg>Regresar</button>
     </div>
   </div>
 </div>
 <!-- TOPOGRAFÍA -->
 <div class="page" id="page-topografia">
   <div class="wrap" style="max-width:1460px;padding:16px 22px">
-    <div class="pg-eye anim-left d1">🛰️ DGeoMap — Herramientas Topográficas</div>
+    <div class="pg-eye anim-left d1"><svg class="ico"><use href="#ic-satellite"/></svg>DGeoMap — Herramientas Topográficas</div>
     <div class="pg-title anim-up d2" style="margin-bottom:14px">Centro de Herramientas</div>
 
     <!-- SUB-TABS -->
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;border-bottom:2px solid var(--bg3);padding-bottom:10px" class="anim-up d3">
-      <button class="topo-st on" id="st-gnss" onclick="switchST('gnss',this)">🛰️ Herramientas GNSS</button>
-      <button class="topo-st" id="st-dron" onclick="switchST('dron',this)">🚁 Dron Colombia</button>
-      <button class="topo-st" id="st-cartera" onclick="switchST('cartera',this)">📓 Carteras de Campo</button>
-      <button class="topo-st" id="st-vias" onclick="switchST('vias',this)">🛣️ Diseño de Vías</button>
+      <button class="topo-st on" id="st-gnss" onclick="switchST('gnss',this)"><svg class="ico"><use href="#ic-satellite"/></svg>Herramientas GNSS</button>
+      <button class="topo-st" id="st-dron" onclick="switchST('dron',this)"><svg class="ico"><use href="#ic-drone"/></svg>Dron Colombia</button>
+      <button class="topo-st" id="st-cartera" onclick="switchST('cartera',this)"><svg class="ico"><use href="#ic-notebook"/></svg>Carteras de Campo</button>
+      <button class="topo-st" id="st-vias" onclick="switchST('vias',this)"><svg class="ico"><use href="#ic-road"/></svg>Diseño de Vías</button>
     </div>
 
     <!-- CALENDARIO GNSS -->
@@ -1652,12 +1694,12 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
     <div class="topo-hw on" id="hw-gnss">
       <!-- SUB-TABS GNSS -->
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:10px;border-bottom:1.5px solid var(--bg3)" id="gnss-subtabs">
-        <button class="gnss-stab on" id="gst-cal" onclick="switchGNSSTab('cal',this)">📅 Calendario</button>
-        <button class="gnss-stab" id="gst-gnss-calc" onclick="switchGNSSTab('gnss-calc',this)">📡 Calculadora</button>
-        <button class="gnss-stab" id="gst-rinex" onclick="switchGNSSTab('rinex',this)">🔄 Conversor RINEX</button>
-        <button class="gnss-stab" id="gst-epoca" onclick="switchGNSSTab('epoca',this)">📅 Cambio de Época VEMOS</button>
-        <button class="gnss-stab" id="gst-geoide" onclick="switchGNSSTab('geoide',this)">🌍 Ondulación Geoidal</button>
-        <button class="gnss-stab" id="gst-convcoord" onclick="switchGNSSTab('convcoord',this)">🧭 Conversión de Coordenadas</button>
+        <button class="gnss-stab on" id="gst-cal" onclick="switchGNSSTab('cal',this)"><svg class="ico"><use href="#ic-calendar"/></svg>Calendario</button>
+        <button class="gnss-stab" id="gst-gnss-calc" onclick="switchGNSSTab('gnss-calc',this)"><svg class="ico"><use href="#ic-calculator"/></svg>Calculadora</button>
+        <button class="gnss-stab" id="gst-rinex" onclick="switchGNSSTab('rinex',this)"><svg class="ico"><use href="#ic-refresh"/></svg>Conversor RINEX</button>
+        <button class="gnss-stab" id="gst-epoca" onclick="switchGNSSTab('epoca',this)"><svg class="ico"><use href="#ic-calendar"/></svg>Cambio de Época VEMOS</button>
+        <button class="gnss-stab" id="gst-geoide" onclick="switchGNSSTab('geoide',this)"><svg class="ico"><use href="#ic-globe"/></svg>Ondulación Geoidal</button>
+        <button class="gnss-stab" id="gst-convcoord" onclick="switchGNSSTab('convcoord',this)"><svg class="ico"><use href="#ic-compass"/></svg>Conversión de Coordenadas</button>
       </div>
 <div class="gnss-subpanel on" id="hw-cal">
       <div style="max-width:700px;margin:0 auto">
@@ -5686,9 +5728,9 @@ function dgFooterHTML() {
           <div class="sf-logo"><img src="img/logo-dgeomap.png" alt="DGeoMap"/><span>DGeoMap Ingeniería</span></div>
           <p class="sf-desc">Empresa colombiana especializada en topografía, geomática, geodesia, cartografía y gestión ambiental. Soluciones de precisión referenciadas en el sistema MAGNA-SIRGAS CTM-12, con cobertura en todo el territorio nacional.</p>
           <div class="sf-info">
-            <div>📍 Bogotá D.C., Colombia</div>
-            <div>📱 322 213 9210</div>
-            <div>✉️ topografia@dgeomaping.com</div>
+            <div><svg class="ico"><use href="#ic-pin"/></svg>Bogotá D.C., Colombia</div>
+            <div><svg class="ico"><use href="#ic-phone"/></svg>322 213 9210</div>
+            <div><svg class="ico"><use href="#ic-mail"/></svg>topografia@dgeomaping.com</div>
           </div>
         </div>
         <div>
@@ -5718,10 +5760,10 @@ function dgFooterHTML() {
         <div>
           <div class="sf-h">Contáctenos</div>
           <div class="sf-info" style="margin-bottom:14px">
-            <div>🕐 Lun–Vie: 8:00 a.m.–6:00 p.m.</div>
-            <div>🗺️ Cobertura nacional — Colombia</div>
+            <div><svg class="ico"><use href="#ic-clock"/></svg>Lun–Vie: 8:00 a.m.–6:00 p.m.</div>
+            <div><svg class="ico"><use href="#ic-map"/></svg>Cobertura nacional — Colombia</div>
           </div>
-          <a class="sf-cta" href="https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener">💬 Cotizar por WhatsApp</a>
+          <a class="sf-cta" href="https://wa.me/573222139210?text=Hola%20DGeoMap%2C%20quiero%20cotizar%20un%20proyecto." target="_blank" rel="noopener"><svg class="ico"><use href="#ic-chat"/></svg>Cotizar por WhatsApp</a>
         </div>
       </div>
     </div>
@@ -6130,7 +6172,7 @@ function heroToggleMute(ev){
   if(!heroVideoEl) return;
   heroVideoEl.muted = !heroVideoEl.muted;
   var btn = document.getElementById('hero-mute-btn');
-  if(btn) btn.textContent = heroVideoEl.muted ? '🔇' : '🔊';
+  if(btn) btn.innerHTML = '<svg class="ico"><use href="#ic-' + (heroVideoEl.muted ? 'mute' : 'sound') + '"/></svg>';
 }
 // Arranca la reproducción del video en la diapositiva inicial y programa el primer avance
 heroPlayIfVideo(0);
