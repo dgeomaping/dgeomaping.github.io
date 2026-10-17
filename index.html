@@ -106,7 +106,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
 .pg-sub{color:var(--tx3);font-size:15px;line-height:1.75;max-width:580px;margin-bottom:38px}
 
 /* HERO */
-.hero-wrap{min-height:calc(100vh - 62px);min-height:calc(100dvh - 62px);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-wrap{min-height:calc(100vh - 116px);min-height:calc(100dvh - 116px);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
 .hero-left{background:linear-gradient(150deg,#ffffff 0%,#f4faf0 50%,#eaf5e4 100%);display:flex;flex-direction:column;justify-content:center;padding:64px 56px;position:relative;overflow:hidden}
 .hero-left::before{content:'';position:absolute;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(61,148,36,.12) 0%,transparent 70%);top:-80px;right:-80px}
 .hero-left::after{content:'';position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(61,148,36,.10) 0%,transparent 70%);bottom:-60px;left:-60px}
@@ -388,17 +388,12 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
   background:rgba(20,30,15,.55);border:1.5px solid rgba(255,255,255,.5);color:#fff;font-size:16px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px);transition:background .2s}
 #hero-mute-btn:hover{background:rgba(46,125,26,.85)}
-#hero-dron-caption{position:absolute;top:0;left:0;right:0;z-index:4;padding:28px 60px 34px;
-  background:linear-gradient(to bottom, rgba(8,18,8,.42) 0%, rgba(8,18,8,.18) 60%, rgba(8,18,8,0) 100%);
-  color:#fff;font-family:var(--fd);font-weight:600;letter-spacing:.3px;font-size:16px;line-height:1.55;
+#hero-dron-caption{position:absolute;bottom:44px;left:0;right:0;z-index:4;padding:40px 60px 14px;
+  background:linear-gradient(to top, rgba(6,14,6,.82) 0%, rgba(6,14,6,.48) 55%, rgba(6,14,6,0) 100%);
+  color:#fff;font-family:var(--fd);font-weight:700;letter-spacing:.3px;font-size:17px;line-height:1.3;
   max-width:680px;margin:0 auto;text-align:center;pointer-events:none}
-#hero-dron-caption-short{display:none}
 @media(max-width:700px){
-  #hero-dron-caption{display:none}
-  #hero-dron-caption-short{display:block;position:absolute;top:0;left:0;right:0;z-index:4;padding:14px 20px 20px;
-    background:linear-gradient(to bottom, rgba(8,18,8,.45) 0%, rgba(8,18,8,.18) 65%, rgba(8,18,8,0) 100%);
-    color:#fff;font-family:var(--fd);font-weight:600;letter-spacing:.2px;font-size:12.5px;line-height:1.45;
-    text-align:center;pointer-events:none}
+  #hero-dron-caption{bottom:38px;padding:26px 20px 10px;font-size:13px}
 }
 .slider-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
 .sdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.45);cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,.6)}
@@ -1094,8 +1089,7 @@ nav{background:linear-gradient(135deg,#1a3a0e 0%,#234d18 50%,#1a3a0e 100%);flex-
       <div class="slider-wrap">
         <div class="slide active" data-duration="19100">
           <video id="hero-video" src="img/DGeoMap_Hero_Dron.mp4" muted playsinline loop="false"></video>
-          <p id="hero-dron-caption">Nuestro dron de ala fija WingtraOne GEN II opera con sensor MicaSense RedEdge-P, una cámara pancromática y multiespectral de alta resolución que registra simultáneamente banda visible e infrarroja, lo que permite calcular índices de vegetación (NDVI) y entregar ortomosaicos de mayor detalle para agricultura de precisión y monitoreo ambiental.</p>
-          <p id="hero-dron-caption-short">WingtraOne GEN II con sensor MicaSense RedEdge-P: cámara multiespectral y pancromática para agricultura de precisión y monitoreo ambiental.</p>
+          <p id="hero-dron-caption">WingtraOne GEN II · Sensor multiespectral MicaSense RedEdge-P</p>
           <button id="hero-mute-btn" onclick="heroToggleMute(event)" aria-label="Activar sonido"><svg class="ico"><use href="#ic-mute"/></svg></button>
         </div>
         <div class="slide" data-duration="5000" style="background-image:url('img/hero-slide-01.jpg')"></div>
